@@ -24,7 +24,7 @@ int my_bsearch_internal(int *arr, int lbound, int rbound, int value)
 		return idx;
 	}
 
-	if (rbound - lbound < 2) {
+	if (rbound - lbound < 1) {
 		printf("not found\n");
 		return -1;
 	}
@@ -82,8 +82,8 @@ int my_bsearch_norecursive(int *arr, int size, int value)
 			return idx;
 		}
 
-		if (r - l < 2) {
-			printf("not found\n");
+		if (r - l < 1) {
+			printf("not found, r: %d, l: %d\n", r, l);
 			return -1;
 		}
 
@@ -93,7 +93,7 @@ int my_bsearch_norecursive(int *arr, int size, int value)
 		}
 
 		if (arr[idx] > value) {
-			printf("too big. going right\n");
+			printf("too big. going left\n");
 			r = idx - 1;
 		}
 
@@ -117,7 +117,7 @@ int test_search(int *arr, int size, int value)
 	int a, b;
 
 	a = my_lsearch(arr, size, value);
-	b = my_bsearch_norecursive(arr, size, value);
+	b = my_bsearch(arr, size, value);
 
 	if (a == b) {
 		printf("ok\n");
