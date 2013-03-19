@@ -1,13 +1,3 @@
-#if 0
-
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
-
-#endif
-
 #include <vector>
 #include <cstdio>
 #include <cstdlib>
@@ -15,30 +5,18 @@
 class Heap {
 	std::vector<int> arr;
 
+	void top_down(int id);
+	void bottom_up(int id);
+
 	public:
-	Heap();
-	~Heap();
 	bool empty();
 	bool exist(int node);
-	void bottom_up(int id);
 	void add(int data);
 	void dump();
-	void top_down(int id);
 	int top();
 	void load_array(int *arr, int len);
 	void load_random(int cnt, int mod);
 };
-
-
-Heap::Heap()
-{
-	;
-}
-
-Heap::~Heap()
-{
-	;
-}
 
 bool Heap::exist(int id)
 {
