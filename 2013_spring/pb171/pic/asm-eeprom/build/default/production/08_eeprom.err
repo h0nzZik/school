@@ -1,0 +1,14 @@
+Warning[205] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 2 : Found directive in column 1. (include)
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 83 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 91 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 102 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 111 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 120 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 121 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 122 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 162 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 164 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 166 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 170 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 172 : Register in operand not in bank 0.  Ensure that bank bits are correct.
+Message[302] Z:\XTUSIL\SCHOOL\2013_SPRING\PB171\PIC\ASM-EEPROM\08_EEPROM.ASM 173 : Register in operand not in bank 0.  Ensure that bank bits are correct.
