@@ -1,0 +1,257 @@
+HI-TECH Software C Compiler 
+
+Linker command line:
+
+--edf=C:\Program Files (x86)\HI-TECH Software\PICC\9.83\dat\en_msgs.txt -cs \
+  -h+dist/default/production\00_empty.X.production.sym -z -Q12F675 -ol.obj \
+  -Mdist/default/production/00_empty.X.production.map -E1 \
+  -ACONST=00h-0FFhx3,0300h-03FEh -ACODE=00h-03FEh -ASTRCODE=00h-03FEh \
+  -AENTRY=00h-0FFhx3,0300h-03FEh -ASTRING=00h-0FFhx3,0300h-03FEh \
+  -ABANK0=020h-05Dh -ARAM=020h-05Dh -AABS1=020h-05Fh -ACOMMON=05Eh-05Fh \
+  -ASFR0=00h-01Fh -ASFR1=080h-0DDh -preset_vec=00h,intentry,init,end_init \
+  -ppowerup=CODE -pfunctab=CODE -ACONFIG=02007h-02007h -pconfig=CONFIG \
+  -DCONFIG=2 -AIDLOC=02000h-02003h -pidloc=IDLOC -DIDLOC=2 \
+  -AEEDATA=00h-07Fh/02100h -peeprom_data=EEDATA -DEEDATA=2 -posccal=03FFh \
+  -DCODE=2 -DSTRCODE=2 -DSTRING=2 -DCONST=2 -DENTRY=2 -k \
+  C:\Users\vyvoj\AppData\Local\Temp\s2is.obj \
+  dist/default/production\00_empty.X.production.obj 
+
+Object code version is 3.10
+
+Machine type is 12F675
+
+
+
+                Name                               Link     Load   Length Selector   Space Scale
+C:\Users\vyvoj\AppData\Local\Temp\s2is.obj
+                end_init                              0        0        5        0       0
+dist/default/production\00_empty.X.production.obj
+                config                             2007     2007        1     400E       0
+                text247                             2C3      2C3       15      586       0
+                text246                             32A      32A       30      654       0
+                text245                             2EF      2EF       1D      5DE       0
+                text244                             2D8      2D8       17      5B0       0
+                text243                             30C      30C       1E      618       0
+                maintext                            35A      35A       A5      6B4       0
+                cstackBANK0                          20       20       14       20       1
+                cinit                               2C1      2C1        2      582       0
+
+TOTAL           Name                               Link     Load   Length     Space
+        CLASS   CONST          
+
+        CLASS   CODE           
+                end_init                              0        0        5         0
+                text247                             2C3      2C3       15         0
+                text246                             32A      32A       30         0
+                text245                             2EF      2EF       1D         0
+                text244                             2D8      2D8       17         0
+                text243                             30C      30C       1E         0
+                maintext                            35A      35A       A5         0
+                cinit                               2C1      2C1        2         0
+
+        CLASS   STRCODE        
+
+        CLASS   ENTRY          
+
+        CLASS   STRING         
+
+        CLASS   BANK0          
+                cstackBANK0                          20       20       14         1
+
+        CLASS   RAM            
+
+        CLASS   ABS1           
+                abs_s1                               5E       5E        2         1
+
+        CLASS   COMMON         
+
+        CLASS   SFR0           
+
+        CLASS   SFR1           
+
+        CLASS   CONFIG         
+                config                             2007     2007        1         0
+
+        CLASS   IDLOC          
+
+        CLASS   EEDATA         
+
+        CLASS   BANK1          
+
+
+
+SEGMENTS        Name                           Load    Length   Top    Selector   Space  Class     Delta
+
+                reset_vec                      000000  000005  000005         0       0  CODE        2
+                cstackBANK0                    000020  000014  000034        20       1  BANK0       1
+                cinit                          0002C1  000002  0002C3       582       0  CODE        2
+                text247                        0002C3  000015  0002D8       586       0  CODE        2
+                text244                        0002D8  000017  0002EF       5B0       0  CODE        2
+                text245                        0002EF  00001D  00030C       5DE       0  CODE        2
+                text243                        00030C  00001E  00032A       618       0  CODE        2
+                text246                        00032A  000030  00035A       654       0  CODE        2
+                maintext                       00035A  0000A5  0003FF       6B4       0  CODE        2
+                config                         002007  000001  002008      400E       0  CONFIG      2
+
+
+UNUSED ADDRESS RANGES
+
+        Name                Unused          Largest block    Delta
+        BANK0            0034-005D             2A           1
+        CODE             0005-02C0            2BC           2
+        CONST            0005-02C0            100           2
+        EEDATA           2100-217F             80           2
+        ENTRY            0005-02C0            100           2
+        IDLOC            2000-2003              4           2
+        RAM              0034-005D             2A           1
+        SFR0             0000-001F             20           1
+        SFR1             0080-00DD             5E           1
+        STRCODE          0005-02C0            2BC           2
+        STRING           0005-02C0            100           2
+
+                                  Symbol Table
+
+??_eeprom_read             cstackBANK0  0020
+??_eeprom_write            cstackBANK0  0021
+??_load_from_eeprom        cstackBANK0  0023
+??_main                    cstackBANK0  0026
+??_save_to_eeprom          cstackBANK0  0024
+??_wait_bounce             cstackCOMMON 0000
+?_eeprom_read              cstackBANK0  0020
+?_eeprom_write             cstackBANK0  0020
+?_load_from_eeprom         cstackBANK0  0022
+?_main                     cstackBANK0  0020
+?_save_to_eeprom           cstackBANK0  0023
+?_wait_bounce              cstackBANK0  0020
+_ANSEL                     (abs)        009F
+_CARRY                     (abs)        0018
+_CMCON                     (abs)        0019
+_EEADR                     (abs)        009B
+_EECON1                    (abs)        009C
+_EECON2                    (abs)        009D
+_EEDATA                    (abs)        009A
+_GIE                       (abs)        005F
+_GPIO0                     (abs)        0028
+_GPIO1                     (abs)        0029
+_GPIO2                     (abs)        002A
+_PIR1bits                  (abs)        000C
+_RD                        (abs)        04E0
+_T1CKPS0                   (abs)        0084
+_T1CKPS1                   (abs)        0085
+_TMR1CS                    (abs)        0081
+_TMR1H                     (abs)        000F
+_TMR1L                     (abs)        000E
+_TMR1ON                    (abs)        0080
+_TRISIO                    (abs)        0085
+_TRISIO2                   (abs)        042A
+_WR                        (abs)        04E1
+_WREN                      (abs)        04E2
+__Habs1                    abs1         07FE
+__Hbank0                   bank0        07FE
+__Hbank1                   bank1        07FE
+__Hcinit                   cinit        07FE
+__Hclrtext                 clrtext      07FE
+__Hcode                    code         07FE
+__Hcommon                  common       07FE
+__Hconfig                  config       2008
+__HcstackBANK0             cstackBANK0  07FE
+__HcstackCOMMON            cstackCOMMON 07FE
+__Heeprom_data             eeprom_data  0000
+__Hend_init                end_init     0005
+__Hfunctab                 functab      0000
+__Hidloc                   idloc        0000
+__Hinit                    init         0000
+__Hintentry                intentry     0000
+__Hmaintext                maintext     07FE
+__Hosccal                  osccal       03FF
+__Hpowerup                 powerup      0000
+__Hram                     ram          07FE
+__Hreset_vec               reset_vec    0000
+__Hsfr0                    sfr0         07FE
+__Hsfr1                    sfr1         07FE
+__Hstrings                 strings      07FE
+__Htext                    text         07FE
+__Labs1                    abs1         07FE
+__Lbank0                   bank0        07FE
+__Lbank1                   bank1        07FE
+__Lcinit                   cinit        07FE
+__Lclrtext                 clrtext      07FE
+__Lcode                    code         07FE
+__Lcommon                  common       07FE
+__Lconfig                  config       2007
+__LcstackBANK0             cstackBANK0  07FE
+__LcstackCOMMON            cstackCOMMON 07FE
+__Leeprom_data             eeprom_data  0000
+__Lend_init                end_init     0000
+__Lfunctab                 functab      0000
+__Lidloc                   idloc        0000
+__Linit                    init         0000
+__Lintentry                intentry     0000
+__Lmaintext                maintext     07FE
+__Losccal                  osccal       03FF
+__Lpowerup                 powerup      0000
+__Lram                     ram          07FE
+__Lreset_vec               reset_vec    0000
+__Lsfr0                    sfr0         07FE
+__Lsfr1                    sfr1         07FE
+__Lstrings                 strings      07FE
+__Ltext                    text         07FE
+__S0                       (abs)        2008
+__S1                       (abs)        0034
+__S2                       (abs)        0000
+___osccal_val              osccal       03FF
+__end_of_eeprom_read       text245      030C
+__end_of_eeprom_write      text246      035A
+__end_of_load_from_eeprom  text243      032A
+__end_of_main              maintext     03FF
+__end_of_save_to_eeprom    text244      02EF
+__end_of_wait_bounce       text247      02D8
+__pcstackBANK0             cstackBANK0  0020
+__pcstackCOMMON            cstackCOMMON 0000
+__pmaintext                maintext     035A
+__ptext242                 text242      0000
+__ptext243                 text243      030C
+__ptext244                 text244      02D8
+__ptext245                 text245      02EF
+__ptext246                 text246      032A
+__ptext247                 text247      02C3
+__ptext248                 text248      0000
+__size_of_eeprom_read      (abs)        0000
+__size_of_eeprom_write     (abs)        0000
+__size_of_load_from_eeprom (abs)        0000
+__size_of_main             (abs)        0000
+__size_of_save_to_eeprom   (abs)        0000
+__size_of_wait_bounce      (abs)        0000
+_eeprom_read               text245      02EF
+_eeprom_write              text246      032A
+_exit                      init         0000
+_load_from_eeprom          text243      030C
+_main                      maintext     035A
+_save_to_eeprom            text244      02D8
+_wait_bounce               text247      02C3
+btemp                      (abs)        005E
+eeprom_read@addr           cstackBANK0  0021
+eeprom_write@addr          cstackBANK0  0022
+eeprom_write@value         cstackBANK0  0020
+end_of_initialization      cinit        02C1
+intlevel0                  functab      0000
+intlevel1                  functab      0000
+intlevel2                  functab      0000
+intlevel3                  functab      0000
+intlevel4                  functab      0000
+intlevel5                  functab      0000
+load_from_eeprom@high      cstackBANK0  0022
+load_from_eeprom@low       cstackBANK0  0024
+main@cntr                  cstackBANK0  002C
+main@high                  cstackBANK0  0032
+main@low                   cstackBANK0  0033
+main@old                   cstackBANK0  002E
+main@saved                 cstackBANK0  0030
+main@state                 cstackBANK0  002A
+reset_vec                  reset_vec    0000
+save_to_eeprom@high        cstackBANK0  0023
+save_to_eeprom@low         cstackBANK0  0025
+start                      init         0000
+start_initialization       cinit        02C1
+wait_bounce@i              cstackBANK0  0020
+wtemp0                     (abs)        005E

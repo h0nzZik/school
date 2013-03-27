@@ -1,0 +1,1334 @@
+
+
+HI-TECH Software PIC LITE Macro Assembler V9.83 build 10920 
+                                                                                               Wed Mar 27 15:43:28 2013
+
+HI-TECH Software Omniscient Code Generator (Lite mode) build 10920
+     1  0000                     opt subtitle "HI-TECH Software Omniscient Code Generator (Lite mode) build 10920"
+     2                           
+     3                           opt pagewidth 120
+     4                           
+     5                           	opt lm
+     6                           
+     7                           	processor	12F675
+     8                           clrc	macro
+     9                           	bcf	3,0
+    10  0000                     	endm
+    11                           clrz	macro
+    12                           	bcf	3,2
+    13  0000                     	endm
+    14                           setc	macro
+    15                           	bsf	3,0
+    16  0000                     	endm
+    17                           setz	macro
+    18                           	bsf	3,2
+    19  0000                     	endm
+    20                           skipc	macro
+    21                           	btfss	3,0
+    22  0000                     	endm
+    23                           skipz	macro
+    24                           	btfss	3,2
+    25  0000                     	endm
+    26                           skipnc	macro
+    27                           	btfsc	3,0
+    28  0000                     	endm
+    29                           skipnz	macro
+    30                           	btfsc	3,2
+    31  0000                     	endm
+    32  0000                     indf	equ	0
+    33  0000                     indf0	equ	0
+    34  0002                     pc	equ	2
+    35  0002                     pcl	equ	2
+    36  0003                     status	equ	3
+    37  0004                     fsr	equ	4
+    38  0004                     fsr0	equ	4
+    39  0001                     c	equ	1
+    40  0000                     z	equ	0
+    41  000A                     pclath	equ	10
+    42                           # 17 "main.c"
+    43                           	psect config,class=CONFIG,delta=2 ;#
+    44                           # 17 "main.c"
+    45  2007  31D4               	dw 0x31DF & 0x31F7 & 0x31FC ;#
+    46                           	FNCALL	_main,_load_from_eeprom
+    47                           	FNCALL	_main,_wait_bounce
+    48                           	FNCALL	_main,_save_to_eeprom
+    49                           	FNCALL	_load_from_eeprom,_eeprom_read
+    50                           	FNCALL	_save_to_eeprom,_eeprom_write
+    51                           	FNROOT	_main
+    52                           	global	_CMCON
+    53                           psect	text242,local,class=CODE,delta=2
+    54                           global __ptext242
+    55  0000                     __ptext242:
+    56  0019                     _CMCON	set	25
+    57                           	global	_PIR1bits
+    58  000C                     _PIR1bits	set	12
+    59                           	global	_TMR1H
+    60  000F                     _TMR1H	set	15
+    61                           	global	_TMR1L
+    62  000E                     _TMR1L	set	14
+    63                           	global	_CARRY
+    64  0018                     _CARRY	set	24
+    65                           	global	_GIE
+    66  005F                     _GIE	set	95
+    67                           	global	_GPIO0
+    68  0028                     _GPIO0	set	40
+    69                           	global	_GPIO1
+    70  0029                     _GPIO1	set	41
+    71                           	global	_GPIO2
+    72  002A                     _GPIO2	set	42
+    73                           	global	_T1CKPS0
+    74  0084                     _T1CKPS0	set	132
+    75                           	global	_T1CKPS1
+    76  0085                     _T1CKPS1	set	133
+    77                           	global	_TMR1CS
+    78  0081                     _TMR1CS	set	129
+    79                           	global	_TMR1ON
+    80  0080                     _TMR1ON	set	128
+    81                           	global	_ANSEL
+    82  009F                     _ANSEL	set	159
+    83                           	global	_EEADR
+    84  009B                     _EEADR	set	155
+    85                           	global	_EECON1
+    86  009C                     _EECON1	set	156
+    87                           	global	_EECON2
+    88  009D                     _EECON2	set	157
+    89                           	global	_EEDATA
+    90  009A                     _EEDATA	set	154
+    91                           	global	_TRISIO
+    92  0085                     _TRISIO	set	133
+    93                           	global	_RD
+    94  04E0                     _RD	set	1248
+    95                           	global	_TRISIO2
+    96  042A                     _TRISIO2	set	1066
+    97                           	global	_WR
+    98  04E1                     _WR	set	1249
+    99                           	global	_WREN
+   100  04E2                     _WREN	set	1250
+   101                           	file	"C:\Users\vyvoj\AppData\Local\Temp\s2is."
+   102                           	line	#
+   103                           psect cinit,class=CODE,delta=2
+   104                           global start_initialization
+   105  02C1                     start_initialization:
+   106                           
+   107                           psect cinit,class=CODE,delta=2
+   108                           global end_of_initialization
+   109                           
+   110                           ;End of C runtime variable initialization code
+   111                           
+   112  02C1                     end_of_initialization:
+   113  02C1  0183               clrf status
+   114  02C2  2B5A               ljmp _main	;jump to C main() function
+   115                           psect	cstackCOMMON,class=COMMON,space=1
+   116                           global __pcstackCOMMON
+   117  0000                     __pcstackCOMMON:
+   118                           	global	??_wait_bounce
+   119  0000                     ??_wait_bounce:	; 0 bytes @ 0x0
+   120                           psect	cstackBANK0,class=BANK0,space=1
+   121                           global __pcstackBANK0
+   122  0020                     __pcstackBANK0:
+   123                           	global	??_eeprom_read
+   124  0020                     ??_eeprom_read:	; 0 bytes @ 0x0
+   125                           	global	?_main
+   126  0020                     ?_main:	; 0 bytes @ 0x0
+   127                           	global	?_eeprom_write
+   128  0020                     ?_eeprom_write:	; 1 bytes @ 0x0
+   129                           	global	?_eeprom_read
+   130  0020                     ?_eeprom_read:	; 1 bytes @ 0x0
+   131                           	global	?_wait_bounce
+   132  0020                     ?_wait_bounce:	; 2 bytes @ 0x0
+   133                           	global	eeprom_write@value
+   134  0020                     eeprom_write@value:	; 1 bytes @ 0x0
+   135                           	global	wait_bounce@i
+   136  0020                     wait_bounce@i:	; 2 bytes @ 0x0
+   137  0020                     	ds	1
+   138                           	global	??_eeprom_write
+   139  0021                     ??_eeprom_write:	; 0 bytes @ 0x1
+   140                           	global	eeprom_read@addr
+   141  0021                     eeprom_read@addr:	; 1 bytes @ 0x1
+   142  0021                     	ds	1
+   143                           	global	?_load_from_eeprom
+   144  0022                     ?_load_from_eeprom:	; 2 bytes @ 0x2
+   145                           	global	load_from_eeprom@high
+   146  0022                     load_from_eeprom@high:	; 1 bytes @ 0x2
+   147                           	global	eeprom_write@addr
+   148  0022                     eeprom_write@addr:	; 1 bytes @ 0x2
+   149  0022                     	ds	1
+   150                           	global	?_save_to_eeprom
+   151  0023                     ?_save_to_eeprom:	; 0 bytes @ 0x3
+   152                           	global	??_load_from_eeprom
+   153  0023                     ??_load_from_eeprom:	; 0 bytes @ 0x3
+   154                           	global	save_to_eeprom@high
+   155  0023                     save_to_eeprom@high:	; 1 bytes @ 0x3
+   156  0023                     	ds	1
+   157                           	global	??_save_to_eeprom
+   158  0024                     ??_save_to_eeprom:	; 0 bytes @ 0x4
+   159                           	global	load_from_eeprom@low
+   160  0024                     load_from_eeprom@low:	; 1 bytes @ 0x4
+   161  0024                     	ds	1
+   162                           	global	save_to_eeprom@low
+   163  0025                     save_to_eeprom@low:	; 1 bytes @ 0x5
+   164  0025                     	ds	1
+   165                           	global	??_main
+   166  0026                     ??_main:	; 0 bytes @ 0x6
+   167  0026                     	ds	4
+   168                           	global	main@state
+   169  002A                     main@state:	; 2 bytes @ 0xA
+   170  002A                     	ds	2
+   171                           	global	main@cntr
+   172  002C                     main@cntr:	; 2 bytes @ 0xC
+   173  002C                     	ds	2
+   174                           	global	main@old
+   175  002E                     main@old:	; 2 bytes @ 0xE
+   176  002E                     	ds	2
+   177                           	global	main@saved
+   178  0030                     main@saved:	; 2 bytes @ 0x10
+   179  0030                     	ds	2
+   180                           	global	main@high
+   181  0032                     main@high:	; 1 bytes @ 0x12
+   182  0032                     	ds	1
+   183                           	global	main@low
+   184  0033                     main@low:	; 1 bytes @ 0x13
+   185  0033                     	ds	1
+   186 ;;Data sizes: Strings 0, constant 0, data 0, bss 0, persistent 0 stack 0
+   187 ;;Auto spaces:   Size  Autos    Used
+   188 ;; COMMON           0      0       0
+   189 ;; BANK0           62     20      20
+   190                           
+   191 ;;
+   192 ;; Pointer list with targets:
+   193                           
+   194 ;; load_from_eeprom@high	PTR unsigned char  size(1) Largest target is 1
+   195 ;;		 -> main@high(BANK0[1]), 
+   196 ;;
+   197 ;; load_from_eeprom@low	PTR unsigned char  size(1) Largest target is 1
+   198 ;;		 -> main@low(BANK0[1]), 
+   199 ;;
+   200                           
+   201                           
+   202 ;;
+   203 ;; Critical Paths under _main in COMMON
+   204 ;;
+   205 ;;   None.
+   206 ;;
+   207 ;; Critical Paths under _main in BANK0
+   208 ;;
+   209 ;;   _main->_save_to_eeprom
+   210 ;;   _load_from_eeprom->_eeprom_read
+   211 ;;   _save_to_eeprom->_eeprom_write
+   212                           
+   213 ;;
+   214 ;;Main: autosize = 0, tempsize = 4, incstack = 0, save=0
+   215 ;;
+   216                           
+   217 ;;
+   218 ;;Call Graph Tables:
+   219 ;;
+   220 ;; ---------------------------------------------------------------------------------
+   221 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   222 ;; ---------------------------------------------------------------------------------
+   223 ;; (0) _main                                                14    14      0     551
+   224 ;;                                              6 BANK0     14    14      0
+   225 ;;                   _load_from_eeprom
+   226 ;;                        _wait_bounce
+   227 ;;                     _save_to_eeprom
+   228 ;; ---------------------------------------------------------------------------------
+   229 ;; (1) _load_from_eeprom                                     4     3      1      66
+   230 ;;                                              2 BANK0      3     2      1
+   231 ;;                        _eeprom_read
+   232 ;; ---------------------------------------------------------------------------------
+   233 ;; (1) _save_to_eeprom                                       3     2      1      94
+   234 ;;                                              3 BANK0      3     2      1
+   235 ;;                       _eeprom_write
+   236 ;; ---------------------------------------------------------------------------------
+   237 ;; (2) _eeprom_read                                          2     2      0      22
+   238 ;;                                              0 BANK0      2     2      0
+   239 ;; ---------------------------------------------------------------------------------
+   240 ;; (2) _eeprom_write                                         3     2      1      50
+   241 ;;                                              0 BANK0      3     2      1
+   242 ;; ---------------------------------------------------------------------------------
+   243 ;; (1) _wait_bounce                                          2     2      0      23
+   244 ;;                                              0 BANK0      2     2      0
+   245 ;; ---------------------------------------------------------------------------------
+   246 ;; Estimated maximum stack depth 2
+   247 ;; ---------------------------------------------------------------------------------
+   248                           
+   249 ;; Call Graph Graphs:
+   250                           
+   251 ;; _main (ROOT)
+   252 ;;   _load_from_eeprom
+   253 ;;     _eeprom_read
+   254 ;;   _wait_bounce
+   255 ;;   _save_to_eeprom
+   256 ;;     _eeprom_write
+   257 ;;
+   258                           
+   259 ;; Address spaces:
+   260                           
+   261 ;;Name               Size   Autos  Total    Cost      Usage
+   262 ;;BITCOMMON            0      0       0       0        0.0%
+   263 ;;EEDATA              80      0       0       0        0.0%
+   264 ;;NULL                 0      0       0       0        0.0%
+   265 ;;CODE                 0      0       0       0        0.0%
+   266 ;;BITSFR0              0      0       0       1        0.0%
+   267 ;;SFR0                 0      0       0       1        0.0%
+   268 ;;COMMON               0      0       0       1        0.0%
+   269 ;;BITSFR1              0      0       0       2        0.0%
+   270 ;;SFR1                 0      0       0       2        0.0%
+   271 ;;STACK                0      0       2       2        0.0%
+   272 ;;BITBANK0            3E      0       0       3        0.0%
+   273 ;;BANK0               3E     14      14       4       32.3%
+   274 ;;ABS                  0      0       0       5        0.0%
+   275 ;;DATA                 0      0       0       6        0.0%
+   276                           
+   277                           	global	_main
+   278                           psect	maintext,global,class=CODE,delta=2
+   279                           global __pmaintext
+   280  035A                     __pmaintext:
+   281                           
+   282 ;; *************** function _main *****************
+   283 ;; Defined at:
+   284 ;;		line 86 in file "main.c"
+   285 ;; Parameters:    Size  Location     Type
+   286 ;;		None
+   287 ;; Auto vars:     Size  Location     Type
+   288 ;;  saved           2   16[BANK0 ] int 
+   289 ;;  old             2   14[BANK0 ] int 
+   290 ;;  cntr            2   12[BANK0 ] int 
+   291 ;;  state           2   10[BANK0 ] int 
+   292 ;;  low             1   19[BANK0 ] unsigned char 
+   293 ;;  high            1   18[BANK0 ] unsigned char 
+   294 ;; Return value:  Size  Location     Type
+   295 ;;		None               void
+   296 ;; Registers used:
+   297 ;;		wreg, fsr0l, fsr0h, status,2, status,0, btemp+1, pclath, cstack
+   298 ;; Tracked objects:
+   299 ;;		On entry : 17F/0
+   300 ;;		On exit  : 0/0
+   301 ;;		Unchanged: 0/0
+   302 ;; Data sizes:     COMMON   BANK0
+   303 ;;      Params:         0       0
+   304 ;;      Locals:         0      10
+   305 ;;      Temps:          0       4
+   306 ;;      Totals:         0      14
+   307 ;;Total ram usage:       14 bytes
+   308 ;; Hardware stack levels required when called:    2
+   309 ;; This function calls:
+   310 ;;		_load_from_eeprom
+   311 ;;		_wait_bounce
+   312 ;;		_save_to_eeprom
+   313 ;; This function is called by:
+   314 ;;		Startup code after reset
+   315 ;; This function uses a non-reentrant model
+   316 ;;
+   317                           psect	maintext
+   318                           	file	"main.c"
+   319                           	line	86
+   320                           	global	__size_of_main
+   321  00A5                     	__size_of_main	equ	__end_of_main-_main
+   322                           	
+   323  035A                     _main:	
+   324                           	opt	stack 6
+   325                           ; Regs used in _main: [wreg-fsr0h+status,2+status,0+btemp+1+pclath+cstack]
+   326                           	line	87
+   327                           	
+   328  035A                     l2836:	
+   329                           ;main.c: 87: int cntr = 0;
+   330  035A  1283               	bcf	status, 5	;RP0=0, select bank0
+   331  035B  01AC               	clrf	(main@cntr)
+   332  035C  01AD               	clrf	(main@cntr+1)
+   333                           	line	90
+   334                           	
+   335  035D                     l2838:	
+   336                           ;main.c: 90: CMCON = 7;
+   337  035D  3007               	movlw	(07h)
+   338  035E  0099               	movwf	(25)	;volatile
+   339                           	line	91
+   340                           	
+   341  035F                     l2840:	
+   342                           ;main.c: 91: ANSEL = 0;
+   343  035F  1683               	bsf	status, 5	;RP0=1, select bank1
+   344  0360  019F               	clrf	(159)^080h	;volatile
+   345                           	line	92
+   346                           	
+   347  0361                     l2842:	
+   348                           ;main.c: 92: TRISIO = 0;
+   349  0361  0185               	clrf	(133)^080h	;volatile
+   350                           	line	93
+   351                           	
+   352  0362                     l2844:	
+   353                           ;main.c: 93: TRISIO2 = 1;
+   354  0362  1505               	bsf	(1066/8)^080h,(1066)&7
+   355                           	line	97
+   356                           	
+   357  0363                     l2846:	
+   358                           ;main.c: 97: TMR1CS = 0;
+   359  0363  1283               	bcf	status, 5	;RP0=0, select bank0
+   360  0364  1090               	bcf	(129/8),(129)&7
+   361                           	line	98
+   362                           	
+   363  0365                     l2848:	
+   364                           ;main.c: 98: T1CKPS0 = 1;
+   365  0365  1610               	bsf	(132/8),(132)&7
+   366                           	line	99
+   367                           	
+   368  0366                     l2850:	
+   369                           ;main.c: 99: T1CKPS1 = 1;
+   370  0366  1690               	bsf	(133/8),(133)&7
+   371                           	line	100
+   372                           	
+   373  0367                     l2852:	
+   374                           ;main.c: 100: TMR1ON = 1;
+   375  0367  1410               	bsf	(128/8),(128)&7
+   376                           	line	105
+   377                           	
+   378  0368                     l2854:	
+   379                           ;main.c: 105: GPIO0 = 1;
+   380  0368  1405               	bsf	(40/8),(40)&7
+   381                           	line	106
+   382                           	
+   383  0369                     l2856:	
+   384                           # 106 "main.c"
+   385  0369  0000               nop ;#
+   386                           psect	maintext
+   387                           	line	107
+   388                           	
+   389  036A                     l2858:	
+   390                           ;main.c: 107: GPIO1 = 0;
+   391  036A  1283               	bcf	status, 5	;RP0=0, select bank0
+   392  036B  1085               	bcf	(41/8),(41)&7
+   393                           	line	108
+   394                           	
+   395  036C                     l2860:	
+   396                           # 108 "main.c"
+   397  036C  0000               nop ;#
+   398                           psect	maintext
+   399                           	line	111
+   400                           	
+   401  036D                     l2862:	
+   402                           ;main.c: 111: int cntr = 0x7000;
+   403  036D  3000               	movlw	low(07000h)
+   404  036E  1283               	bcf	status, 5	;RP0=0, select bank0
+   405  036F  00AC               	movwf	(main@cntr)
+   406  0370  3070               	movlw	high(07000h)
+   407  0371  00AD               	movwf	((main@cntr))+1
+   408                           	line	112
+   409                           ;main.c: 112: while(cntr--)
+   410  0372  2B74               	goto	l2864
+   411                           	
+   412  0373                     l377:	
+   413  0373  2B74               	goto	l2864
+   414                           	line	113
+   415                           ;main.c: 113: ;
+   416                           	
+   417  0374                     l376:	
+   418                           	line	112
+   419                           	
+   420  0374                     l2864:	
+   421  0374  30FF               	movlw	low(-1)
+   422  0375  07AC               	addwf	(main@cntr),f
+   423  0376  1803               	skipnc
+   424  0377  0AAD               	incf	(main@cntr+1),f
+   425  0378  30FF               	movlw	high(-1)
+   426  0379  07AD               	addwf	(main@cntr+1),f
+   427  037A  30FF               	movlw	high(-1)
+   428  037B  062D               	xorwf	((main@cntr+1)),w
+   429  037C  1D03               	skipz
+   430  037D  2B80               	goto	u2605
+   431  037E  30FF               	movlw	low(-1)
+   432  037F  062C               	xorwf	((main@cntr)),w
+   433  0380                     u2605:
+   434                           
+   435  0380  1D03               	skipz
+   436  0381  2B83               	goto	u2601
+   437  0382  2B84               	goto	u2600
+   438  0383                     u2601:
+   439  0383  2B74               	goto	l2864
+   440  0384                     u2600:
+   441  0384  2B85               	goto	l2866
+   442                           	
+   443  0385                     l378:	
+   444                           	line	116
+   445                           	
+   446  0385                     l2866:	
+   447                           ;main.c: 115: char high, low;
+   448                           ;main.c: 116: int state = 0;
+   449  0385  01AA               	clrf	(main@state)
+   450  0386  01AB               	clrf	(main@state+1)
+   451                           	line	120
+   452                           	
+   453  0387                     l2868:	
+   454                           ;main.c: 117: int saved;
+   455                           ;main.c: 118: int old;
+   456                           ;main.c: 120: high = low = 0;
+   457  0387  3000               	movlw	(0)
+   458  0388  00B3               	movwf	(main@low)
+   459  0389  00A6               	movwf	(??_main+0)+0
+   460  038A  0826               	movf	(??_main+0)+0,w
+   461  038B  00B2               	movwf	(main@high)
+   462                           	line	121
+   463                           	
+   464  038C                     l2870:	
+   465                           ;main.c: 121: load_from_eeprom(&low, &high);
+   466  038C  3032               	movlw	(main@high)&0ffh
+   467  038D  00A6               	movwf	(??_main+0)+0
+   468  038E  0826               	movf	(??_main+0)+0,w
+   469  038F  00A2               	movwf	(?_load_from_eeprom)
+   470  0390  3033               	movlw	(main@low)&0ffh
+   471  0391  230C               	fcall	_load_from_eeprom
+   472                           	line	122
+   473                           	
+   474  0392                     l2872:	
+   475                           ;main.c: 122: TMR1L = low;
+   476  0392  1283               	bcf	status, 5	;RP0=0, select bank0
+   477  0393  0833               	movf	(main@low),w
+   478  0394  008E               	movwf	(14)	;volatile
+   479                           	line	123
+   480                           	
+   481  0395                     l2874:	
+   482                           ;main.c: 123: TMR1H = high;
+   483  0395  0832               	movf	(main@high),w
+   484  0396  008F               	movwf	(15)	;volatile
+   485  0397  2B98               	goto	l2876
+   486                           	line	125
+   487                           ;main.c: 125: while(1){
+   488                           	
+   489  0398                     l379:	
+   490                           	line	126
+   491                           	
+   492  0398                     l2876:	
+   493                           ;main.c: 126: if (GPIO2 == 0 && old == 1) {
+   494  0398  1905               	btfsc	(42/8),(42)&7
+   495  0399  2B9B               	goto	u2611
+   496  039A  2B9C               	goto	u2610
+   497  039B                     u2611:
+   498  039B  2BAC               	goto	l2888
+   499  039C                     u2610:
+   500                           	
+   501  039C                     l2878:	
+   502  039C  3001               	movlw	01h
+   503  039D  062E               	xorwf	(main@old),w
+   504  039E  042F               	iorwf	(main@old+1),w
+   505  039F  1D03               	skipz
+   506  03A0  2BA2               	goto	u2621
+   507  03A1  2BA3               	goto	u2620
+   508  03A2                     u2621:
+   509  03A2  2BAC               	goto	l2888
+   510  03A3                     u2620:
+   511                           	line	127
+   512                           	
+   513  03A3                     l2880:	
+   514                           ;main.c: 127: TMR1L = 0;
+   515  03A3  018E               	clrf	(14)	;volatile
+   516                           	line	128
+   517                           ;main.c: 128: TMR1H = 0;
+   518  03A4  018F               	clrf	(15)	;volatile
+   519                           	line	129
+   520                           	
+   521  03A5                     l2882:	
+   522                           ;main.c: 129: state = 1;
+   523  03A5  3001               	movlw	low(01h)
+   524  03A6  00AA               	movwf	(main@state)
+   525  03A7  3000               	movlw	high(01h)
+   526  03A8  00AB               	movwf	((main@state))+1
+   527                           	line	130
+   528                           	
+   529  03A9                     l2884:	
+   530                           ;main.c: 130: GPIO1 = 0;
+   531  03A9  1085               	bcf	(41/8),(41)&7
+   532                           	line	131
+   533                           	
+   534  03AA                     l2886:	
+   535                           ;main.c: 131: wait_bounce();
+   536  03AA  22C3               	fcall	_wait_bounce
+   537  03AB  2BAC               	goto	l2888
+   538                           	line	132
+   539                           	
+   540  03AC                     l380:	
+   541                           	line	133
+   542                           	
+   543  03AC                     l2888:	
+   544                           ;main.c: 132: }
+   545                           ;main.c: 133: if (GPIO2 == 1 && old == 0) {
+   546  03AC  1283               	bcf	status, 5	;RP0=0, select bank0
+   547  03AD  1D05               	btfss	(42/8),(42)&7
+   548  03AE  2BB0               	goto	u2631
+   549  03AF  2BB1               	goto	u2630
+   550  03B0                     u2631:
+   551  03B0  2BE2               	goto	l381
+   552  03B1                     u2630:
+   553                           	
+   554  03B1                     l2890:	
+   555  03B1  082F               	movf	((main@old+1)),w
+   556  03B2  042E               	iorwf	((main@old)),w
+   557  03B3  1D03               	skipz
+   558  03B4  2BB6               	goto	u2641
+   559  03B5  2BB7               	goto	u2640
+   560  03B6                     u2641:
+   561  03B6  2BE2               	goto	l381
+   562  03B7                     u2640:
+   563                           	line	134
+   564                           	
+   565  03B7                     l2892:	
+   566                           ;main.c: 134: saved = TMR1H << 8 | TMR1L;
+   567  03B7  080E               	movf	(14),w	;volatile
+   568  03B8  00A6               	movwf	(??_main+0)+0
+   569  03B9  01A7               	clrf	(??_main+0)+0+1
+   570  03BA  080F               	movf	(15),w	;volatile
+   571  03BB  00A8               	movwf	(??_main+2)+0
+   572  03BC  01A9               	clrf	(??_main+2)+0+1
+   573  03BD  0828               	movf	(??_main+2)+0,w
+   574  03BE  00A9               	movwf	(??_main+2)+1
+   575  03BF  01A8               	clrf	(??_main+2)+0
+   576  03C0  0826               	movf	0+(??_main+0)+0,w
+   577  03C1  0428               	iorwf	0+(??_main+2)+0,w
+   578  03C2  00B0               	movwf	(main@saved)
+   579  03C3  0827               	movf	1+(??_main+0)+0,w
+   580  03C4  0429               	iorwf	1+(??_main+2)+0,w
+   581  03C5  00B1               	movwf	1+(main@saved)
+   582                           	line	136
+   583                           	
+   584  03C6                     l2894:	
+   585                           ;main.c: 136: saved = 65536 - saved;
+   586  03C6  09B0               	comf	(main@saved),f
+   587  03C7  09B1               	comf	(main@saved+1),f
+   588  03C8  0AB0               	incf	(main@saved),f
+   589  03C9  1903               	skipnz
+   590  03CA  0AB1               	incf	(main@saved+1),f
+   591                           	line	137
+   592                           	
+   593  03CB                     l2896:	
+   594                           ;main.c: 137: high = saved >> 8;
+   595  03CB  0831               	movf	(main@saved+1),w
+   596  03CC  00A6               	movwf	(??_main+0)+0
+   597  03CD  0826               	movf	(??_main+0)+0,w
+   598  03CE  00B2               	movwf	(main@high)
+   599                           	line	138
+   600                           	
+   601  03CF                     l2898:	
+   602                           ;main.c: 138: low = saved & 0x00FF;
+   603  03CF  0830               	movf	(main@saved),w
+   604  03D0  00A6               	movwf	(??_main+0)+0
+   605  03D1  0826               	movf	(??_main+0)+0,w
+   606  03D2  00B3               	movwf	(main@low)
+   607                           	line	140
+   608                           	
+   609  03D3                     l2900:	
+   610                           ;main.c: 140: TMR1L = low;
+   611  03D3  0833               	movf	(main@low),w
+   612  03D4  008E               	movwf	(14)	;volatile
+   613                           	line	141
+   614                           	
+   615  03D5                     l2902:	
+   616                           ;main.c: 141: TMR1H = high;
+   617  03D5  0832               	movf	(main@high),w
+   618  03D6  008F               	movwf	(15)	;volatile
+   619                           	line	142
+   620                           	
+   621  03D7                     l2904:	
+   622                           ;main.c: 142: state = 0;
+   623  03D7  01AA               	clrf	(main@state)
+   624  03D8  01AB               	clrf	(main@state+1)
+   625                           	line	143
+   626                           	
+   627  03D9                     l2906:	
+   628                           ;main.c: 143: GPIO1 = 0;
+   629  03D9  1085               	bcf	(41/8),(41)&7
+   630                           	line	144
+   631                           	
+   632  03DA                     l2908:	
+   633                           ;main.c: 144: save_to_eeprom(low, high);
+   634  03DA  0832               	movf	(main@high),w
+   635  03DB  00A6               	movwf	(??_main+0)+0
+   636  03DC  0826               	movf	(??_main+0)+0,w
+   637  03DD  00A3               	movwf	(?_save_to_eeprom)
+   638  03DE  0833               	movf	(main@low),w
+   639  03DF  22D8               	fcall	_save_to_eeprom
+   640                           	line	145
+   641                           	
+   642  03E0                     l2910:	
+   643                           ;main.c: 145: wait_bounce();
+   644  03E0  22C3               	fcall	_wait_bounce
+   645                           	line	146
+   646                           ;main.c: 146: } else if (PIR1bits.T1IF == 1) {
+   647  03E1  2BEF               	goto	l2916
+   648                           	
+   649  03E2                     l381:	
+   650  03E2  1C0C               	btfss	(12),0	;volatile
+   651  03E3  2BE5               	goto	u2651
+   652  03E4  2BE6               	goto	u2650
+   653  03E5                     u2651:
+   654  03E5  2BEF               	goto	l2916
+   655  03E6                     u2650:
+   656                           	line	147
+   657                           	
+   658  03E6                     l2912:	
+   659                           ;main.c: 147: TMR1L = low;
+   660  03E6  0833               	movf	(main@low),w
+   661  03E7  008E               	movwf	(14)	;volatile
+   662                           	line	148
+   663                           ;main.c: 148: TMR1H = high;
+   664  03E8  0832               	movf	(main@high),w
+   665  03E9  008F               	movwf	(15)	;volatile
+   666                           	line	149
+   667                           	
+   668  03EA                     l2914:	
+   669                           ;main.c: 149: PIR1bits.T1IF = 0;
+   670  03EA  100C               	bcf	(12),0	;volatile
+   671                           	line	150
+   672                           ;main.c: 150: GPIO1 = !GPIO1;
+   673  03EB  3002               	movlw	1<<((41)&7)
+   674  03EC  0685               	xorwf	((41)/8),f
+   675  03ED  2BEF               	goto	l2916
+   676                           	line	152
+   677                           	
+   678  03EE                     l383:	
+   679  03EE  2BEF               	goto	l2916
+   680                           	line	153
+   681                           	
+   682  03EF                     l382:	
+   683                           	
+   684  03EF                     l2916:	
+   685                           ;main.c: 152: }
+   686                           ;main.c: 153: old = GPIO2;
+   687  03EF  1003               	clrc
+   688  03F0  1283               	bcf	status, 5	;RP0=0, select bank0
+   689  03F1  1905               	btfsc	(42/8),(42)&7
+   690  03F2  1403               	setc
+   691  03F3  3000               	movlw	0
+   692  03F4  1803               	skipnc
+   693  03F5  3001               	movlw	1
+   694                           
+   695  03F6  00A6               	movwf	(??_main+0)+0
+   696  03F7  01A7               	clrf	(??_main+0)+0+1
+   697  03F8  0826               	movf	0+(??_main+0)+0,w
+   698  03F9  00AE               	movwf	(main@old)
+   699  03FA  0827               	movf	1+(??_main+0)+0,w
+   700  03FB  00AF               	movwf	(main@old+1)
+   701  03FC  2B98               	goto	l2876
+   702                           	line	154
+   703                           	
+   704  03FD                     l384:	
+   705                           	line	125
+   706  03FD  2B98               	goto	l2876
+   707                           	
+   708  03FE                     l385:	
+   709                           	line	157
+   710                           	
+   711  03FE                     l386:	
+   712                           	global	start
+   713  03FE  2800               	ljmp	start
+   714                           	opt stack 0
+   715                           GLOBAL	__end_of_main
+   716  03FF                     	__end_of_main:
+   717 ;; =============== function _main ends ============
+   718                           
+   719                           	signat	_main,88
+   720                           	global	_load_from_eeprom
+   721                           psect	text243,local,class=CODE,delta=2
+   722                           global __ptext243
+   723  030C                     __ptext243:
+   724                           
+   725 ;; *************** function _load_from_eeprom *****************
+   726 ;; Defined at:
+   727 ;;		line 76 in file "main.c"
+   728 ;; Parameters:    Size  Location     Type
+   729 ;;  low             1    wreg     PTR unsigned char 
+   730 ;;		 -> main@low(1), 
+   731 ;;  high            1    2[BANK0 ] PTR unsigned char 
+   732 ;;		 -> main@high(1), 
+   733 ;; Auto vars:     Size  Location     Type
+   734 ;;  low             1    4[BANK0 ] PTR unsigned char 
+   735 ;;		 -> main@low(1), 
+   736 ;;  tmp             1    0        unsigned char 
+   737 ;; Return value:  Size  Location     Type
+   738 ;;                  2    2[BANK0 ] int 
+   739 ;; Registers used:
+   740 ;;		wreg, fsr0l, fsr0h, status,2, status,0, pclath, cstack
+   741 ;; Tracked objects:
+   742 ;;		On entry : 0/0
+   743 ;;		On exit  : 0/0
+   744 ;;		Unchanged: 0/0
+   745 ;; Data sizes:     COMMON   BANK0
+   746 ;;      Params:         0       1
+   747 ;;      Locals:         0       1
+   748 ;;      Temps:          0       1
+   749 ;;      Totals:         0       3
+   750 ;;Total ram usage:        3 bytes
+   751 ;; Hardware stack levels used:    1
+   752 ;; Hardware stack levels required when called:    1
+   753 ;; This function calls:
+   754 ;;		_eeprom_read
+   755 ;; This function is called by:
+   756 ;;		_main
+   757 ;; This function uses a non-reentrant model
+   758 ;;
+   759                           psect	text243
+   760                           	file	"main.c"
+   761                           	line	76
+   762                           	global	__size_of_load_from_eeprom
+   763  001E                     	__size_of_load_from_eeprom	equ	__end_of_load_from_eeprom-_load_from_eeprom
+   764                           	
+   765  030C                     _load_from_eeprom:	
+   766                           	opt	stack 6
+   767                           ; Regs used in _load_from_eeprom: [wreg-fsr0h+status,2+status,0+pclath+cstack]
+   768                           ;load_from_eeprom@low stored from wreg
+   769                           	line	79
+   770  030C  1283               	bcf	status, 5	;RP0=0, select bank0
+   771  030D  00A4               	movwf	(load_from_eeprom@low)
+   772                           	
+   773  030E                     l2830:	
+   774                           ;main.c: 77: char tmp;
+   775                           ;main.c: 79: if (((char)0xC4) != eeprom_read(0x1F))
+   776  030E  301F               	movlw	(01Fh)
+   777  030F  22EF               	fcall	_eeprom_read
+   778  0310  3AC4               	xorlw	0C4h
+   779  0311  1903               	skipnz
+   780  0312  2B14               	goto	u2591
+   781  0313  2B15               	goto	u2590
+   782  0314                     u2591:
+   783  0314  2B17               	goto	l2834
+   784  0315                     u2590:
+   785  0315  2B29               	goto	l373
+   786                           	line	80
+   787                           	
+   788  0316                     l2832:	
+   789                           ;main.c: 80: return 1;
+   790                           ;	Return value of _load_from_eeprom is never used
+   791  0316  2B29               	goto	l373
+   792                           	
+   793  0317                     l372:	
+   794                           	line	82
+   795                           	
+   796  0317                     l2834:	
+   797                           ;main.c: 82: *low = eeprom_read(0x20);
+   798  0317  3020               	movlw	(020h)
+   799  0318  22EF               	fcall	_eeprom_read
+   800  0319  1283               	bcf	status, 5	;RP0=0, select bank0
+   801  031A  00A3               	movwf	(??_load_from_eeprom+0)+0
+   802  031B  0824               	movf	(load_from_eeprom@low),w
+   803  031C  0084               	movwf	fsr0
+   804  031D  0823               	movf	(??_load_from_eeprom+0)+0,w
+   805  031E  1383               	bcf	status, 7	;select IRP bank0
+   806  031F  0080               	movwf	indf
+   807                           	line	83
+   808                           ;main.c: 83: *high = eeprom_read(0x21);
+   809  0320  3021               	movlw	(021h)
+   810  0321  22EF               	fcall	_eeprom_read
+   811  0322  1283               	bcf	status, 5	;RP0=0, select bank0
+   812  0323  00A3               	movwf	(??_load_from_eeprom+0)+0
+   813  0324  0822               	movf	(load_from_eeprom@high),w
+   814  0325  0084               	movwf	fsr0
+   815  0326  0823               	movf	(??_load_from_eeprom+0)+0,w
+   816  0327  1383               	bcf	status, 7	;select IRP bank0
+   817  0328  0080               	movwf	indf
+   818                           	line	84
+   819                           	
+   820  0329                     l373:	
+   821  0329  0008               	return
+   822                           	opt stack 0
+   823                           GLOBAL	__end_of_load_from_eeprom
+   824  032A                     	__end_of_load_from_eeprom:
+   825 ;; =============== function _load_from_eeprom ends ============
+   826                           
+   827                           	signat	_load_from_eeprom,8314
+   828                           	global	_save_to_eeprom
+   829                           psect	text244,local,class=CODE,delta=2
+   830                           global __ptext244
+   831  02D8                     __ptext244:
+   832                           
+   833 ;; *************** function _save_to_eeprom *****************
+   834 ;; Defined at:
+   835 ;;		line 69 in file "main.c"
+   836 ;; Parameters:    Size  Location     Type
+   837 ;;  low             1    wreg     unsigned char 
+   838 ;;  high            1    3[BANK0 ] unsigned char 
+   839 ;; Auto vars:     Size  Location     Type
+   840 ;;  low             1    5[BANK0 ] unsigned char 
+   841 ;; Return value:  Size  Location     Type
+   842 ;;		None               void
+   843 ;; Registers used:
+   844 ;;		wreg, status,2, status,0, pclath, cstack
+   845 ;; Tracked objects:
+   846 ;;		On entry : 0/0
+   847 ;;		On exit  : 0/0
+   848 ;;		Unchanged: 0/0
+   849 ;; Data sizes:     COMMON   BANK0
+   850 ;;      Params:         0       1
+   851 ;;      Locals:         0       1
+   852 ;;      Temps:          0       1
+   853 ;;      Totals:         0       3
+   854 ;;Total ram usage:        3 bytes
+   855 ;; Hardware stack levels used:    1
+   856 ;; Hardware stack levels required when called:    1
+   857 ;; This function calls:
+   858 ;;		_eeprom_write
+   859 ;; This function is called by:
+   860 ;;		_main
+   861 ;; This function uses a non-reentrant model
+   862 ;;
+   863                           psect	text244
+   864                           	file	"main.c"
+   865                           	line	69
+   866                           	global	__size_of_save_to_eeprom
+   867  0017                     	__size_of_save_to_eeprom	equ	__end_of_save_to_eeprom-_save_to_eeprom
+   868                           	
+   869  02D8                     _save_to_eeprom:	
+   870                           	opt	stack 6
+   871                           ; Regs used in _save_to_eeprom: [wreg+status,2+status,0+pclath+cstack]
+   872                           ;save_to_eeprom@low stored from wreg
+   873  02D8  1283               	bcf	status, 5	;RP0=0, select bank0
+   874  02D9  00A5               	movwf	(save_to_eeprom@low)
+   875                           	line	70
+   876                           	
+   877  02DA                     l2828:	
+   878                           ;main.c: 70: eeprom_write(0x1F, ((char)0xC4));
+   879  02DA  30C4               	movlw	(0C4h)
+   880  02DB  00A4               	movwf	(??_save_to_eeprom+0)+0
+   881  02DC  0824               	movf	(??_save_to_eeprom+0)+0,w
+   882  02DD  00A0               	movwf	(?_eeprom_write)
+   883  02DE  301F               	movlw	(01Fh)
+   884  02DF  232A               	fcall	_eeprom_write
+   885                           	line	71
+   886                           ;main.c: 71: eeprom_write(0x20, low);
+   887  02E0  1283               	bcf	status, 5	;RP0=0, select bank0
+   888  02E1  0825               	movf	(save_to_eeprom@low),w
+   889  02E2  00A4               	movwf	(??_save_to_eeprom+0)+0
+   890  02E3  0824               	movf	(??_save_to_eeprom+0)+0,w
+   891  02E4  00A0               	movwf	(?_eeprom_write)
+   892  02E5  3020               	movlw	(020h)
+   893  02E6  232A               	fcall	_eeprom_write
+   894                           	line	72
+   895                           ;main.c: 72: eeprom_write(0x21, high);
+   896  02E7  1283               	bcf	status, 5	;RP0=0, select bank0
+   897  02E8  0823               	movf	(save_to_eeprom@high),w
+   898  02E9  00A4               	movwf	(??_save_to_eeprom+0)+0
+   899  02EA  0824               	movf	(??_save_to_eeprom+0)+0,w
+   900  02EB  00A0               	movwf	(?_eeprom_write)
+   901  02EC  3021               	movlw	(021h)
+   902  02ED  232A               	fcall	_eeprom_write
+   903                           	line	73
+   904                           	
+   905  02EE                     l369:	
+   906  02EE  0008               	return
+   907                           	opt stack 0
+   908                           GLOBAL	__end_of_save_to_eeprom
+   909  02EF                     	__end_of_save_to_eeprom:
+   910 ;; =============== function _save_to_eeprom ends ============
+   911                           
+   912                           	signat	_save_to_eeprom,8312
+   913                           	global	_eeprom_read
+   914                           psect	text245,local,class=CODE,delta=2
+   915                           global __ptext245
+   916  02EF                     __ptext245:
+   917                           
+   918 ;; *************** function _eeprom_read *****************
+   919 ;; Defined at:
+   920 ;;		line 7 in file "eeread.c"
+   921 ;; Parameters:    Size  Location     Type
+   922 ;;  addr            1    wreg     unsigned char 
+   923 ;; Auto vars:     Size  Location     Type
+   924 ;;  addr            1    1[BANK0 ] unsigned char 
+   925 ;; Return value:  Size  Location     Type
+   926 ;;                  1    wreg      unsigned char 
+   927 ;; Registers used:
+   928 ;;		wreg, status,2, status,0
+   929 ;; Tracked objects:
+   930 ;;		On entry : 0/0
+   931 ;;		On exit  : 0/0
+   932 ;;		Unchanged: 0/0
+   933 ;; Data sizes:     COMMON   BANK0
+   934 ;;      Params:         0       0
+   935 ;;      Locals:         0       1
+   936 ;;      Temps:          0       1
+   937 ;;      Totals:         0       2
+   938 ;;Total ram usage:        2 bytes
+   939 ;; Hardware stack levels used:    1
+   940 ;; This function calls:
+   941 ;;		Nothing
+   942 ;; This function is called by:
+   943 ;;		_load_from_eeprom
+   944 ;; This function uses a non-reentrant model
+   945 ;;
+   946                           psect	text245
+   947                           	file	"C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\eeread.c"
+   948                           	line	7
+   949                           	global	__size_of_eeprom_read
+   950  001D                     	__size_of_eeprom_read	equ	__end_of_eeprom_read-_eeprom_read
+   951                           	
+   952  02EF                     _eeprom_read:	
+   953                           	opt	stack 6
+   954                           ; Regs used in _eeprom_read: [wreg+status,2+status,0]
+   955                           ;eeprom_read@addr stored from wreg
+   956                           	line	9
+   957  02EF  1283               	bcf	status, 5	;RP0=0, select bank0
+   958  02F0  00A1               	movwf	(eeprom_read@addr)
+   959                           	line	8
+   960                           	
+   961  02F1                     l691:	
+   962                           	line	9
+   963                           # 9 "C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\eeread.c"
+   964  02F1  0064               clrwdt ;#
+   965                           psect	text245
+   966                           	line	10
+   967  02F2  1683               	bsf	status, 5	;RP0=1, select bank1
+   968  02F3  189C               	btfsc	(1249/8)^080h,(1249)&7
+   969  02F4  2AF6               	goto	u2581
+   970  02F5  2AF7               	goto	u2580
+   971  02F6                     u2581:
+   972  02F6  2AF1               	goto	l691
+   973  02F7                     u2580:
+   974  02F7  2AF8               	goto	l2824
+   975                           	
+   976  02F8                     l692:	
+   977                           	line	11
+   978                           	
+   979  02F8                     l2824:	
+   980  02F8  1283               	bcf	status, 5	;RP0=0, select bank0
+   981  02F9  0821               	movf	(eeprom_read@addr),w
+   982  02FA  1683               	bsf	status, 5	;RP0=1, select bank1
+   983  02FB  009B               	movwf	(155)^080h	;volatile
+   984  02FC  303F               	movlw	(03Fh)
+   985  02FD  1283               	bcf	status, 5	;RP0=0, select bank0
+   986  02FE  00A0               	movwf	(??_eeprom_read+0)+0
+   987  02FF  0820               	movf	(??_eeprom_read+0)+0,w
+   988  0300  1683               	bsf	status, 5	;RP0=1, select bank1
+   989  0301  059C               	andwf	(156)^080h,f	;volatile
+   990  0302  141C               	bsf	(1248/8)^080h,(1248)&7
+   991  0303  1003               	clrc
+   992  0304  181C               	btfsc	(1248/8)^080h,(1248)&7
+   993  0305  1403               	setc
+   994  0306  3000               	movlw	0
+   995  0307  1803               	skipnc
+   996  0308  3001               	movlw	1
+   997                           
+   998  0309  081A               	movf	(154)^080h,w	;volatile
+   999  030A  2B0B               	goto	l693
+  1000                           	
+  1001  030B                     l2826:	
+  1002                           	line	12
+  1003                           	
+  1004  030B                     l693:	
+  1005  030B  0008               	return
+  1006                           	opt stack 0
+  1007                           GLOBAL	__end_of_eeprom_read
+  1008  030C                     	__end_of_eeprom_read:
+  1009 ;; =============== function _eeprom_read ends ============
+  1010                           
+  1011                           	signat	_eeprom_read,4217
+  1012                           	global	_eeprom_write
+  1013                           psect	text246,local,class=CODE,delta=2
+  1014                           global __ptext246
+  1015  032A                     __ptext246:
+  1016                           
+  1017 ;; *************** function _eeprom_write *****************
+  1018 ;; Defined at:
+  1019 ;;		line 7 in file "C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\eewrite.c"
+  1020 ;; Parameters:    Size  Location     Type
+  1021 ;;  addr            1    wreg     unsigned char 
+  1022 ;;  value           1    0[BANK0 ] unsigned char 
+  1023 ;; Auto vars:     Size  Location     Type
+  1024 ;;  addr            1    2[BANK0 ] unsigned char 
+  1025 ;; Return value:  Size  Location     Type
+  1026 ;;                  1    wreg      unsigned char 
+  1027 ;; Registers used:
+  1028 ;;		wreg, status,2, status,0
+  1029 ;; Tracked objects:
+  1030 ;;		On entry : 0/0
+  1031 ;;		On exit  : 0/0
+  1032 ;;		Unchanged: 0/0
+  1033 ;; Data sizes:     COMMON   BANK0
+  1034 ;;      Params:         0       1
+  1035 ;;      Locals:         0       1
+  1036 ;;      Temps:          0       1
+  1037 ;;      Totals:         0       3
+  1038 ;;Total ram usage:        3 bytes
+  1039 ;; Hardware stack levels used:    1
+  1040 ;; This function calls:
+  1041 ;;		Nothing
+  1042 ;; This function is called by:
+  1043 ;;		_save_to_eeprom
+  1044 ;; This function uses a non-reentrant model
+  1045 ;;
+  1046                           psect	text246
+  1047                           	file	"C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\eewrite.c"
+  1048                           	line	7
+  1049                           	global	__size_of_eeprom_write
+  1050  0030                     	__size_of_eeprom_write	equ	__end_of_eeprom_write-_eeprom_write
+  1051                           	
+  1052  032A                     _eeprom_write:	
+  1053                           	opt	stack 6
+  1054                           ; Regs used in _eeprom_write: [wreg+status,2+status,0]
+  1055                           ;eeprom_write@addr stored from wreg
+  1056  032A  1283               	bcf	status, 5	;RP0=0, select bank0
+  1057  032B  00A2               	movwf	(eeprom_write@addr)
+  1058                           	line	8
+  1059                           	
+  1060  032C                     l998:	
+  1061  032C  2B2D               	goto	l999
+  1062                           	
+  1063  032D                     l1000:	
+  1064                           	
+  1065  032D                     l999:	
+  1066  032D  1683               	bsf	status, 5	;RP0=1, select bank1
+  1067  032E  189C               	btfsc	(1249/8)^080h,(1249)&7
+  1068  032F  2B31               	goto	u2551
+  1069  0330  2B32               	goto	u2550
+  1070  0331                     u2551:
+  1071  0331  2B2D               	goto	l999
+  1072  0332                     u2550:
+  1073  0332  2B33               	goto	l2804
+  1074                           	
+  1075  0333                     l1001:	
+  1076                           	
+  1077  0333                     l2804:	
+  1078  0333  1283               	bcf	status, 5	;RP0=0, select bank0
+  1079  0334  0822               	movf	(eeprom_write@addr),w
+  1080  0335  1683               	bsf	status, 5	;RP0=1, select bank1
+  1081  0336  009B               	movwf	(155)^080h	;volatile
+  1082  0337  1283               	bcf	status, 5	;RP0=0, select bank0
+  1083  0338  0820               	movf	(eeprom_write@value),w
+  1084  0339  1683               	bsf	status, 5	;RP0=1, select bank1
+  1085  033A  009A               	movwf	(154)^080h	;volatile
+  1086                           	
+  1087  033B                     l2806:	
+  1088  033B  303F               	movlw	(03Fh)
+  1089  033C  1283               	bcf	status, 5	;RP0=0, select bank0
+  1090  033D  00A1               	movwf	(??_eeprom_write+0)+0
+  1091  033E  0821               	movf	(??_eeprom_write+0)+0,w
+  1092  033F  1683               	bsf	status, 5	;RP0=1, select bank1
+  1093  0340  059C               	andwf	(156)^080h,f	;volatile
+  1094                           	
+  1095  0341                     l2808:	
+  1096  0341  1283               	bcf	status, 5	;RP0=0, select bank0
+  1097  0342  1003               	bcf	(24/8),(24)&7
+  1098                           	
+  1099  0343                     l2810:	
+  1100  0343  1F8B               	btfss	(95/8),(95)&7
+  1101  0344  2B46               	goto	u2561
+  1102  0345  2B47               	goto	u2560
+  1103  0346                     u2561:
+  1104  0346  2B48               	goto	l1002
+  1105  0347                     u2560:
+  1106                           	
+  1107  0347                     l2812:	
+  1108  0347  1403               	bsf	(24/8),(24)&7
+  1109                           	
+  1110  0348                     l1002:	
+  1111  0348  138B               	bcf	(95/8),(95)&7
+  1112  0349  1683               	bsf	status, 5	;RP0=1, select bank1
+  1113  034A  151C               	bsf	(1250/8)^080h,(1250)&7
+  1114                           	
+  1115  034B                     l2814:	
+  1116  034B  3055               	movlw	(055h)
+  1117  034C  009D               	movwf	(157)^080h	;volatile
+  1118  034D  30AA               	movlw	(0AAh)
+  1119  034E  009D               	movwf	(157)^080h	;volatile
+  1120                           	
+  1121  034F                     l2816:	
+  1122  034F  149C               	bsf	(1249/8)^080h,(1249)&7
+  1123                           	
+  1124  0350                     l2818:	
+  1125  0350  111C               	bcf	(1250/8)^080h,(1250)&7
+  1126                           	
+  1127  0351                     l2820:	
+  1128  0351  1283               	bcf	status, 5	;RP0=0, select bank0
+  1129  0352  1C03               	btfss	(24/8),(24)&7
+  1130  0353  2B55               	goto	u2571
+  1131  0354  2B56               	goto	u2570
+  1132  0355                     u2571:
+  1133  0355  2B59               	goto	l1005
+  1134  0356                     u2570:
+  1135                           	
+  1136  0356                     l2822:	
+  1137  0356  178B               	bsf	(95/8),(95)&7
+  1138  0357  2B59               	goto	l1005
+  1139                           	
+  1140  0358                     l1003:	
+  1141  0358  2B59               	goto	l1005
+  1142                           	
+  1143  0359                     l1004:	
+  1144                           	line	10
+  1145                           ;	Return value of _eeprom_write is never used
+  1146                           	
+  1147  0359                     l1005:	
+  1148  0359  0008               	return
+  1149                           	opt stack 0
+  1150                           GLOBAL	__end_of_eeprom_write
+  1151  035A                     	__end_of_eeprom_write:
+  1152 ;; =============== function _eeprom_write ends ============
+  1153                           
+  1154                           	signat	_eeprom_write,8313
+  1155                           	global	_wait_bounce
+  1156                           psect	text247,local,class=CODE,delta=2
+  1157                           global __ptext247
+  1158  02C3                     __ptext247:
+  1159                           
+  1160 ;; *************** function _wait_bounce *****************
+  1161 ;; Defined at:
+  1162 ;;		line 26 in file "main.c"
+  1163 ;; Parameters:    Size  Location     Type
+  1164 ;;		None
+  1165 ;; Auto vars:     Size  Location     Type
+  1166 ;;  i               2    0[BANK0 ] int 
+  1167 ;; Return value:  Size  Location     Type
+  1168 ;;                  2  349[BANK0 ] int 
+  1169 ;; Registers used:
+  1170 ;;		wreg, status,2, status,0
+  1171 ;; Tracked objects:
+  1172 ;;		On entry : 0/0
+  1173 ;;		On exit  : 0/0
+  1174 ;;		Unchanged: 0/0
+  1175 ;; Data sizes:     COMMON   BANK0
+  1176 ;;      Params:         0       0
+  1177 ;;      Locals:         0       2
+  1178 ;;      Temps:          0       0
+  1179 ;;      Totals:         0       2
+  1180 ;;Total ram usage:        2 bytes
+  1181 ;; Hardware stack levels used:    1
+  1182 ;; This function calls:
+  1183 ;;		Nothing
+  1184 ;; This function is called by:
+  1185 ;;		_main
+  1186 ;;		_old
+  1187 ;; This function uses a non-reentrant model
+  1188 ;;
+  1189                           psect	text247
+  1190                           	file	"main.c"
+  1191                           	line	26
+  1192                           	global	__size_of_wait_bounce
+  1193  0015                     	__size_of_wait_bounce	equ	__end_of_wait_bounce-_wait_bounce
+  1194                           	
+  1195  02C3                     _wait_bounce:	
+  1196                           	opt	stack 7
+  1197                           ; Regs used in _wait_bounce: [wreg+status,2+status,0]
+  1198                           	line	27
+  1199                           	
+  1200  02C3                     l2768:	
+  1201                           ;main.c: 27: int i = 0x20;
+  1202  02C3  3020               	movlw	low(020h)
+  1203  02C4  1283               	bcf	status, 5	;RP0=0, select bank0
+  1204  02C5  00A0               	movwf	(wait_bounce@i)
+  1205  02C6  3000               	movlw	high(020h)
+  1206  02C7  00A1               	movwf	((wait_bounce@i))+1
+  1207                           	line	28
+  1208                           ;main.c: 28: while(--i)
+  1209  02C8  2ACA               	goto	l2770
+  1210                           	
+  1211  02C9                     l351:	
+  1212  02C9  2ACA               	goto	l2770
+  1213                           	line	29
+  1214                           ;main.c: 29: ;
+  1215                           	
+  1216  02CA                     l350:	
+  1217                           	line	28
+  1218                           	
+  1219  02CA                     l2770:	
+  1220  02CA  30FF               	movlw	low(-1)
+  1221  02CB  07A0               	addwf	(wait_bounce@i),f
+  1222  02CC  1803               	skipnc
+  1223  02CD  0AA1               	incf	(wait_bounce@i+1),f
+  1224  02CE  30FF               	movlw	high(-1)
+  1225  02CF  07A1               	addwf	(wait_bounce@i+1),f
+  1226  02D0  0821               	movf	(((wait_bounce@i+1))),w
+  1227  02D1  0420               	iorwf	(((wait_bounce@i))),w
+  1228  02D2  1D03               	skipz
+  1229  02D3  2AD5               	goto	u2441
+  1230  02D4  2AD6               	goto	u2440
+  1231  02D5                     u2441:
+  1232  02D5  2ACA               	goto	l2770
+  1233  02D6                     u2440:
+  1234  02D6  2AD7               	goto	l353
+  1235                           	
+  1236  02D7                     l352:	
+  1237                           	line	31
+  1238                           ;main.c: 30: return 1;
+  1239                           ;	Return value of _wait_bounce is never used
+  1240                           	
+  1241  02D7                     l353:	
+  1242  02D7  0008               	return
+  1243                           	opt stack 0
+  1244                           GLOBAL	__end_of_wait_bounce
+  1245  02D8                     	__end_of_wait_bounce:
+  1246 ;; =============== function _wait_bounce ends ============
+  1247                           
+  1248                           	signat	_wait_bounce,90
+  1249                           psect	text248,local,class=CODE,delta=2
+  1250                           global __ptext248
+  1251  0000                     __ptext248:
+  1252                           	global	btemp
+  1253  005E                     	btemp set 05Eh
+  1254                           
+  1255                           	DABS	1,94,2	;btemp
+  1256                           	global	wtemp0
+  1257  005E                     	wtemp0 set btemp
+
+
+HI-TECH Software PICC Macro Assembler V9.83 build 10920 
+Symbol Table                                                                                   Wed Mar 27 15:43:28 2013
+
+__size_of_load_from_eeprom 001E                         _RD 04E0                         _WR 04E1  
+                      l350 02CA                        l351 02C9                        l352 02D7  
+                      l353 02D7                        l372 0317                        l380 03AC  
+                      l373 0329                        l381 03E2                        l382 03EF  
+                      l383 03EE                        l384 03FD                        l376 0374  
+                      l369 02EE                        l385 03FE                        l377 0373  
+                      l386 03FE                        l378 0385                        l379 0398  
+                      l691 02F1                        l692 02F8                        l693 030B  
+                      _GIE 005F                        l998 032C                        l999 032D  
+                      fsr0 0004                        indf 0000                       l1000 032D  
+                     l1001 0333                       l1002 0348                       l1003 0358  
+                     l1004 0359                       l1005 0359                       l2810 0343  
+                     l2820 0351                       l2812 0347                       l2804 0333  
+                     l2900 03D3                       l2822 0356                       l2814 034B  
+                     l2806 033B                       l2830 030E                       l2910 03E0  
+                     l2902 03D5                       l2816 034F                       l2808 0341  
+                     l2824 02F8                       l2832 0316                       l2912 03E6  
+                     l2904 03D7                       l2840 035F                       l2770 02CA  
+                     l2818 0350                       l2826 030B                       l2834 0317  
+                     l2914 03EA                       l2906 03D9                       l2850 0366  
+                     l2842 0361                       l2828 02DA                       l2916 03EF  
+                     l2908 03DA                       l2860 036C                       l2852 0367  
+                     l2844 0362                       l2836 035A                       l2870 038C  
+                     l2862 036D                       l2854 0368                       l2846 0363  
+                     l2838 035D                       l2768 02C3                       l2880 03A3  
+                     l2872 0392                       l2864 0374                       l2856 0369  
+                     l2848 0365                       l2890 03B1                       l2882 03A5  
+                     l2874 0395                       l2866 0385                       l2858 036A  
+                     l2892 03B7                       l2884 03A9                       l2876 0398  
+                     l2868 0387                       l2894 03C6                       l2886 03AA  
+                     l2878 039C                       l2896 03CB                       l2888 03AC  
+                     l2898 03CF                       u2440 02D6                       u2600 0384  
+                     u2441 02D5                       u2601 0383                       u2610 039C  
+                     u2611 039B                       u2620 03A3                       u2621 03A2  
+                     u2605 0380                       u2550 0332                       u2630 03B1  
+                     u2551 0331                       u2631 03B0                       u2560 0347  
+                     u2640 03B7                       u2561 0346                       u2641 03B6  
+                     u2570 0356                       u2650 03E6                       u2571 0355  
+                     u2651 03E5                       u2580 02F7                       u2581 02F6  
+                     u2590 0315                       u2591 0314                       _WREN 04E2  
+           ??_eeprom_write 0021                       _main 035A                       btemp 005E  
+                     start 0000                      ?_main 0020                      _EEADR 009B  
+                    _CARRY 0018                      _CMCON 0019                      _ANSEL 009F  
+                    _GPIO0 0028                      _GPIO1 0029                      _GPIO2 002A  
+                    _TMR1H 000F                      _TMR1L 000E    __size_of_save_to_eeprom 0017  
+                    status 0003                      wtemp0 005E               __end_of_main 03FF  
+                   ??_main 0026                     _EEDATA 009A                     _EECON1 009C  
+                   _EECON2 009D                     _TMR1CS 0081                     _TMR1ON 0080  
+                   _TRISIO 0085       __size_of_eeprom_read 001D           _load_from_eeprom 030C  
+     __end_of_eeprom_write 035A               ?_wait_bounce 0020            eeprom_read@addr 0021  
+           __pcstackCOMMON 0000       load_from_eeprom@high 0022          eeprom_write@value 0020  
+           _save_to_eeprom 02D8                 __pmaintext 035A                    _T1CKPS0 0084  
+                  _T1CKPS1 0085          save_to_eeprom@low 0025                    _TRISIO2 042A  
+   __end_of_save_to_eeprom 02EF      __size_of_eeprom_write 0030       __size_of_wait_bounce 0015  
+                  main@old 002E                    main@low 0033            ?_save_to_eeprom 0023  
+     end_of_initialization 02C1   __end_of_load_from_eeprom 032A               _eeprom_write 032A  
+            ??_eeprom_read 0020        start_initialization 02C1        __end_of_eeprom_read 030C  
+            __pcstackBANK0 0020        load_from_eeprom@low 0024           eeprom_write@addr 0022  
+                __ptext242 0000                  __ptext243 030C                  __ptext244 02D8  
+                __ptext245 02EF                  __ptext246 032A                  __ptext247 02C3  
+                __ptext248 0000           ??_save_to_eeprom 0024          ?_load_from_eeprom 0022  
+       ??_load_from_eeprom 0023                _eeprom_read 02EF                   _PIR1bits 000C  
+       save_to_eeprom@high 0023              ??_wait_bounce 0000                  main@saved 0030  
+                main@state 002A        __end_of_wait_bounce 02D8              __size_of_main 00A5  
+                 main@high 0032                   main@cntr 002C               wait_bounce@i 0020  
+              _wait_bounce 02C3              ?_eeprom_write 0020               ?_eeprom_read 0020  

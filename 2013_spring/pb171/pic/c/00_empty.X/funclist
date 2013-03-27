@@ -1,0 +1,7 @@
+_save_to_eeprom: CODE, 728 0 23
+_main: CODE, 858 0 165
+_wait_bounce: CODE, 707 0 21
+_load_from_eeprom: CODE, 780 0 30
+_eeprom_read: CODE, 751 0 29
+_eeprom_write: CODE, 810 0 48
+Total: 316
