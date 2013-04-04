@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <windows.h>
+#include <stdbool.h>
 
-
-int global_variable;
+volatile int global_variable;
 
 int thread_func()
 {
@@ -40,9 +40,11 @@ int main(int argc, char **argv)
 	for (i=0; i<num; i++)
 		h[i] = CreateThread(NULL, 0, thread_func_stdcall, (void *)('0'+i), 0, NULL);
 
+	WaitForMultipleObjects(num, h, true, INFINITE);
+#if 0
 	for (i=0; i<num; i++)
 		WaitForSingleObject(h[i],INFINITE);
-
+#endif
 	printf("exitting\n");
 	printf("global var: %d\n", global_variable);
 
