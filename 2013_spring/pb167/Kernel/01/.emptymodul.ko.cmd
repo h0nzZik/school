@@ -1,1 +1,0 @@
-cmd_/home/jenda/School/2013/jaro/osys/mod/km/emptymodul.ko := ld -r -m elf_x86_64 -T /usr/src/kernels/3.8.2-206.fc18.x86_64/scripts/module-common.lds --build-id  -o /home/jenda/School/2013/jaro/osys/mod/km/emptymodul.ko /home/jenda/School/2013/jaro/osys/mod/km/emptymodul.o /home/jenda/School/2013/jaro/osys/mod/km/emptymodul.mod.o
