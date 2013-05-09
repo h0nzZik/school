@@ -1,3 +1,11 @@
+# Object files
 *.o
 *.ko
+
+# Windows executable
+*.exe
+
+# Hidden files
 .*
+# Backup files
+*~
