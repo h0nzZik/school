@@ -1,0 +1,964 @@
+
+
+HI-TECH Software PIC LITE Macro Assembler V9.83 build 10920 
+                                                                                               Wed May 15 15:41:58 2013
+
+HI-TECH Software Omniscient Code Generator (Lite mode) build 10920
+     1  0000                     opt subtitle "HI-TECH Software Omniscient Code Generator (Lite mode) build 10920"
+     2                           
+     3                           opt pagewidth 120
+     4                           
+     5                           	opt lm
+     6                           
+     7                           	processor	16F819
+     8                           clrc	macro
+     9                           	bcf	3,0
+    10  0000                     	endm
+    11                           clrz	macro
+    12                           	bcf	3,2
+    13  0000                     	endm
+    14                           setc	macro
+    15                           	bsf	3,0
+    16  0000                     	endm
+    17                           setz	macro
+    18                           	bsf	3,2
+    19  0000                     	endm
+    20                           skipc	macro
+    21                           	btfss	3,0
+    22  0000                     	endm
+    23                           skipz	macro
+    24                           	btfss	3,2
+    25  0000                     	endm
+    26                           skipnc	macro
+    27                           	btfsc	3,0
+    28  0000                     	endm
+    29                           skipnz	macro
+    30                           	btfsc	3,2
+    31  0000                     	endm
+    32  0000                     indf	equ	0
+    33  0000                     indf0	equ	0
+    34  0002                     pc	equ	2
+    35  0002                     pcl	equ	2
+    36  0003                     status	equ	3
+    37  0004                     fsr	equ	4
+    38  0004                     fsr0	equ	4
+    39  0001                     c	equ	1
+    40  0000                     z	equ	0
+    41  000A                     pclath	equ	10
+    42                           # 9 "main.c"
+    43                           	psect config,class=CONFIG,delta=2 ;#
+    44                           # 9 "main.c"
+    45  2007  FF98               	dw 0xFFFB & 0xFFFF & 0xFFDF & 0xFFFC & 0xFFBF ;#
+    46                           	FNCALL	_main,_init
+    47                           	FNCALL	_main,_shift_write
+    48                           	FNCALL	_main,_bit_on
+    49                           	FNCALL	_main,_bit_off
+    50                           	FNCALL	_shift_write,_bit_off
+    51                           	FNCALL	_shift_write,_bit_on
+    52                           	FNROOT	_main
+    53                           	global	_a_latch
+    54                           	global	_PORTA
+    55                           psect	text106,local,class=CODE,delta=2
+    56                           global __ptext106
+    57  0000                     __ptext106:
+    58  0005                     _PORTA	set	5
+    59                           	global	_CARRY
+    60  0018                     _CARRY	set	24
+    61                           	global	_GIE
+    62  005F                     _GIE	set	95
+    63                           	global	_RA1
+    64  0029                     _RA1	set	41
+    65                           	global	_ADCON1
+    66  009F                     _ADCON1	set	159
+    67                           	global	_TRISA
+    68  0085                     _TRISA	set	133
+    69                           	global	_EEADR
+    70  010D                     _EEADR	set	269
+    71                           	global	_EEDATA
+    72  010C                     _EEDATA	set	268
+    73                           	global	_EECON1
+    74  018C                     _EECON1	set	396
+    75                           	global	_EECON2
+    76  018D                     _EECON2	set	397
+    77                           	global	_RD
+    78  0C60                     _RD	set	3168
+    79                           	global	_WR
+    80  0C61                     _WR	set	3169
+    81                           	global	_WREN
+    82  0C62                     _WREN	set	3170
+    83                           	file	"C:\Users\vyvoj\AppData\Local\Temp\s2j8."
+    84                           	line	#
+    85                           psect cinit,class=CODE,delta=2
+    86                           global start_initialization
+    87  0756                     start_initialization:
+    88                           
+    89                           psect	bssCOMMON,class=COMMON,space=1
+    90                           global __pbssCOMMON
+    91  007A                     __pbssCOMMON:
+    92  007A                     _a_latch:
+    93  007A                            ds      1
+    94                           
+    95                           ; Clear objects allocated to COMMON
+    96                           psect cinit,class=CODE,delta=2
+    97  0756  01FA               	clrf	((__pbssCOMMON)+0)&07Fh
+    98                           psect cinit,class=CODE,delta=2
+    99                           global end_of_initialization
+   100                           
+   101                           ;End of C runtime variable initialization code
+   102                           
+   103  0757                     end_of_initialization:
+   104  0757  0183               clrf status
+   105  0758  2FBC               ljmp _main	;jump to C main() function
+   106                           psect	cstackCOMMON,class=COMMON,space=1
+   107                           global __pcstackCOMMON
+   108  0070                     __pcstackCOMMON:
+   109                           	global	?_bit_on
+   110  0070                     ?_bit_on:	; 0 bytes @ 0x0
+   111                           	global	??_bit_on
+   112  0070                     ??_bit_on:	; 0 bytes @ 0x0
+   113                           	global	?_bit_off
+   114  0070                     ?_bit_off:	; 0 bytes @ 0x0
+   115                           	global	??_bit_off
+   116  0070                     ??_bit_off:	; 0 bytes @ 0x0
+   117                           	global	?_init
+   118  0070                     ?_init:	; 0 bytes @ 0x0
+   119                           	global	??_init
+   120  0070                     ??_init:	; 0 bytes @ 0x0
+   121                           	global	?_shift_write
+   122  0070                     ?_shift_write:	; 0 bytes @ 0x0
+   123                           	global	?_main
+   124  0070                     ?_main:	; 0 bytes @ 0x0
+   125  0070                     	ds	1
+   126                           	global	bit_on@bt
+   127  0071                     bit_on@bt:	; 1 bytes @ 0x1
+   128                           	global	bit_off@bt
+   129  0071                     bit_off@bt:	; 1 bytes @ 0x1
+   130  0071                     	ds	1
+   131                           	global	??_shift_write
+   132  0072                     ??_shift_write:	; 0 bytes @ 0x2
+   133  0072                     	ds	2
+   134                           	global	shift_write@i
+   135  0074                     shift_write@i:	; 2 bytes @ 0x4
+   136  0074                     	ds	2
+   137                           	global	shift_write@data
+   138  0076                     shift_write@data:	; 1 bytes @ 0x6
+   139  0076                     	ds	1
+   140                           	global	??_main
+   141  0077                     ??_main:	; 0 bytes @ 0x7
+   142  0077                     	ds	1
+   143                           	global	main@x
+   144  0078                     main@x:	; 1 bytes @ 0x8
+   145  0078                     	ds	1
+   146                           	global	main@i
+   147  0079                     main@i:	; 1 bytes @ 0x9
+   148  0079                     	ds	1
+   149 ;;Data sizes: Strings 0, constant 0, data 0, bss 1, persistent 0 stack 0
+   150 ;;Auto spaces:   Size  Autos    Used
+   151 ;; COMMON          14     10      11
+   152 ;; BANK0           80      0       0
+   153 ;; BANK1           80      0       0
+   154 ;; BANK2           80      0       0
+   155                           
+   156 ;;
+   157 ;; Pointer list with targets:
+   158                           
+   159                           
+   160                           
+   161 ;;
+   162 ;; Critical Paths under _main in COMMON
+   163 ;;
+   164 ;;   _main->_shift_write
+   165 ;;   _shift_write->_bit_off
+   166 ;;   _shift_write->_bit_on
+   167 ;;
+   168 ;; Critical Paths under _main in BANK0
+   169 ;;
+   170 ;;   None.
+   171 ;;
+   172 ;; Critical Paths under _main in BANK1
+   173 ;;
+   174 ;;   None.
+   175 ;;
+   176 ;; Critical Paths under _main in BANK2
+   177 ;;
+   178 ;;   None.
+   179                           
+   180 ;;
+   181 ;;Main: autosize = 0, tempsize = 1, incstack = 0, save=0
+   182 ;;
+   183                           
+   184 ;;
+   185 ;;Call Graph Tables:
+   186 ;;
+   187 ;; ---------------------------------------------------------------------------------
+   188 ;; (Depth) Function   	        Calls       Base Space   Used Autos Params    Refs
+   189 ;; ---------------------------------------------------------------------------------
+   190 ;; (0) _main                                                 3     3      0     195
+   191 ;;                                              7 COMMON     3     3      0
+   192 ;;                               _init
+   193 ;;                        _shift_write
+   194 ;;                             _bit_on
+   195 ;;                            _bit_off
+   196 ;; ---------------------------------------------------------------------------------
+   197 ;; (1) _shift_write                                          5     5      0      90
+   198 ;;                                              2 COMMON     5     5      0
+   199 ;;                            _bit_off
+   200 ;;                             _bit_on
+   201 ;; ---------------------------------------------------------------------------------
+   202 ;; (1) _init                                                 0     0      0       0
+   203 ;; ---------------------------------------------------------------------------------
+   204 ;; (1) _bit_off                                              2     2      0      15
+   205 ;;                                              0 COMMON     2     2      0
+   206 ;; ---------------------------------------------------------------------------------
+   207 ;; (1) _bit_on                                               2     2      0      15
+   208 ;;                                              0 COMMON     2     2      0
+   209 ;; ---------------------------------------------------------------------------------
+   210 ;; Estimated maximum stack depth 1
+   211 ;; ---------------------------------------------------------------------------------
+   212                           
+   213 ;; Call Graph Graphs:
+   214                           
+   215 ;; _main (ROOT)
+   216 ;;   _init
+   217 ;;   _shift_write
+   218 ;;     _bit_off
+   219 ;;     _bit_on
+   220 ;;   _bit_on
+   221 ;;   _bit_off
+   222 ;;
+   223                           
+   224 ;; Address spaces:
+   225                           
+   226 ;;Name               Size   Autos  Total    Cost      Usage
+   227 ;;BITCOMMON            E      0       0       0        0.0%
+   228 ;;EEDATA             100      0       0       0        0.0%
+   229 ;;NULL                 0      0       0       0        0.0%
+   230 ;;CODE                 0      0       0       0        0.0%
+   231 ;;COMMON               E      A       B       1       78.6%
+   232 ;;BITSFR0              0      0       0       1        0.0%
+   233 ;;SFR0                 0      0       0       1        0.0%
+   234 ;;BITSFR1              0      0       0       2        0.0%
+   235 ;;SFR1                 0      0       0       2        0.0%
+   236 ;;STACK                0      0       2       2        0.0%
+   237 ;;BANK0               50      0       0       3        0.0%
+   238 ;;BITBANK1            50      0       0       4        0.0%
+   239 ;;BITSFR3              0      0       0       4        0.0%
+   240 ;;SFR3                 0      0       0       4        0.0%
+   241 ;;BANK1               50      0       0       5        0.0%
+   242 ;;BITSFR2              0      0       0       5        0.0%
+   243 ;;SFR2                 0      0       0       5        0.0%
+   244 ;;BITBANK2            50      0       0       6        0.0%
+   245 ;;BANK2               50      0       0       7        0.0%
+   246 ;;ABS                  0      0       B       8        0.0%
+   247 ;;BITBANK0            50      0       0       9        0.0%
+   248 ;;DATA                 0      0       D      10        0.0%
+   249                           
+   250                           	global	_main
+   251                           psect	maintext,global,class=CODE,delta=2
+   252                           global __pmaintext
+   253  07BC                     __pmaintext:
+   254                           
+   255 ;; *************** function _main *****************
+   256 ;; Defined at:
+   257 ;;		line 86 in file "main.c"
+   258 ;; Parameters:    Size  Location     Type
+   259 ;;		None
+   260 ;; Auto vars:     Size  Location     Type
+   261 ;;  i               1    9[COMMON] unsigned char 
+   262 ;;  x               1    8[COMMON] unsigned char 
+   263 ;; Return value:  Size  Location     Type
+   264 ;;		None               void
+   265 ;; Registers used:
+   266 ;;		wreg, status,2, status,0, btemp+1, pclath, cstack
+   267 ;; Tracked objects:
+   268 ;;		On entry : 17F/0
+   269 ;;		On exit  : 0/0
+   270 ;;		Unchanged: 0/0
+   271 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   272 ;;      Params:         0       0       0       0
+   273 ;;      Locals:         2       0       0       0
+   274 ;;      Temps:          1       0       0       0
+   275 ;;      Totals:         3       0       0       0
+   276 ;;Total ram usage:        3 bytes
+   277 ;; Hardware stack levels required when called:    2
+   278 ;; This function calls:
+   279 ;;		_init
+   280 ;;		_shift_write
+   281 ;;		_bit_on
+   282 ;;		_bit_off
+   283 ;; This function is called by:
+   284 ;;		Startup code after reset
+   285 ;; This function uses a non-reentrant model
+   286 ;;
+   287                           psect	maintext
+   288                           	file	"main.c"
+   289                           	line	86
+   290                           	global	__size_of_main
+   291  0044                     	__size_of_main	equ	__end_of_main-_main
+   292                           	
+   293  07BC                     _main:	
+   294                           	opt	stack 6
+   295                           ; Regs used in _main: [wreg+status,2+status,0+btemp+1+pclath+cstack]
+   296                           	line	88
+   297                           	
+   298  07BC                     l2205:	
+   299                           ;main.c: 88: init();
+   300  07BC  276D               	fcall	_init
+   301                           	line	90
+   302                           	
+   303  07BD                     l2207:	
+   304                           ;main.c: 90: unsigned char i = 0;
+   305  07BD  01F9               	clrf	(main@i)
+   306                           	line	92
+   307                           	
+   308  07BE                     l2209:	
+   309                           ;main.c: 92: shift_write(0x5A);
+   310  07BE  305A               	movlw	(05Ah)
+   311  07BF  2778               	fcall	_shift_write
+   312                           	line	95
+   313                           	
+   314  07C0                     l2211:	
+   315                           ;main.c: 95: bit_on(0x02);
+   316  07C0  3002               	movlw	(02h)
+   317  07C1  2759               	fcall	_bit_on
+   318                           	line	97
+   319                           	
+   320  07C2                     l2213:	
+   321                           ;main.c: 97: unsigned char x = 0;
+   322  07C2  01F8               	clrf	(main@x)
+   323  07C3  2FC4               	goto	l2215
+   324                           	line	98
+   325                           ;main.c: 98: while(1) {
+   326                           	
+   327  07C4                     l465:	
+   328                           	line	99
+   329                           	
+   330  07C4                     l2215:	
+   331                           ;main.c: 99: if (i == 0) {
+   332  07C4  08F9               	movf	(main@i),f
+   333  07C5  1D03               	skipz
+   334  07C6  2FC8               	goto	u2251
+   335  07C7  2FC9               	goto	u2250
+   336  07C8                     u2251:
+   337  07C8  2FCC               	goto	l2219
+   338  07C9                     u2250:
+   339                           	line	100
+   340                           	
+   341  07C9                     l2217:	
+   342                           ;main.c: 100: bit_off(0x02);
+   343  07C9  3002               	movlw	(02h)
+   344  07CA  2763               	fcall	_bit_off
+   345  07CB  2FCC               	goto	l2219
+   346                           	line	101
+   347                           	
+   348  07CC                     l466:	
+   349                           	line	102
+   350                           	
+   351  07CC                     l2219:	
+   352                           ;main.c: 101: }
+   353                           ;main.c: 102: if (i == 64){
+   354  07CC  0879               	movf	(main@i),w
+   355  07CD  3A40               	xorlw	040h
+   356  07CE  1D03               	skipz
+   357  07CF  2FD1               	goto	u2261
+   358  07D0  2FD2               	goto	u2260
+   359  07D1                     u2261:
+   360  07D1  2FDB               	goto	l2225
+   361  07D2                     u2260:
+   362                           	line	103
+   363                           	
+   364  07D2                     l2221:	
+   365                           ;main.c: 103: bit_on(0x02);
+   366  07D2  3002               	movlw	(02h)
+   367  07D3  2759               	fcall	_bit_on
+   368                           	line	104
+   369                           	
+   370  07D4                     l2223:	
+   371                           ;main.c: 104: shift_write(++x);
+   372  07D4  3001               	movlw	(01h)
+   373  07D5  00F7               	movwf	(??_main+0)+0
+   374  07D6  0877               	movf	(??_main+0)+0,w
+   375  07D7  07F8               	addwf	(main@x),f
+   376  07D8  0878               	movf	((main@x)),w
+   377  07D9  2778               	fcall	_shift_write
+   378  07DA  2FDB               	goto	l2225
+   379                           	line	105
+   380                           	
+   381  07DB                     l467:	
+   382                           	line	107
+   383                           	
+   384  07DB                     l2225:	
+   385                           ;main.c: 105: }
+   386                           ;main.c: 107: i++;
+   387  07DB  3001               	movlw	(01h)
+   388  07DC  00F7               	movwf	(??_main+0)+0
+   389  07DD  0877               	movf	(??_main+0)+0,w
+   390  07DE  07F9               	addwf	(main@i),f
+   391  07DF  2FC4               	goto	l2215
+   392                           	line	108
+   393                           	
+   394  07E0                     l468:	
+   395                           	line	98
+   396  07E0  2FC4               	goto	l2215
+   397                           	
+   398  07E1                     l469:	
+   399  07E1  2FE4               	goto	l2227
+   400                           	line	111
+   401                           ;main.c: 108: }
+   402                           ;main.c: 111: do {
+   403                           	
+   404  07E2                     l470:	
+   405                           	line	112
+   406                           ;main.c: 112: while(++i)
+   407  07E2  2FE4               	goto	l2227
+   408                           	
+   409  07E3                     l472:	
+   410  07E3  2FE4               	goto	l2227
+   411                           	line	113
+   412                           ;main.c: 113: ;
+   413                           	
+   414  07E4                     l471:	
+   415                           	line	112
+   416                           	
+   417  07E4                     l2227:	
+   418  07E4  3001               	movlw	(01h)
+   419  07E5  00F7               	movwf	(??_main+0)+0
+   420  07E6  0877               	movf	(??_main+0)+0,w
+   421  07E7  07F9               	addwf	(main@i),f
+   422  07E8  1D03               	btfss	status,2
+   423  07E9  2FEB               	goto	u2271
+   424  07EA  2FEC               	goto	u2270
+   425  07EB                     u2271:
+   426  07EB  2FE4               	goto	l2227
+   427  07EC                     u2270:
+   428                           	
+   429  07EC                     l473:	
+   430                           	line	114
+   431                           # 114 "main.c"
+   432  07EC  0000               nop ;#
+   433                           psect	maintext
+   434                           	line	115
+   435                           ;main.c: 115: RA1 = 1;
+   436  07ED  1283               	bcf	status, 5	;RP0=0, select bank0
+   437  07EE  1303               	bcf	status, 6	;RP1=0, select bank0
+   438  07EF  1485               	bsf	(41/8),(41)&7
+   439                           	line	116
+   440                           ;main.c: 116: while(++i)
+   441  07F0  2FF2               	goto	l2229
+   442                           	
+   443  07F1                     l475:	
+   444  07F1  2FF2               	goto	l2229
+   445                           	line	117
+   446                           ;main.c: 117: ;
+   447                           	
+   448  07F2                     l474:	
+   449                           	line	116
+   450                           	
+   451  07F2                     l2229:	
+   452  07F2  3001               	movlw	(01h)
+   453  07F3  00F7               	movwf	(??_main+0)+0
+   454  07F4  0877               	movf	(??_main+0)+0,w
+   455  07F5  07F9               	addwf	(main@i),f
+   456  07F6  1D03               	btfss	status,2
+   457  07F7  2FF9               	goto	u2281
+   458  07F8  2FFA               	goto	u2280
+   459  07F9                     u2281:
+   460  07F9  2FF2               	goto	l2229
+   461  07FA                     u2280:
+   462                           	
+   463  07FA                     l476:	
+   464                           	line	118
+   465                           # 118 "main.c"
+   466  07FA  0000               nop ;#
+   467                           psect	maintext
+   468                           	line	119
+   469                           ;main.c: 119: RA1 = 0;
+   470  07FB  1283               	bcf	status, 5	;RP0=0, select bank0
+   471  07FC  1303               	bcf	status, 6	;RP1=0, select bank0
+   472  07FD  1085               	bcf	(41/8),(41)&7
+   473                           	line	120
+   474                           ;main.c: 120: } while(1);
+   475  07FE  2FE4               	goto	l2227
+   476                           	
+   477  07FF                     l477:	
+   478                           	line	124
+   479                           	
+   480  07FF                     l478:	
+   481                           	global	start
+   482  07FF  2800               	ljmp	start
+   483                           	opt stack 0
+   484                           GLOBAL	__end_of_main
+   485  0800                     	__end_of_main:
+   486 ;; =============== function _main ends ============
+   487                           
+   488                           	signat	_main,88
+   489                           	global	_shift_write
+   490                           psect	text107,local,class=CODE,delta=2
+   491                           global __ptext107
+   492  0778                     __ptext107:
+   493                           
+   494 ;; *************** function _shift_write *****************
+   495 ;; Defined at:
+   496 ;;		line 63 in file "main.c"
+   497 ;; Parameters:    Size  Location     Type
+   498 ;;  data            1    wreg     unsigned char 
+   499 ;; Auto vars:     Size  Location     Type
+   500 ;;  data            1    6[COMMON] unsigned char 
+   501 ;;  i               2    4[COMMON] int 
+   502 ;; Return value:  Size  Location     Type
+   503 ;;		None               void
+   504 ;; Registers used:
+   505 ;;		wreg, status,2, status,0, btemp+1, pclath, cstack
+   506 ;; Tracked objects:
+   507 ;;		On entry : 0/0
+   508 ;;		On exit  : 0/0
+   509 ;;		Unchanged: 0/0
+   510 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   511 ;;      Params:         0       0       0       0
+   512 ;;      Locals:         3       0       0       0
+   513 ;;      Temps:          2       0       0       0
+   514 ;;      Totals:         5       0       0       0
+   515 ;;Total ram usage:        5 bytes
+   516 ;; Hardware stack levels used:    1
+   517 ;; Hardware stack levels required when called:    1
+   518 ;; This function calls:
+   519 ;;		_bit_off
+   520 ;;		_bit_on
+   521 ;; This function is called by:
+   522 ;;		_main
+   523 ;; This function uses a non-reentrant model
+   524 ;;
+   525                           psect	text107
+   526                           	file	"main.c"
+   527                           	line	63
+   528                           	global	__size_of_shift_write
+   529  0044                     	__size_of_shift_write	equ	__end_of_shift_write-_shift_write
+   530                           	
+   531  0778                     _shift_write:	
+   532                           	opt	stack 6
+   533                           ; Regs used in _shift_write: [wreg+status,2+status,0+btemp+1+pclath+cstack]
+   534                           ;shift_write@data stored from wreg
+   535                           	line	66
+   536  0778  00F6               	movwf	(shift_write@data)
+   537                           	
+   538  0779                     l2181:	
+   539                           ;main.c: 64: int i;
+   540                           ;main.c: 66: bit_off(0x08);
+   541  0779  3008               	movlw	(08h)
+   542  077A  2763               	fcall	_bit_off
+   543                           	line	67
+   544                           ;main.c: 67: bit_off(0x10);
+   545  077B  3010               	movlw	(010h)
+   546  077C  2763               	fcall	_bit_off
+   547                           	line	68
+   548                           	
+   549  077D                     l2183:	
+   550                           ;main.c: 68: for (i=0; i<8; i++) {
+   551  077D  01F4               	clrf	(shift_write@i)
+   552  077E  01F5               	clrf	(shift_write@i+1)
+   553                           	
+   554  077F                     l2185:	
+   555  077F  0875               	movf	(shift_write@i+1),w
+   556  0780  3A80               	xorlw	80h
+   557  0781  00FF               	movwf	btemp+1
+   558  0782  3080               	movlw	(high(08h))^80h
+   559  0783  027F               	subwf	btemp+1,w
+   560  0784  1D03               	skipz
+   561  0785  2F88               	goto	u2225
+   562  0786  3008               	movlw	low(08h)
+   563  0787  0274               	subwf	(shift_write@i),w
+   564  0788                     u2225:
+   565                           
+   566  0788  1C03               	skipc
+   567  0789  2F8B               	goto	u2221
+   568  078A  2F8C               	goto	u2220
+   569  078B                     u2221:
+   570  078B  2F8E               	goto	l458
+   571  078C                     u2220:
+   572  078C  2FB6               	goto	l2201
+   573                           	
+   574  078D                     l2187:	
+   575  078D  2FB6               	goto	l2201
+   576                           	
+   577  078E                     l458:	
+   578                           	line	69
+   579                           ;main.c: 69: if ((data & 0x01) != 0) {
+   580  078E  1C76               	btfss	(shift_write@data),(0)&7
+   581  078F  2F91               	goto	u2231
+   582  0790  2F92               	goto	u2230
+   583  0791                     u2231:
+   584  0791  2F95               	goto	l2191
+   585  0792                     u2230:
+   586                           	line	70
+   587                           	
+   588  0792                     l2189:	
+   589                           ;main.c: 70: bit_on(0x04);
+   590  0792  3004               	movlw	(04h)
+   591  0793  2759               	fcall	_bit_on
+   592                           	line	71
+   593                           ;main.c: 71: } else {
+   594  0794  2F97               	goto	l461
+   595                           	
+   596  0795                     l460:	
+   597                           	line	72
+   598                           	
+   599  0795                     l2191:	
+   600                           ;main.c: 72: bit_off(0x04);
+   601  0795  3004               	movlw	(04h)
+   602  0796  2763               	fcall	_bit_off
+   603                           	line	73
+   604                           	
+   605  0797                     l461:	
+   606                           	line	75
+   607                           ;main.c: 73: }
+   608                           ;main.c: 75: bit_on(0x10);
+   609  0797  3010               	movlw	(010h)
+   610  0798  2759               	fcall	_bit_on
+   611                           	line	77
+   612                           	
+   613  0799                     l2193:	
+   614                           ;main.c: 77: data = data >> 1;
+   615  0799  0876               	movf	(shift_write@data),w
+   616  079A  00F2               	movwf	(??_shift_write+0)+0
+   617  079B  1003               	clrc
+   618  079C  0C72               	rrf	(??_shift_write+0)+0,w
+   619  079D  00F3               	movwf	(??_shift_write+1)+0
+   620  079E  0873               	movf	(??_shift_write+1)+0,w
+   621  079F  00F6               	movwf	(shift_write@data)
+   622                           	line	78
+   623                           	
+   624  07A0                     l2195:	
+   625                           ;main.c: 78: bit_off(0x10);
+   626  07A0  3010               	movlw	(010h)
+   627  07A1  2763               	fcall	_bit_off
+   628                           	line	68
+   629                           	
+   630  07A2                     l2197:	
+   631  07A2  3001               	movlw	low(01h)
+   632  07A3  07F4               	addwf	(shift_write@i),f
+   633  07A4  1803               	skipnc
+   634  07A5  0AF5               	incf	(shift_write@i+1),f
+   635  07A6  3000               	movlw	high(01h)
+   636  07A7  07F5               	addwf	(shift_write@i+1),f
+   637                           	
+   638  07A8                     l2199:	
+   639  07A8  0875               	movf	(shift_write@i+1),w
+   640  07A9  3A80               	xorlw	80h
+   641  07AA  00FF               	movwf	btemp+1
+   642  07AB  3080               	movlw	(high(08h))^80h
+   643  07AC  027F               	subwf	btemp+1,w
+   644  07AD  1D03               	skipz
+   645  07AE  2FB1               	goto	u2245
+   646  07AF  3008               	movlw	low(08h)
+   647  07B0  0274               	subwf	(shift_write@i),w
+   648  07B1                     u2245:
+   649                           
+   650  07B1  1C03               	skipc
+   651  07B2  2FB4               	goto	u2241
+   652  07B3  2FB5               	goto	u2240
+   653  07B4                     u2241:
+   654  07B4  2F8E               	goto	l458
+   655  07B5                     u2240:
+   656  07B5  2FB6               	goto	l2201
+   657                           	
+   658  07B6                     l459:	
+   659                           	line	81
+   660                           	
+   661  07B6                     l2201:	
+   662                           ;main.c: 80: }
+   663                           ;main.c: 81: bit_on(0x08);
+   664  07B6  3008               	movlw	(08h)
+   665  07B7  2759               	fcall	_bit_on
+   666                           	line	82
+   667                           	
+   668  07B8                     l2203:	
+   669                           # 82 "main.c"
+   670  07B8  0000               nop ;#
+   671                           psect	text107
+   672                           	line	83
+   673                           ;main.c: 83: bit_off(0x08);
+   674  07B9  3008               	movlw	(08h)
+   675  07BA  2763               	fcall	_bit_off
+   676                           	line	84
+   677                           	
+   678  07BB                     l462:	
+   679  07BB  0008               	return
+   680                           	opt stack 0
+   681                           GLOBAL	__end_of_shift_write
+   682  07BC                     	__end_of_shift_write:
+   683 ;; =============== function _shift_write ends ============
+   684                           
+   685                           	signat	_shift_write,4216
+   686                           	global	_init
+   687                           psect	text108,local,class=CODE,delta=2
+   688                           global __ptext108
+   689  076D                     __ptext108:
+   690                           
+   691 ;; *************** function _init *****************
+   692 ;; Defined at:
+   693 ;;		line 46 in file "main.c"
+   694 ;; Parameters:    Size  Location     Type
+   695 ;;		None
+   696 ;; Auto vars:     Size  Location     Type
+   697 ;;		None
+   698 ;; Return value:  Size  Location     Type
+   699 ;;		None               void
+   700 ;; Registers used:
+   701 ;;		status,2
+   702 ;; Tracked objects:
+   703 ;;		On entry : 0/0
+   704 ;;		On exit  : 0/0
+   705 ;;		Unchanged: 0/0
+   706 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   707 ;;      Params:         0       0       0       0
+   708 ;;      Locals:         0       0       0       0
+   709 ;;      Temps:          0       0       0       0
+   710 ;;      Totals:         0       0       0       0
+   711 ;;Total ram usage:        0 bytes
+   712 ;; Hardware stack levels used:    1
+   713 ;; This function calls:
+   714 ;;		Nothing
+   715 ;; This function is called by:
+   716 ;;		_main
+   717 ;; This function uses a non-reentrant model
+   718 ;;
+   719                           psect	text108
+   720                           	file	"main.c"
+   721                           	line	46
+   722                           	global	__size_of_init
+   723  000B                     	__size_of_init	equ	__end_of_init-_init
+   724                           	
+   725  076D                     _init:	
+   726                           	opt	stack 7
+   727                           ; Regs used in _init: [status,2]
+   728                           	line	51
+   729                           	
+   730  076D                     l1315:	
+   731                           ;main.c: 51: TRISA = 0;
+   732  076D  1683               	bsf	status, 5	;RP0=1, select bank1
+   733  076E  1303               	bcf	status, 6	;RP1=0, select bank1
+   734  076F  0185               	clrf	(133)^080h	;volatile
+   735                           	line	52
+   736                           ;main.c: 52: ADCON1 = 0;
+   737  0770  019F               	clrf	(159)^080h	;volatile
+   738                           	line	53
+   739                           	
+   740  0771                     l1317:	
+   741                           # 53 "main.c"
+   742  0771  0000               nop ;#
+   743                           psect	text108
+   744                           	line	54
+   745                           ;main.c: 54: PORTA = 0x00;
+   746  0772  1283               	bcf	status, 5	;RP0=0, select bank0
+   747  0773  1303               	bcf	status, 6	;RP1=0, select bank0
+   748  0774  0185               	clrf	(5)	;volatile
+   749                           	line	55
+   750                           	
+   751  0775                     l1319:	
+   752                           ;main.c: 55: a_latch = 0x00;
+   753  0775  01FA               	clrf	(_a_latch)
+   754                           	line	56
+   755                           	
+   756  0776                     l1321:	
+   757                           # 56 "main.c"
+   758  0776  0000               nop ;#
+   759                           psect	text108
+   760                           	line	59
+   761                           	
+   762  0777                     l455:	
+   763  0777  0008               	return
+   764                           	opt stack 0
+   765                           GLOBAL	__end_of_init
+   766  0778                     	__end_of_init:
+   767 ;; =============== function _init ends ============
+   768                           
+   769                           	signat	_init,88
+   770                           	global	_bit_off
+   771                           psect	text109,local,class=CODE,delta=2
+   772                           global __ptext109
+   773  0763                     __ptext109:
+   774                           
+   775 ;; *************** function _bit_off *****************
+   776 ;; Defined at:
+   777 ;;		line 33 in file "main.c"
+   778 ;; Parameters:    Size  Location     Type
+   779 ;;  bt              1    wreg     unsigned char 
+   780 ;; Auto vars:     Size  Location     Type
+   781 ;;  bt              1    1[COMMON] unsigned char 
+   782 ;; Return value:  Size  Location     Type
+   783 ;;		None               void
+   784 ;; Registers used:
+   785 ;;		wreg, status,2, status,0
+   786 ;; Tracked objects:
+   787 ;;		On entry : 0/0
+   788 ;;		On exit  : 0/0
+   789 ;;		Unchanged: 0/0
+   790 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   791 ;;      Params:         0       0       0       0
+   792 ;;      Locals:         1       0       0       0
+   793 ;;      Temps:          1       0       0       0
+   794 ;;      Totals:         2       0       0       0
+   795 ;;Total ram usage:        2 bytes
+   796 ;; Hardware stack levels used:    1
+   797 ;; This function calls:
+   798 ;;		Nothing
+   799 ;; This function is called by:
+   800 ;;		_shift_write
+   801 ;;		_main
+   802 ;; This function uses a non-reentrant model
+   803 ;;
+   804                           psect	text109
+   805                           	file	"main.c"
+   806                           	line	33
+   807                           	global	__size_of_bit_off
+   808  000A                     	__size_of_bit_off	equ	__end_of_bit_off-_bit_off
+   809                           	
+   810  0763                     _bit_off:	
+   811                           	opt	stack 7
+   812                           ; Regs used in _bit_off: [wreg+status,2+status,0]
+   813                           ;bit_off@bt stored from wreg
+   814  0763  00F1               	movwf	(bit_off@bt)
+   815                           	line	34
+   816                           	
+   817  0764                     l1311:	
+   818                           ;main.c: 34: a_latch &= ~bt;
+   819  0764  0971               	comf	(bit_off@bt),w
+   820  0765  00F0               	movwf	(??_bit_off+0)+0
+   821  0766  0870               	movf	(??_bit_off+0)+0,w
+   822  0767  05FA               	andwf	(_a_latch),f
+   823                           	line	35
+   824                           	
+   825  0768                     l1313:	
+   826                           ;main.c: 35: PORTA = a_latch;
+   827  0768  087A               	movf	(_a_latch),w
+   828  0769  1283               	bcf	status, 5	;RP0=0, select bank0
+   829  076A  1303               	bcf	status, 6	;RP1=0, select bank0
+   830  076B  0085               	movwf	(5)	;volatile
+   831                           	line	36
+   832                           	
+   833  076C                     l452:	
+   834  076C  0008               	return
+   835                           	opt stack 0
+   836                           GLOBAL	__end_of_bit_off
+   837  076D                     	__end_of_bit_off:
+   838 ;; =============== function _bit_off ends ============
+   839                           
+   840                           	signat	_bit_off,4216
+   841                           	global	_bit_on
+   842                           psect	text110,local,class=CODE,delta=2
+   843                           global __ptext110
+   844  0759                     __ptext110:
+   845                           
+   846 ;; *************** function _bit_on *****************
+   847 ;; Defined at:
+   848 ;;		line 27 in file "main.c"
+   849 ;; Parameters:    Size  Location     Type
+   850 ;;  bt              1    wreg     unsigned char 
+   851 ;; Auto vars:     Size  Location     Type
+   852 ;;  bt              1    1[COMMON] unsigned char 
+   853 ;; Return value:  Size  Location     Type
+   854 ;;		None               void
+   855 ;; Registers used:
+   856 ;;		wreg, status,2, status,0
+   857 ;; Tracked objects:
+   858 ;;		On entry : 0/0
+   859 ;;		On exit  : 0/0
+   860 ;;		Unchanged: 0/0
+   861 ;; Data sizes:     COMMON   BANK0   BANK1   BANK2
+   862 ;;      Params:         0       0       0       0
+   863 ;;      Locals:         1       0       0       0
+   864 ;;      Temps:          1       0       0       0
+   865 ;;      Totals:         2       0       0       0
+   866 ;;Total ram usage:        2 bytes
+   867 ;; Hardware stack levels used:    1
+   868 ;; This function calls:
+   869 ;;		Nothing
+   870 ;; This function is called by:
+   871 ;;		_shift_write
+   872 ;;		_main
+   873 ;; This function uses a non-reentrant model
+   874 ;;
+   875                           psect	text110
+   876                           	file	"main.c"
+   877                           	line	27
+   878                           	global	__size_of_bit_on
+   879  000A                     	__size_of_bit_on	equ	__end_of_bit_on-_bit_on
+   880                           	
+   881  0759                     _bit_on:	
+   882                           	opt	stack 7
+   883                           ; Regs used in _bit_on: [wreg+status,2+status,0]
+   884                           ;bit_on@bt stored from wreg
+   885  0759  00F1               	movwf	(bit_on@bt)
+   886                           	line	28
+   887                           	
+   888  075A                     l1307:	
+   889                           ;main.c: 28: a_latch |= bt;
+   890  075A  0871               	movf	(bit_on@bt),w
+   891  075B  00F0               	movwf	(??_bit_on+0)+0
+   892  075C  0870               	movf	(??_bit_on+0)+0,w
+   893  075D  04FA               	iorwf	(_a_latch),f
+   894                           	line	29
+   895                           	
+   896  075E                     l1309:	
+   897                           ;main.c: 29: PORTA = a_latch;
+   898  075E  087A               	movf	(_a_latch),w
+   899  075F  1283               	bcf	status, 5	;RP0=0, select bank0
+   900  0760  1303               	bcf	status, 6	;RP1=0, select bank0
+   901  0761  0085               	movwf	(5)	;volatile
+   902                           	line	30
+   903                           	
+   904  0762                     l449:	
+   905  0762  0008               	return
+   906                           	opt stack 0
+   907                           GLOBAL	__end_of_bit_on
+   908  0763                     	__end_of_bit_on:
+   909 ;; =============== function _bit_on ends ============
+   910                           
+   911                           	signat	_bit_on,4216
+   912                           psect	text111,local,class=CODE,delta=2
+   913                           global __ptext111
+   914  0000                     __ptext111:
+   915                           	global	btemp
+   916  007E                     	btemp set 07Eh
+   917                           
+   918                           	DABS	1,126,2	;btemp
+   919                           	global	wtemp0
+   920  007E                     	wtemp0 set btemp
+
+
+HI-TECH Software PICC Macro Assembler V9.83 build 10920 
+Symbol Table                                                                                   Wed May 15 15:41:58 2013
+
+                  _RD 0C60                    _WR 0C61                   l452 076C                   l460 0795  
+                 l461 0797                   l462 07BB                   l470 07E2                   l455 0777  
+                 l471 07E4                   l472 07E3                   l449 0762                   l473 07EC  
+                 l465 07C4                   l458 078E                   l474 07F2                   l466 07CC  
+                 l459 07B6                   l475 07F1                   l467 07DB                   l476 07FA  
+                 l468 07E0                   l477 07FF                   l469 07E1                   l478 07FF  
+                 _GIE 005F                   _RA1 0029                  l1311 0764                  l1313 0768  
+                l1321 0776                  l2201 07B6                  l1307 075A                  l1315 076D  
+                l2203 07B8                  l2211 07C0                  l1309 075E                  l1317 0771  
+                l2221 07D2                  l2213 07C2                  l2205 07BC                  l1319 0775  
+                l2223 07D4                  l2215 07C4                  l2207 07BD                  l2225 07DB  
+                l2217 07C9                  l2209 07BE                  l2227 07E4                  l2219 07CC  
+                l2181 0779                  l2229 07F2                  l2191 0795                  l2183 077D  
+                l2193 0799                  l2185 077F                  l2195 07A0                  l2187 078D  
+                l2197 07A2                  l2189 0792                  l2199 07A8                  u2220 078C  
+                u2221 078B                  u2230 0792                  u2231 0791                  u2240 07B5  
+                u2241 07B4                  u2225 0788                  u2250 07C9                  u2251 07C8  
+                u2260 07D2                  u2245 07B1                  u2261 07D1                  u2270 07EC  
+                u2271 07EB                  u2280 07FA                  u2281 07F9                  _WREN 0C62  
+                _main 07BC                  _init 076D       shift_write@data 0076                  btemp 007E  
+                start 0000                 ?_main 0070                 ?_init 0070                 _EEADR 010D  
+               _CARRY 0018                 _PORTA 0005                 _TRISA 0085       __end_of_bit_off 076D  
+               main@i 0079                 main@x 0078                 status 0003                 wtemp0 007E  
+        __end_of_main 0800          __end_of_init 0778                ??_main 0077                ??_init 0070  
+              _ADCON1 009F                _EEDATA 010C                _EECON1 018C                _EECON2 018D  
+        ?_shift_write 0070                _bit_on 0759             ??_bit_off 0070        __pcstackCOMMON 0070  
+          __pmaintext 07BC               ?_bit_on 0070               _a_latch 007A       __size_of_bit_on 000A  
+__size_of_shift_write 0044               _bit_off 0763  end_of_initialization 0757        __end_of_bit_on 0763  
+ start_initialization 0756              ??_bit_on 0070           __pbssCOMMON 007A             __ptext110 0759  
+           __ptext111 0000             __ptext106 0000             __ptext107 0778             __ptext108 076D  
+           __ptext109 0763              ?_bit_off 0070             bit_off@bt 0071         ??_shift_write 0072  
+ __end_of_shift_write 07BC      __size_of_bit_off 000A         __size_of_main 0044         __size_of_init 000B  
+            bit_on@bt 0071          shift_write@i 0074           _shift_write 0778  
