@@ -1,17 +1,17 @@
-_next_segment: CODE, 224 0 83
-_init: CODE, 17 0 106
-_sync: CODE, 123 0 101
-_main: CODE, 456 0 67
-_sixty_stop: CODE, 629 0 43
-_sixty_start: CODE, 578 0 51
-_shift_write: CODE, 307 0 78
-_bit_on: CODE, 764 0 10
-_hour_start_end_init: CODE, 385 0 71
-_show_face: CODE, 523 0 55
-_application_reset: CODE, 738 0 16
-_interrupt_handler: CODE, 672 0 40
-_bit_off: CODE, 754 0 10
-i1_bit_on: CODE, 784 0 10
-i1_bit_off: CODE, 774 0 10
-___bmul: CODE, 712 0 26
-Total: 777
+_next_segment: CODE, 197 0 76
+_init: CODE, 411 0 52
+_sync: CODE, 17 0 102
+_main: CODE, 344 0 67
+_sixty_stop: CODE, 560 0 43
+_sixty_start: CODE, 463 0 51
+_shift_write: CODE, 119 0 78
+_bit_on: CODE, 696 0 10
+_hour_start_end_init: CODE, 273 0 71
+_show_face: CODE, 514 0 46
+_application_reset: CODE, 669 0 17
+_interrupt_handler: CODE, 603 0 40
+_bit_off: CODE, 686 0 10
+i1_bit_on: CODE, 716 0 10
+i1_bit_off: CODE, 706 0 10
+___bmul: CODE, 643 0 26
+Total: 709

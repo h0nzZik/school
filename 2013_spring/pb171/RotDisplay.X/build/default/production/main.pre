@@ -778,17 +778,21 @@ uns8 tmr0_counter = 0;
 uns8 seg_ticks_h;
 uns8 seg_ticks_l;
 
-uns8 seg = 0;
 
-# 58
-char running = 0;
 
-# 66
+struct {
+uns8 raw;
+uns8 hrl;
+
+# 56
+} segment;
+
+# 67
+uns8 state = 0;
+
+# 75
 void shift_write(uns8 data)
 {
-
-
-
 int i;
 
 bit_off(0x08);
@@ -812,7 +816,7 @@ bit_off(0x08);
 
 }
 
-# 100
+# 106
 uns8 convert(uns8 x)
 {
 if (x < 2 || x == 127)
@@ -833,7 +837,7 @@ return 90;
 return x-7;
 }
 
-# 126
+# 132
 uns8 sixty_start(uns8 x)
 {
 
@@ -850,7 +854,7 @@ return x+5;
 return x + 7;
 }
 
-# 147
+# 153
 uns8 sixty_stop(uns8 x)
 {
 x = x << 1;
@@ -864,20 +868,10 @@ return x+6;
 return x+8;
 }
 
-
-uns8 twelve_start;
-uns8 twelve_stop;
-uns8 three_start;
-uns8 three_stop;
-uns8 six_start;
-uns8 six_stop;
-uns8 nine_start;
-uns8 nine_stop;
-
-
-
+# 178
 uns8 hour_start[12];
 uns8 hour_end[12];
+
 void hour_start_end_init(void)
 {
 uns8 i;
@@ -891,43 +885,40 @@ hour_end[i] = sixty_stop(min);
 }
 void show_face()
 {
-uns8 i;
-for (i=0; i<12; i++) {
-if (hour_start[i] == seg) {
+if (segment.hrl >= 12)
+return;
+if (hour_start[segment.hrl] == segment.raw)
 bit_on(0x02);
-return;
-}
-if (hour_end[i] == seg) {
+else if (hour_end[segment.hrl] == segment.raw){
 bit_off(0x02);
-return;
+segment.hrl++;
 }
-}
+
 }
 
 void next_segment(void)
 {
 GIE = 0;
 
-# 210
-if (seg > 128)
+if (segment.raw > 128)
 goto ns_end;
 
-if (seg < 128)
 show_face();
 
-if (seg == 0x80) {
+
+if (segment.raw == 0x80) {
 shift_write(0x00);
 }
-if (seg == 0x00)
+if (segment.raw == 0x00)
 shift_write(0x10);
-if (seg == 0x20)
+if (segment.raw == 0x20)
 shift_write(0x20);
-if (seg == 0x40)
+if (segment.raw == 0x40)
 shift_write(0x40);
-if (seg == 0x60)
+if (segment.raw == 0x60)
 shift_write(0x80);
 
-seg++;
+segment.raw++;
 
 ns_end:
 GIE = 1;
@@ -943,7 +934,7 @@ bit_off(0x02);
 
 TMR1ON = 0;
 
-switch (running) {
+switch (state) {
 case 0:
 
 TMR1H = 0;
@@ -962,7 +953,8 @@ tmr1_counter++;
 seg_ticks_l = (TMR1L >> 7) | ((TMR1H << 1) & 0xFF);
 seg_ticks_h = (TMR1H >> 7) | ((tmr1_counter << 1) & 0xFF);
 
-seg = 0;
+segment.raw = 0;
+segment.hrl = 0;
 
 
 
@@ -984,8 +976,8 @@ default:
 }
 
 
-if (running != 2)
-running++;
+if (state != 2)
+state++;
 
 
 bit_on(0x02);
@@ -995,9 +987,10 @@ return;
 # 298
 void application_reset(void)
 {
-running = 0;
+state = 0;
 shift_write(0x5A);
-seg = 0;
+segment.raw = 0;
+segment.hrl = 0;
 tmr1_counter = 0;
 tmr0_counter = 0;
 
@@ -1069,16 +1062,7 @@ shift_write(0x02);
 
 hour_start_end_init();
 
-twelve_start = sixty_start(0);
-twelve_stop = sixty_stop(0);
-three_start = sixty_start(15);
-three_stop = sixty_stop(15);
-six_start = sixty_start(30);
-six_stop = sixty_stop(30);
-nine_start = sixty_start(45);
-nine_stop = sixty_stop(45);
-
-
+# 385
 TMR1IF = 0;
 TMR1IE = 0;
 T1CON = 0;
@@ -1087,7 +1071,7 @@ TMR1ON = 1;
 TMR0IF = 0;
 TMR0IE = 0;
 T0CS = 0;
-running = 0;
+state = 0;
 
 
 RBIE = 1;
@@ -1109,7 +1093,7 @@ bit_on(0x02);
 
 while(1) {
 if (TMR0IF) {
-if (running == 2) {
+if (state == 2) {
 
 if (tmr0_counter == seg_ticks_h) {
 tmr0_counter = 0;

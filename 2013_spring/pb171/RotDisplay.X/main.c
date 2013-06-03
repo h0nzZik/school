@@ -45,7 +45,16 @@ uns8 tmr0_counter = 0;
 uns8 seg_ticks_h;	// how many overflows of Timer0 per segment
 uns8 seg_ticks_l;	// and how many ticks..
 
-uns8 seg = 0;
+
+
+struct {
+	uns8 raw;	/* one of 128 segments where we are right now */
+	uns8 hrl;	/* one of  12 hour-like segments we are going to be */
+#if 0
+	uns8 hsg;	/* and coresponding 'raw' segment */
+#endif
+} segment;
+
 
 #define STATE_STOPPED 0
 #define STATE_STARTED 1
@@ -55,7 +64,7 @@ uns8 seg = 0;
 
 #define INPUT_BIT	RB7
 
-char running = STATE_STOPPED;
+uns8 state = STATE_STOPPED;
 
 
 
@@ -65,9 +74,6 @@ char running = STATE_STOPPED;
 
 void shift_write(uns8 data)
 {
-//	GIE = 0;
-	/* DEBUG */
-//	data = 0x00;
 	int i;
 
 	bit_off(STCLK_BIT);
@@ -88,7 +94,7 @@ void shift_write(uns8 data)
 	bit_on(STCLK_BIT);
 	asm("nop");
 	bit_off(STCLK_BIT);
-//	GIE = 1;
+
 }
 
 /**
@@ -120,8 +126,8 @@ uns8 convert(uns8 x)
 
 /**
  * Partial inversion to çonvert() #1
- * @param x	minute or second
- * @return	segment to start on
+ * @param x	minute or second	( 0 to  59)
+ * @return	segment to start on	( 0 to 127)
  */
 uns8 sixty_start(uns8 x)
 {
@@ -141,8 +147,8 @@ uns8 sixty_start(uns8 x)
 
 /**
  * Partial inversion to çonvert() #2
- * @param x	minute or second (range 0 to 59)
- * @return	segment to stop on
+ * @param x	minute or second	( 0 to  59)
+ * @return	segment to stop on	( 0 to 127)
  */
 uns8 sixty_stop(uns8 x)
 {
@@ -157,7 +163,7 @@ uns8 sixty_stop(uns8 x)
 	return x+8;
 }
 
-#if 1
+#if 0
 uns8 twelve_start;
 uns8 twelve_stop;
 uns8 three_start;
@@ -171,6 +177,7 @@ uns8 nine_stop;
 
 uns8 hour_start[12];
 uns8 hour_end[12];
+
 void hour_start_end_init(void)
 {
 	uns8 i;
@@ -184,48 +191,40 @@ void hour_start_end_init(void)
 }
 void show_face()
 {
-	uns8 i;
-	for (i=0; i<12; i++) {
-		if (hour_start[i] == seg) {
-			bit_on(LED_BIT);
-			return;
-		}
-		if (hour_end[i] == seg) {
-			bit_off(LED_BIT);
-			return;
-		}
+	if (segment.hrl >= 12)
+		return;
+	if (hour_start[segment.hrl] == segment.raw)
+		bit_on(LED_BIT);
+	else if (hour_end[segment.hrl] == segment.raw){
+		bit_off(LED_BIT);
+		segment.hrl++;
 	}
+
 }
 
 void next_segment(void)
 {
 	GIE = 0;
 
-#if 0
-	if (seg == twelve_start || seg == six_start)
-		bit_on(LED_BIT);
-	if (seg == twelve_stop || seg == six_stop)
-		bit_off(LED_BIT);
-#endif
-	if (seg > 128)
+	if (segment.raw > 128)
 		goto ns_end;
 
-	if (seg < 128)
-		show_face();
+	show_face();
 
-	if (seg == 0x80) {
+#if 1
+	if (segment.raw == 0x80) {
 		shift_write(0x00);
 	}
-	if (seg == 0x00)
+	if (segment.raw == 0x00)
 		shift_write(0x10);
-	if (seg == 0x20)
+	if (segment.raw == 0x20)
 		shift_write(0x20);
-	if (seg == 0x40)
+	if (segment.raw == 0x40)
 		shift_write(0x40);
-	if (seg == 0x60)
+	if (segment.raw == 0x60)
 		shift_write(0x80);
-
-	seg++;
+#endif
+	segment.raw++;
 
 ns_end:
 	GIE = 1; // enable interrupts
@@ -241,7 +240,7 @@ void sync(void)
 //	GIE = 0;	// volam to z interruptu
 	TMR1ON = 0;
 
-	switch (running) {
+	switch (state) {
 		case STATE_STOPPED:
 			/* start measuring the period */
 			TMR1H = 0;
@@ -260,7 +259,8 @@ void sync(void)
 			seg_ticks_l = (TMR1L >> 7) |  ((TMR1H << 1) & 0xFF);
 			seg_ticks_h = (TMR1H >> 7) | ((tmr1_counter << 1) & 0xFF);
 			/* ok, show first segment */
-			seg = 0;
+			segment.raw = 0;
+			segment.hrl = 0;
 	//		next_segment();
 
 			/* setup timer 1 */
@@ -273,7 +273,7 @@ void sync(void)
 			/* setup timer 0*/
 			TMR0 = 256 - seg_ticks_l;
 			tmr0_counter = 0;
-			TMR0IF = 0;
+			TMR0IF = 0;	// test
 
 
 			break;
@@ -282,8 +282,8 @@ void sync(void)
 	}
 
 	/* next state */
-	if (running != STATE_RUNNING)
-		running++;
+	if (state != STATE_RUNNING)
+		state++;
 	/* enable interrupts */
 //	GIE = 1;
 	bit_on(LED_BIT);
@@ -297,9 +297,10 @@ void sync(void)
 
 void application_reset(void)
 {
-	running = STATE_STOPPED;
+	state = STATE_STOPPED;
 	shift_write(0x5A);
-	seg = 0;
+	segment.raw = 0;
+	segment.hrl = 0;
 	tmr1_counter = 0;
 	tmr0_counter = 0;
 	
@@ -370,7 +371,7 @@ void init(void)
 
 	/* calculate something.. */
 	hour_start_end_init();
-#if 1
+#if 0
 	twelve_start = sixty_start(0);
 	twelve_stop = sixty_stop(0);
 	three_start = sixty_start(15);
@@ -389,7 +390,7 @@ void init(void)
 	TMR0IF = 0;
 	TMR0IE = 0;	// TEST
 	T0CS = 0;	// timer mode
-	running = STATE_STOPPED;
+	state = STATE_STOPPED;
 
 	/* enable portB interrupt */
 	RBIE = 1;	// TEST
@@ -411,7 +412,7 @@ void main(void) {
 
 	while(1) {
 		if (TMR0IF) {
-			if (running == STATE_RUNNING) {
+			if (state == STATE_RUNNING) {
 				/* show next */
 				if (tmr0_counter == seg_ticks_h) {
 					tmr0_counter = 0;
