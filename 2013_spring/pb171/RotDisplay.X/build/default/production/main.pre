@@ -751,40 +751,44 @@ extern void _delay(unsigned long);
 # 9 "main.c"
 asm("\tpsect config,class=CONFIG,delta=2"); asm("\tdw ""0xFFFB & 0xFFFF & 0xFFDF & 0xFFFC & 0xFFBF");
 
-# 25
-unsigned char a_latch;
-void bit_on(unsigned char bt)
+# 22
+typedef unsigned char uns8;
+
+
+
+uns8 a_latch;
+void bit_on(uns8 bt)
 {
 a_latch |= bt;
 PORTA = a_latch;
 }
 
-void bit_off(unsigned char bt)
+void bit_off(uns8 bt)
 {
 a_latch &= ~bt;
 PORTA = a_latch;
 }
 
-# 45
-void init(void)
+
+
+
+uns8 tmr1_counter = 0;
+uns8 tmr0_counter = 0;
+
+uns8 seg_ticks_h;
+uns8 seg_ticks_l;
+
+uns8 seg = 0;
+
+# 58
+char running = 0;
+
+# 66
+void shift_write(uns8 data)
 {
 
 
 
-
-TRISA = 0;
-ADCON1 = 0;
-asm("nop");
-PORTA = 0x00;
-a_latch = 0x00;
-asm("nop");
-
-
-}
-
-
-void shift_write(char data)
-{
 int i;
 
 bit_off(0x08);
@@ -805,45 +809,331 @@ bit_off(0x10);
 bit_on(0x08);
 asm("nop");
 bit_off(0x08);
+
 }
+
+# 100
+uns8 convert(uns8 x)
+{
+if (x < 2 || x == 127)
+return 0;
+if (x < 31)
+return x-1;
+if (x < 34)
+return 30;
+if (x < 63)
+return x-3;
+if (x < 66)
+return 60;
+if (x < 95)
+return x-5;
+if (x < 98)
+return 90;
+
+return x-7;
+}
+
+# 126
+uns8 sixty_start(uns8 x)
+{
+
+x = x << 1;
+if (x == 0)
+return 127;
+if (x <= 30)
+return x+1;
+if (x <= 60)
+return x+3;
+if (x <= 90)
+return x+5;
+
+return x + 7;
+}
+
+# 147
+uns8 sixty_stop(uns8 x)
+{
+x = x << 1;
+if (x < 30)
+return x+2;
+if (x < 60)
+return x+4;
+if (x < 90)
+return x+6;
+
+return x+8;
+}
+
+
+uns8 twelve_start;
+uns8 twelve_stop;
+uns8 three_start;
+uns8 three_stop;
+uns8 six_start;
+uns8 six_stop;
+uns8 nine_start;
+uns8 nine_stop;
+
+
+
+uns8 hour_start[12];
+uns8 hour_end[12];
+void hour_start_end_init(void)
+{
+uns8 i;
+for (i=0; i<12; i++) {
+uns8 min;
+min = i << 2 + i;
+min = i*5;
+hour_start[i] = sixty_start(min);
+hour_end[i] = sixty_stop(min);
+}
+}
+void show_face()
+{
+uns8 i;
+for (i=0; i<12; i++) {
+if (hour_start[i] == seg) {
+bit_on(0x02);
+return;
+}
+if (hour_end[i] == seg) {
+bit_off(0x02);
+return;
+}
+}
+}
+
+void next_segment(void)
+{
+GIE = 0;
+
+# 210
+if (seg > 128)
+goto ns_end;
+
+if (seg < 128)
+show_face();
+
+if (seg == 0x80) {
+shift_write(0x00);
+}
+if (seg == 0x00)
+shift_write(0x10);
+if (seg == 0x20)
+shift_write(0x20);
+if (seg == 0x40)
+shift_write(0x40);
+if (seg == 0x60)
+shift_write(0x80);
+
+seg++;
+
+ns_end:
+GIE = 1;
+return;
+}
+
+
+
+void sync(void)
+{
+bit_off(0x02);
+
+
+TMR1ON = 0;
+
+switch (running) {
+case 0:
+
+TMR1H = 0;
+TMR1L = 0;
+tmr1_counter = 0;
+TMR1IF = 0;
+TMR1ON = 1;
+break;
+
+case 1:
+case 2:
+
+if (TMR1IF == 1)
+tmr1_counter++;
+
+seg_ticks_l = (TMR1L >> 7) | ((TMR1H << 1) & 0xFF);
+seg_ticks_h = (TMR1H >> 7) | ((tmr1_counter << 1) & 0xFF);
+
+seg = 0;
+
+
+
+TMR1L = 0;
+TMR1H = 0;
+tmr1_counter = 0;
+TMR1IF = 0;
+TMR1ON = 1;
+
+
+TMR0 = 256 - seg_ticks_l;
+tmr0_counter = 0;
+TMR0IF = 0;
+
+
+break;
+default:
+;
+}
+
+
+if (running != 2)
+running++;
+
+
+bit_on(0x02);
+return;
+}
+
+# 298
+void application_reset(void)
+{
+running = 0;
+shift_write(0x5A);
+seg = 0;
+tmr1_counter = 0;
+tmr0_counter = 0;
+
+
+TMR0 = 0;
+TMR1L = 0;
+TMR1H = 0;
+
+
+TMR0IF = 0;
+TMR1IF = 0;
+}
+
+void interrupt interrupt_handler(void)
+{
+
+static char c=0;
+if (RBIF) {
+if (RB7 == 1) {
+
+;
+}
+
+if (RB5 == 0 || RB7 == 1) {
+
+
+
+
+if(c == 0){
+sync();
+c = 1;
+} else {
+c = 0;
+}
+}
+RBIF = 0;
+}
+}
+
+
+
+void init(void)
+{
+
+
+TRISA = 0;
+ADCON1 = 0;
+asm("nop");
+PORTA = 0x00;
+a_latch = 0x00;
+asm("nop");
+
+
+TRISB = 0xFF;
+
+
+
+shift_write(0x05);
+
+OSCCONbits.IRCF2 = 1;
+OSCCONbits.IRCF1 = 1;
+OSCCONbits.IRCF0 = 1;
+
+while(!IOFS) {
+;
+}
+shift_write(0x02);
+
+
+hour_start_end_init();
+
+twelve_start = sixty_start(0);
+twelve_stop = sixty_stop(0);
+three_start = sixty_start(15);
+three_stop = sixty_stop(15);
+six_start = sixty_start(30);
+six_stop = sixty_stop(30);
+nine_start = sixty_start(45);
+nine_stop = sixty_stop(45);
+
+
+TMR1IF = 0;
+TMR1IE = 0;
+T1CON = 0;
+TMR1ON = 1;
+
+TMR0IF = 0;
+TMR0IE = 0;
+T0CS = 0;
+running = 0;
+
+
+RBIE = 1;
+
+PEIE = 1;
+GIE = 1;
+}
+
 
 void main(void) {
 
 init();
+application_reset();
 
-unsigned char i = 0;
-
-shift_write(0x5A);
+uns8 i = 0;
 
 
 bit_on(0x02);
 
-unsigned char x = 0;
 while(1) {
-if (i == 0) {
-bit_off(0x02);
+if (TMR0IF) {
+if (running == 2) {
+
+if (tmr0_counter == seg_ticks_h) {
+tmr0_counter = 0;
+TMR0 = 256 - seg_ticks_l;
+next_segment();
+} else {
+tmr0_counter++;
 }
-if (i == 64){
-bit_on(0x02);
-shift_write(++x);
 }
-
-i++;
+TMR0IF = 0;
 }
 
 
-do {
-while(++i)
-;
-asm("nop");
-RA1 = 1;
-while(++i)
-;
-asm("nop");
-RA1 = 0;
-} while(1);
+if (TMR1IF) {
+tmr1_counter++;
 
 
+if (tmr1_counter >= 40) {
+application_reset();
+}
+TMR1IF = 0;
+}
 
+
+}
 }
 

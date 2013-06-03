@@ -308,6 +308,8 @@
 `uc 1 EEPGD 1 0 :1:7 
 ]
 [u S813 . 1 `S805 1 . 1 0 ]
+"317 main.c
+[v F771 `(v  1 t 0 ]
 "5 C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\abdiv.c
 [v ___abdiv `(c  1 e 1 0 ]
 "5 C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\abmod.c
@@ -408,15 +410,37 @@
 [v ___fttoee `(f  1 e 3 0 ]
 "132
 [v ___fltoee `(d  1 e 3 0 ]
-"27 main.c
+"28 main.c
 [v _bit_on `(v  1 e 0 0 ]
-"33
+[v i1_bit_on `(v  1 e 0 0 ]
+[v i1_bit_on `(v  1 e 0 0 ]
+"34
 [v _bit_off `(v  1 e 0 0 ]
-"46
-[v _init `(v  1 e 0 0 ]
-"63
+[v i1_bit_off `(v  1 e 0 0 ]
+[v i1_bit_off `(v  1 e 0 0 ]
+"67
 [v _shift_write `(v  1 e 0 0 ]
-"86
+"101
+[v _convert `(uc  1 e 1 0 ]
+"127
+[v _sixty_start `(uc  1 e 1 0 ]
+"148
+[v _sixty_stop `(uc  1 e 1 0 ]
+"175
+[v _hour_start_end_init `(v  1 e 0 0 ]
+"186
+[v _show_face `(v  1 e 0 0 ]
+"201
+[v _next_segment `(v  1 e 0 0 ]
+"238
+[v _sync `(v  1 e 0 0 ]
+"299
+[v _application_reset `(v  1 e 0 0 ]
+"317
+[v _interrupt_handler `I(v  1 e 0 0 ]
+"345
+[v _init `(v  1 e 0 0 ]
+"402
 [v _main `(v  1 e 0 0 ]
 "100 /hitech/products/compilers/pic/pro/9.83/dist/linux/include/pic16f819.h
 [v _INDF `VEuc  1 e 1 @0 ]
@@ -862,43 +886,150 @@
 [v _EEADRHbits `VES793  1 e 1 @271 ]
 "839
 [v _EECON1bits `VES813  1 e 1 @396 ]
-"25 main.c
+"26 main.c
 [v _a_latch `uc  1 e 1 0 ]
-"86
+"42
+[v _tmr1_counter `uc  1 e 1 0 ]
+"43
+[v _tmr0_counter `uc  1 e 1 0 ]
+"45
+[v _seg_ticks_h `uc  1 e 1 0 ]
+"46
+[v _seg_ticks_l `uc  1 e 1 0 ]
+"48
+[v _seg `uc  1 e 1 0 ]
+"58
+[v _running `uc  1 e 1 0 ]
+"161
+[v _twelve_start `uc  1 e 1 0 ]
+"162
+[v _twelve_stop `uc  1 e 1 0 ]
+"163
+[v _three_start `uc  1 e 1 0 ]
+"164
+[v _three_stop `uc  1 e 1 0 ]
+"165
+[v _six_start `uc  1 e 1 0 ]
+"166
+[v _six_stop `uc  1 e 1 0 ]
+"167
+[v _nine_start `uc  1 e 1 0 ]
+"168
+[v _nine_stop `uc  1 e 1 0 ]
+"172
+[v _hour_start `[12]uc  1 e 12 0 ]
+"173
+[v _hour_end `[12]uc  1 e 12 0 ]
+"402
 [v _main `(v  1 e 0 0 ]
 {
-"90
-[v main@i `uc  1 a 1 9 ]
-"97
-[v main@x `uc  1 a 1 8 ]
-"124
+"407
+[v main@i `uc  1 a 1 10 ]
+"440
 } 0
-"63
+"345
+[v _init `(v  1 e 0 0 ]
+{
+"399
+} 0
+"299
+[v _application_reset `(v  1 e 0 0 ]
+{
+"314
+} 0
+"201
+[v _next_segment `(v  1 e 0 0 ]
+{
+"233
+} 0
+"186
+[v _show_face `(v  1 e 0 0 ]
+{
+"187
+[v show_face@i `uc  1 a 1 3 ]
+"198
+} 0
+"175
+[v _hour_start_end_init `(v  1 e 0 0 ]
+{
+"178
+[v hour_start_end_init@min `uc  1 a 1 6 ]
+"176
+[v hour_start_end_init@i `uc  1 a 1 7 ]
+"184
+} 0
+"67
 [v _shift_write `(v  1 e 0 0 ]
 {
 [v shift_write@data `uc  1 a 1 wreg ]
-"64
+"71
 [v shift_write@i `i  1 a 2 4 ]
-"63
+"67
 [v shift_write@data `uc  1 a 1 wreg ]
-"84
+"92
 } 0
-"46
-[v _init `(v  1 e 0 0 ]
+"3 C:\Program Files (x86)\HI-TECH Software\PICC\9.83\sources\bmul.c
+[v ___bmul `(uc  1 e 1 0 ]
 {
-"59
+[v ___bmul@multiplier `uc  1 a 1 wreg ]
+"4
+[v ___bmul@product `uc  1 a 1 2 ]
+"3
+[v ___bmul@multiplier `uc  1 a 1 wreg ]
+[v ___bmul@multiplicand `uc  1 p 1 0 ]
+"13
 } 0
-"33
+"148 main.c
+[v _sixty_stop `(uc  1 e 1 0 ]
+{
+[v sixty_stop@x `uc  1 a 1 wreg ]
+[v sixty_stop@x `uc  1 a 1 wreg ]
+"158
+} 0
+"127
+[v _sixty_start `(uc  1 e 1 0 ]
+{
+[v sixty_start@x `uc  1 a 1 wreg ]
+[v sixty_start@x `uc  1 a 1 wreg ]
+"140
+} 0
+"34
 [v _bit_off `(v  1 e 0 0 ]
 {
 [v bit_off@bt `uc  1 a 1 wreg ]
 [v bit_off@bt `uc  1 a 1 wreg ]
-"36
+"37
 } 0
-"27
+"28
 [v _bit_on `(v  1 e 0 0 ]
 {
 [v bit_on@bt `uc  1 a 1 wreg ]
 [v bit_on@bt `uc  1 a 1 wreg ]
-"30
+"31
+} 0
+"317
+[v _interrupt_handler `I(v  1 e 0 0 ]
+{
+"319
+[v interrupt_handler@c `uc  1 s 1 c ]
+"340
+} 0
+"238
+[v _sync `(v  1 e 0 0 ]
+{
+"291
+} 0
+"34
+[v i1_bit_off `(v  1 e 0 0 ]
+{
+[v i1bit_off@bt `uc  1 a 1 wreg ]
+[v i1bit_off@bt `uc  1 a 1 wreg ]
+"37
+} 0
+"28
+[v i1_bit_on `(v  1 e 0 0 ]
+{
+[v i1bit_on@bt `uc  1 a 1 wreg ]
+[v i1bit_on@bt `uc  1 a 1 wreg ]
+"31
 } 0
