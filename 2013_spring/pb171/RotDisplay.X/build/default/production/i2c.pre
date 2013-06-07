@@ -1,5 +1,5 @@
 
-# 1 "main.c"
+# 1 "i2c.c"
 
 # 100 "C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\pic16f819.h"
 volatile unsigned char INDF @ 0x000;
@@ -754,567 +754,100 @@ typedef unsigned char uns8;
 # 30 "i2c.h"
 uns8 i2c_write(uns8 dev, uns8 addr, uns8 data);
 
-# 14 "main.c"
-asm("\tpsect config,class=CONFIG,delta=2"); asm("\tdw ""0xFFFB & 0xFFFF & 0xFFDF & 0xFFFC & 0xFFBF & 0xFF7F");
+# 8 "i2c.c"
+typedef unsigned char uns8;
 
-# 21
-uns8 a_latch;
-void bit_on(uns8 bt)
+void i2c_write_bit(uns8 x)
 {
-a_latch |= bt;
-PORTA = a_latch;
+x &= 0x01;
+if (x)
+do {asm("nop"); TRISB1 = 1; } while(0);
+else
+do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0);
+do {asm("nop"); TRISB4 = 1; } while(0);
+
+do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
 }
 
-void bit_off(uns8 bt)
+uns8 i2c_read_bit()
 {
-a_latch &= ~bt;
-PORTA = a_latch;
-}
+uns8 b;
 
-# 39
-void shift_write(uns8 data)
-{
-int i;
+do {asm("nop"); TRISB1 = 1; } while(0);
+do {asm("nop"); TRISB4 = 1; } while(0);
+b = (RB1);
+do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
 
-bit_off(0x08);
-bit_off(0x10);
-for (i=0; i<8; i++) {
-if ((data & 0x01) != 0) {
-bit_on(0x04);
-} else {
-bit_off(0x04);
-}
-
-bit_on(0x10);
-
-data = data >> 1;
-bit_off(0x10);
-
-}
-bit_on(0x08);
-asm("nop");
-bit_off(0x08);
-
-}
-
-
-uns8 tmr1_counter = 0;
-uns8 tmr0_counter = 0;
-
-uns8 seg_ticks_h;
-uns8 seg_ticks_l;
-
-
-typedef struct {
-uns8 start;
-uns8 stop;
-} start_stop_t;
-
-struct {
-uns8 raw;
-uns8 hrl;
-
-start_stop_t min;
-start_stop_t hour;
-
-start_stop_t min_next;
-start_stop_t hour_next;
-
-
-
-uns8 flags;
-
-
-
-uns8 show;
-} segment;
-
-# 106
-uns8 state = 0;
-
-typedef struct {
-uns8 min;
-uns8 hrs;
-} time_t;
-
-# 118
-time_t time;
-
-# 125
-uns8 mode;
-
-# 135
-uns8 convert(uns8 x)
-{
-if (x < 2 || x == 127)
+if (b)
+return 1;
+else
 return 0;
-if (x < 31)
-return x-1;
-if (x < 34)
-return 30;
-if (x < 63)
-return x-3;
-if (x < 66)
-return 60;
-if (x < 95)
-return x-5;
-if (x < 98)
-return 90;
-
-return x-7;
 }
 
-# 161
-uns8 sixty_start(uns8 x)
+uns8 i2c_check_ack()
 {
-
-x = x << 1;
-if (x == 0)
-return 127;
-if (x <= 30)
-return x+1;
-if (x <= 60)
-return x+3;
-if (x <= 90)
-return x+5;
-
-return x + 7;
-}
-
-# 182
-uns8 sixty_stop(uns8 x)
-{
-x = x << 1;
-if (x < 30)
-return x+2;
-if (x < 60)
-return x+4;
-if (x < 90)
-return x+6;
-
-return x+8;
-}
-
-
-uns8 hour_start[12];
-uns8 hour_end[12];
-
-void hour_start_end_init(void)
-{
-uns8 i;
-for (i=0; i<12; i++) {
-uns8 min;
-min = i << 2 + i;
-min = i*5;
-hour_start[i] = sixty_start(min);
-hour_end[i] = sixty_stop(min);
-}
-}
-void show_face()
-{
-if (segment.hrl >= 12)
-return;
-if (hour_start[segment.hrl] == segment.raw)
-bit_on(0x02);
-else if (hour_end[segment.hrl] == segment.raw){
-bit_off(0x02);
-segment.hrl++;
-}
-
-}
-
-
-
-void show_clk(void)
-{
-
-if (segment.raw == 0 && segment.flags != 0) {
-segment.flags = 0;
-segment.hour = segment.hour_next;
-segment.min = segment.min_next;
-}
-
-if (segment.raw == segment.min.start) {
-segment.show |= 0x02;
-} else if (segment.raw == segment.min.stop ) {
-segment.show &=~0x02;
-}
-
-
-if (segment.raw == segment.hour.start) {
-segment.show |= 0x01;
-} else if (segment.raw == segment.hour.stop ) {
-segment.show &=~0x01;
-}
-
-switch (segment.show) {
-case 0:
-shift_write(0x00);
-break;
-case 0x02:
-shift_write(0x1F);
-break;
-case 0x01:
-shift_write(0xF0);
-break;
-case 0x01 | 0x02:
-shift_write(0xFF);
-break;
-}
-}
-
-uns8 red_start;
-uns8 red_stop;
-void next_segment(void)
-{
-GIE = 0;
-
-if (segment.raw >= 128) {
-
-goto ns_end;
-}
-
-if (segment.raw == red_start)
-bit_on(0x02);
-else if (segment.raw == red_stop)
-bit_off(0x02);
-
-
-show_clk();
-
-segment.raw++;
-
-ns_end:
-GIE = 1;
-return;
-}
-
-
-
-void time_next_minute(void)
-{
-
-time.min++;
-if (time.min < 60)
-return;
-
-time.min = 0;
-time.hrs++;
-if (time.hrs < 12)
-return;
-time.hrs = 0;
-}
-
-# 310
-void segment_calc(void)
-{
-segment.min_next.start = sixty_start(time.min);
-segment.min_next.stop = sixty_stop(time.min);
-
-segment.hour_next.start = sixty_start(time.hrs * 12);
-segment.hour_next.stop = sixty_stop(time.hrs * 12);
-
-segment.flags = 0x02 | 0x01;
-
-}
-
-void next_minute(void)
-{
-
-time_next_minute();
-
-segment_calc();
-}
-
-void sync(void)
-{
-TMR1ON = 0;
-
-switch (state) {
-case 0:
-
-TMR1H = 0;
-TMR1L = 0;
-tmr1_counter = 0;
-TMR1IF = 0;
-TMR1ON = 1;
-break;
-
-case 1:
-case 2:
-
-if (TMR1IF == 1)
-tmr1_counter++;
-
-seg_ticks_l = (TMR1L >> 7) | ((TMR1H << 1) & 0xFF);
-seg_ticks_h = (TMR1H >> 7) | ((tmr1_counter << 1) & 0xFF);
-
-segment.raw = 0;
-segment.hrl = 0;
-
-
-
-TMR1L = 0;
-TMR1H = 0;
-tmr1_counter = 0;
-TMR1IF = 0;
-TMR1ON = 1;
-
-
-TMR0 = 256 - seg_ticks_l;
-tmr0_counter = 0;
-TMR0IF = 1;
-
-
-break;
-default:
-;
-}
-
-
-if (state != 2)
-state++;
-return;
-}
-
-
-void what_time_is_now()
-{
-time.hrs = 3;
-time.min = 25;
-
-
-
-
-}
-
-# 401
-void set_it_faster(uns8 how_much)
-{
-shift_write(0x05);
-
-if (how_much == 0)
-OSCCONbits.IRCF2 = 0;
-else
-OSCCONbits.IRCF2 = 1;
-
-OSCCONbits.IRCF1 = 1;
-OSCCONbits.IRCF0 = 1;
-
-while(!IOFS) {
-;
-}
-shift_write(0x02);
-}
-
-# 425
-uns8 rtc_setup(void)
-{
-uns8 table[] = {
-
-0x00, 0x00,
-0x01, 0x11,
-0x0D, 0x83,
-0x0E, 0x80,
-0x0F, 0x01,
-
-
-0x09, 0x00,
-0x0A, 0x00,
-0x0B, 0x00,
-0x0C, 0x00,
-
-0xFF, 0xFF
-};
-
-uns8 i=0;
-while (table[i] != 0xFF) {
-uns8 rv;
-rv = i2c_write(0xA3, table[i], table[i+1]);
-if (rv)
+uns8 tmp;
+do {asm("nop"); TRISB1 = 1; } while(0);
+do {asm("nop"); TRISB4 = 1; } while(0);
+tmp = (RB1);
+do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
+
+if (1 && tmp != 0) {
+do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
 return 0xFF;
-i += 2;
 }
-}
-
-# 457
-void application_reset(void)
-{
-if (mode != 0)
-return;
-state = 0;
-shift_write(0x5A);
-
-tmr1_counter = 0;
-tmr0_counter = 0;
-
-
-segment.show = 0;
-what_time_is_now();
-segment_calc();
-
-
-TMR0 = 0;
-TMR1L = 0;
-TMR1H = 0;
-
-
-TMR0IF = 0;
-TMR1IF = 0;
+return 0;
 }
 
-# 487
-void init_normal(void)
-{
-mode = 0;
-what_time_is_now();
-set_it_faster(1);
-hour_start_end_init();
-
-red_start = sixty_start(45);
-red_stop = sixty_stop(15);
-
-
-TMR1IF = 0;
-TMR1IE = 0;
-T1CON = 0;
-TMR1ON = 1;
-
-
-TMR0IF = 0;
-TMR0IE = 0;
-T0CS = 0;
-
-state = 0;
-
-
-RBIE = 1;
-
-INTE = 0;
-
-PEIE = 1;
-GIE = 1;
-}
-
-# 524
-void init_setup(void)
-{
-mode = 1;
-
-}
-
-
-void init(void)
-{
-set_it_faster(0);
-
-
-TRISA = 0;
-ADCON1 = 0;
-
-PORTA = 0x00;
-a_latch = 0x00;
-
-
-
-TRISB = 0xFF;
-
-rtc_setup();
-if (RB5 == 0)
-init_setup();
-else
-init_normal();
-}
-
-# 558
-void interrupt interrupt_handler(void)
+# 59
+uns8 i2c_write_byte(uns8 byte)
 {
 
-if (mode == 0) {
 
+uns8 i;
+for (i=0; i<8; i++) {
 
-
-static char c=0;
-if (RBIF) {
-
-if (RB7 == 1) {
-
-if(c == 0){
-sync();
-c = 1;
-} else {
-c = 0;
+i2c_write_bit((byte >> (7-i)) & 0x01);
 }
-}
-RBIF = 0;
-}
-if (INTF) {
+if (i2c_check_ack())
+return 0xFF;
 
-
-
-
-INTF = 0;
-}
-}
+return 0;
 }
 
-bit last_clk = 0;
-
-void main(void) {
-
-init();
-
-application_reset();
-
-uns8 i = 0;
-
-if (mode == 0) {
-bit_on(0x02);
-while(1) {
-
-if (TMR0IF) {
-if (state == 2) {
-
-if (tmr0_counter == seg_ticks_h) {
-tmr0_counter = 0;
-TMR0 = 256 - seg_ticks_l;
-next_segment();
-} else {
-tmr0_counter++;
-}
-}
-TMR0IF = 0;
-}
-
-
-
-if (TMR1IF) {
-tmr1_counter++;
-
-
-if (tmr1_counter >= 40) {
-application_reset();
-}
-TMR1IF = 0;
-}
-
-
-
-if (last_clk == 1 && RB3 == 0) {
-next_minute();
-}
-
-last_clk = RB3;
+uns8 i2c_read_byte(uns8 *byte)
+{
 
 
 }
+
+uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
+{
+
+# 87
+dev &= 0xFE;
+do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+
+if (i2c_write_byte(dev))
+return 0xFF;
+if (i2c_write_byte(addr))
+return 0xFF;
+if (i2c_write_byte(data))
+return 0xFF;
+do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+return 0;
 }
 
+# 102
+uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
+{
 
-if (mode == 1) {
-while(1)
-;
-
+do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+if (i2c_write_byte(dev & 0xFE))
+return 0xFF;
+if (i2c_write_byte(addr))
+return 0xFF;
+do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+if (i2c_write_byte(dev | 0x01))
+return 0xFF;
 }
-}
-

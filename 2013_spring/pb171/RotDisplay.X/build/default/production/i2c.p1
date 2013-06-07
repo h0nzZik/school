@@ -587,43 +587,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _EECON1bits `VS71  1 e@396 ]
 "843 C:\Program Files (x86)\HI-TECH Software\PICC\9.83\include\pic16f819.h
 [v _EECON2 `Vuc  1 e@397 ]
-"21 main.c
-[v _a_latch `uc  1 e ]
-"65 main.c
-[v _tmr1_counter `uc  1 e ]
-"66 main.c
-[v _tmr0_counter `uc  1 e ]
-"68 main.c
-[v _seg_ticks_h `uc  1 e ]
-"69 main.c
-[v _seg_ticks_l `uc  1 e ]
-[s S81 `uc 1 `uc 1 ]
-[n S81 . start stop ]
-[s S82 `uc 1 `uc 1 `S81 1 `S81 1 `S81 1 `S81 1 `uc 1 `uc 1 ]
-[n S82 . raw hrl min hour min_next hour_next flags show ]
-"94 main.c
-[v _segment `S82  1 e ]
-"106 main.c
-[v _state `uc  1 e ]
-[s S83 `uc 1 `uc 1 ]
-[n S83 . min hrs ]
-"118 main.c
-[v _time `S83  1 e ]
-"125 main.c
-[v _mode `uc  1 e ]
-"196 main.c
-[v _hour_start `uc  -> 12 `i e ]
-"197 main.c
-[v _hour_end `uc  -> 12 `i e ]
-"263 main.c
-[v _red_start `uc  1 e ]
-"264 main.c
-[v _red_stop `uc  1 e ]
-"30 i2c.h
-[v _i2c_write `(uc  0 ef3`uc`uc`uc ]
-"589 main.c
-[v _last_clk `b  1 e ]
-[p mainexit ]
 [; ;pic16f819.h: 100: volatile unsigned char INDF @ 0x000;
 [; ;pic16f819.h: 104: volatile unsigned char TMR0 @ 0x001;
 [; ;pic16f819.h: 108: volatile unsigned char PCL @ 0x002;
@@ -1183,1361 +1146,447 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 154: extern void _delay(unsigned long);
 [; ;main.h: 28: typedef unsigned char uns8;
 [; ;i2c.h: 30: uns8 i2c_write(uns8 dev, uns8 addr, uns8 data);
-"14 main.c
-[; ;main.c: 14: asm("\tpsect config,class=CONFIG,delta=2"); asm("\tdw ""0xFFFB & 0xFFFF & 0xFFDF & 0xFFFC & 0xFFBF & 0xFF7F");
-[; 	psect config,class=CONFIG,delta=2 ;#
-[; 	dw 0xFFFB & 0xFFFF & 0xFFDF & 0xFFFC & 0xFFBF & 0xFF7F ;#
-[; ;main.c: 21: uns8 a_latch;
-"23
-[v _bit_on `(v  1 ef1`uc ]
+[; ;i2c.c: 8: typedef unsigned char uns8;
+"11 i2c.c
+[v _i2c_write_bit `(v  1 ef1`uc ]
 {
-[; ;main.c: 22: void bit_on(uns8 bt)
-[; ;main.c: 23: {
-[e :U _bit_on ]
-[v _bt `uc  1 r1 ]
+[; ;i2c.c: 10: void i2c_write_bit(uns8 x)
+[; ;i2c.c: 11: {
+[e :U _i2c_write_bit ]
+[v _x `uc  1 r1 ]
 [f ]
-[; ;main.c: 24: a_latch |= bt;
-"24
-[e =| _a_latch _bt ]
-[; ;main.c: 25: PORTA = a_latch;
-"25
-[e = _PORTA _a_latch ]
-[; ;main.c: 26: }
-"26
-[e :UE 73 ]
+[; ;i2c.c: 12: x &= 0x01;
+"12
+[e =& _x -> -> 1 `i `uc ]
+[; ;i2c.c: 13: if (x)
+"13
+[e $ ! != -> _x `i -> -> -> 0 `i `uc `i 74  ]
+[; ;i2c.c: 14: do {asm("nop"); TRISB1 = 1; } while(0);
+"14
+[e :U 77 ]
+{
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
 }
-"29
-[v _bit_off `(v  1 ef1`uc ]
-{
-[; ;main.c: 28: void bit_off(uns8 bt)
-[; ;main.c: 29: {
-[e :U _bit_off ]
-[v _bt `uc  1 r1 ]
-[f ]
-[; ;main.c: 30: a_latch &= ~bt;
-"30
-[e =& _a_latch -> ~ -> _bt `i `uc ]
-[; ;main.c: 31: PORTA = a_latch;
-"31
-[e = _PORTA _a_latch ]
-[; ;main.c: 32: }
-"32
-[e :UE 74 ]
-}
-"40
-[v _shift_write `(v  1 ef1`uc ]
-{
-[; ;main.c: 39: void shift_write(uns8 data)
-[; ;main.c: 40: {
-[e :U _shift_write ]
-[v _data `uc  1 r1 ]
-[f ]
-"41
-[v _i `i  1 a ]
-[; ;main.c: 41: int i;
-[; ;main.c: 43: bit_off(0x08);
-"43
-[e ( _bit_off (1 -> -> 8 `i `uc ]
-[; ;main.c: 44: bit_off(0x10);
-"44
-[e ( _bit_off (1 -> -> 16 `i `uc ]
-[; ;main.c: 45: for (i=0; i<8; i++) {
-"45
-{
-[e = _i -> 0 `i ]
-[e $ < _i -> 8 `i 76  ]
-[e $U 77  ]
 [e :U 76 ]
+[e $U 78  ]
+"15
+[e :U 74 ]
+[; ;i2c.c: 15: else
+[; ;i2c.c: 16: do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0);
+"16
+[e :U 81 ]
 {
-[; ;main.c: 46: if ((data & 0x01) != 0) {
-"46
-[e $ ! != & -> _data `i -> 1 `i -> 0 `i 79  ]
-{
-[; ;main.c: 47: bit_on(0x04);
-"47
-[e ( _bit_on (1 -> -> 4 `i `uc ]
-"48
-}
-[; ;main.c: 48: } else {
-[e $U 80  ]
-[e :U 79 ]
-{
-[; ;main.c: 49: bit_off(0x04);
-"49
-[e ( _bit_off (1 -> -> 4 `i `uc ]
-"50
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
 }
 [e :U 80 ]
-[; ;main.c: 50: }
-[; ;main.c: 52: bit_on(0x10);
-"52
-[e ( _bit_on (1 -> -> 16 `i `uc ]
-[; ;main.c: 54: data = data >> 1;
-"54
-[e = _data -> >> -> _data `i -> 1 `i `uc ]
-[; ;main.c: 55: bit_off(0x10);
-"55
-[e ( _bit_off (1 -> -> 16 `i `uc ]
-"57
-}
-"45
-[e ++ _i -> 1 `i ]
-[e $ < _i -> 8 `i 76  ]
-[e :U 77 ]
-"57
-}
-[; ;main.c: 57: }
-[; ;main.c: 58: bit_on(0x08);
-"58
-[e ( _bit_on (1 -> -> 8 `i `uc ]
-[; ;main.c: 59: asm("nop");
-"59
+[e :U 78 ]
+[; ;i2c.c: 17: do {asm("nop"); TRISB4 = 1; } while(0);
+"17
+[e :U 84 ]
+{
 [; nop ;#
-[; ;main.c: 60: bit_off(0x08);
-"60
-[e ( _bit_off (1 -> -> 8 `i `uc ]
-[; ;main.c: 62: }
-"62
-[e :UE 75 ]
+[e = _TRISB4 -> -> 1 `i `b ]
 }
-"65
-[i _tmr1_counter
--> -> 0 `i `uc
-]
-[; ;main.c: 65: uns8 tmr1_counter = 0;
-"66
-[i _tmr0_counter
--> -> 0 `i `uc
-]
-[; ;main.c: 66: uns8 tmr0_counter = 0;
-[; ;main.c: 68: uns8 seg_ticks_h;
-[; ;main.c: 69: uns8 seg_ticks_l;
-[; ;main.c: 72: typedef struct {
-[; ;main.c: 73: uns8 start;
-[; ;main.c: 74: uns8 stop;
-[; ;main.c: 75: } start_stop_t;
-[; ;main.c: 77: struct {
-[; ;main.c: 78: uns8 raw;
-[; ;main.c: 79: uns8 hrl;
-[; ;main.c: 81: start_stop_t min;
-[; ;main.c: 82: start_stop_t hour;
-[; ;main.c: 84: start_stop_t min_next;
-[; ;main.c: 85: start_stop_t hour_next;
-[; ;main.c: 89: uns8 flags;
-[; ;main.c: 93: uns8 show;
-[; ;main.c: 94: } segment;
-"106
-[i _state
--> -> 0 `i `uc
-]
-[; ;main.c: 106: uns8 state = 0;
-[; ;main.c: 108: typedef struct {
-[; ;main.c: 109: uns8 min;
-[; ;main.c: 110: uns8 hrs;
-[; ;main.c: 111: } time_t;
-[; ;main.c: 118: time_t time;
-[; ;main.c: 125: uns8 mode;
-"136
-[v _convert `(uc  1 ef1`uc ]
-{
-[; ;main.c: 135: uns8 convert(uns8 x)
-[; ;main.c: 136: {
-[e :U _convert ]
-[v _x `uc  1 r1 ]
-[f ]
-[; ;main.c: 137: if (x < 2 || x == 127)
-"137
-[e $ ! || < -> _x `i -> 2 `i == -> _x `i -> 127 `i 85  ]
-[; ;main.c: 138: return 0;
-"138
-[e ) -> -> 0 `i `uc ]
-[e $UE 84  ]
-[e :U 85 ]
-[; ;main.c: 139: if (x < 31)
-"139
-[e $ ! < -> _x `i -> 31 `i 86  ]
-[; ;main.c: 140: return x-1;
-"140
-[e ) -> - -> _x `i -> 1 `i `uc ]
-[e $UE 84  ]
-[e :U 86 ]
-[; ;main.c: 141: if (x < 34)
-"141
-[e $ ! < -> _x `i -> 34 `i 87  ]
-[; ;main.c: 142: return 30;
-"142
-[e ) -> -> 30 `i `uc ]
-[e $UE 84  ]
+[e :U 83 ]
+[; ;i2c.c: 19: do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
+"19
 [e :U 87 ]
-[; ;main.c: 143: if (x < 63)
-"143
-[e $ ! < -> _x `i -> 63 `i 88  ]
-[; ;main.c: 144: return x-3;
-"144
-[e ) -> - -> _x `i -> 3 `i `uc ]
-[e $UE 84  ]
-[e :U 88 ]
-[; ;main.c: 145: if (x < 66)
-"145
-[e $ ! < -> _x `i -> 66 `i 89  ]
-[; ;main.c: 146: return 60;
-"146
-[e ) -> -> 60 `i `uc ]
-[e $UE 84  ]
-[e :U 89 ]
-[; ;main.c: 147: if (x < 95)
-"147
-[e $ ! < -> _x `i -> 95 `i 90  ]
-[; ;main.c: 148: return x-5;
-"148
-[e ) -> - -> _x `i -> 5 `i `uc ]
-[e $UE 84  ]
-[e :U 90 ]
-[; ;main.c: 149: if (x < 98)
-"149
-[e $ ! < -> _x `i -> 98 `i 91  ]
-[; ;main.c: 150: return 90;
-"150
-[e ) -> -> 90 `i `uc ]
-[e $UE 84  ]
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
+}
+[e :U 86 ]
+[; ;i2c.c: 20: }
+"20
+[e :UE 73 ]
+}
+"23
+[v _i2c_read_bit `(uc  1 ef ]
+{
+[; ;i2c.c: 22: uns8 i2c_read_bit()
+[; ;i2c.c: 23: {
+[e :U _i2c_read_bit ]
+[f ]
+"24
+[v _b `uc  1 a ]
+[; ;i2c.c: 24: uns8 b;
+[; ;i2c.c: 26: do {asm("nop"); TRISB1 = 1; } while(0);
+"26
 [e :U 91 ]
-[; ;main.c: 152: return x-7;
-"152
-[e ) -> - -> _x `i -> 7 `i `uc ]
-[e $UE 84  ]
-[; ;main.c: 153: }
-"153
-[e :UE 84 ]
-}
-"162
-[v _sixty_start `(uc  1 ef1`uc ]
 {
-[; ;main.c: 161: uns8 sixty_start(uns8 x)
-[; ;main.c: 162: {
-[e :U _sixty_start ]
-[v _x `uc  1 r1 ]
-[f ]
-[; ;main.c: 164: x = x << 1;
-"164
-[e = _x -> << -> _x `i -> 1 `i `uc ]
-[; ;main.c: 165: if (x == 0)
-"165
-[e $ ! == -> _x `i -> 0 `i 93  ]
-[; ;main.c: 166: return 127;
-"166
-[e ) -> -> 127 `i `uc ]
-[e $UE 92  ]
-[e :U 93 ]
-[; ;main.c: 167: if (x <= 30)
-"167
-[e $ ! <= -> _x `i -> 30 `i 94  ]
-[; ;main.c: 168: return x+1;
-"168
-[e ) -> + -> _x `i -> 1 `i `uc ]
-[e $UE 92  ]
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
+}
+[e :U 90 ]
+[; ;i2c.c: 27: do {asm("nop"); TRISB4 = 1; } while(0);
+"27
 [e :U 94 ]
-[; ;main.c: 169: if (x <= 60)
-"169
-[e $ ! <= -> _x `i -> 60 `i 95  ]
-[; ;main.c: 170: return x+3;
-"170
-[e ) -> + -> _x `i -> 3 `i `uc ]
-[e $UE 92  ]
-[e :U 95 ]
-[; ;main.c: 171: if (x <= 90)
-"171
-[e $ ! <= -> _x `i -> 90 `i 96  ]
-[; ;main.c: 172: return x+5;
-"172
-[e ) -> + -> _x `i -> 5 `i `uc ]
-[e $UE 92  ]
+{
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
+}
+[e :U 93 ]
+[; ;i2c.c: 28: b = (RB1);
+"28
+[e = _b -> -> _RB1 `i `uc ]
+[; ;i2c.c: 29: do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
+"29
+[e :U 97 ]
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
+}
 [e :U 96 ]
-[; ;main.c: 174: return x + 7;
-"174
-[e ) -> + -> _x `i -> 7 `i `uc ]
-[e $UE 92  ]
-[; ;main.c: 175: }
-"175
-[e :UE 92 ]
-}
-"183
-[v _sixty_stop `(uc  1 ef1`uc ]
-{
-[; ;main.c: 182: uns8 sixty_stop(uns8 x)
-[; ;main.c: 183: {
-[e :U _sixty_stop ]
-[v _x `uc  1 r1 ]
-[f ]
-[; ;main.c: 184: x = x << 1;
-"184
-[e = _x -> << -> _x `i -> 1 `i `uc ]
-[; ;main.c: 185: if (x < 30)
-"185
-[e $ ! < -> _x `i -> 30 `i 98  ]
-[; ;main.c: 186: return x+2;
-"186
-[e ) -> + -> _x `i -> 2 `i `uc ]
-[e $UE 97  ]
+[; ;i2c.c: 31: if (b)
+"31
+[e $ ! != -> _b `i -> -> -> 0 `i `uc `i 98  ]
+[; ;i2c.c: 32: return 1;
+"32
+[e ) -> -> 1 `i `uc ]
+[e $UE 88  ]
+[e $U 99  ]
+"33
 [e :U 98 ]
-[; ;main.c: 187: if (x < 60)
-"187
-[e $ ! < -> _x `i -> 60 `i 99  ]
-[; ;main.c: 188: return x+4;
-"188
-[e ) -> + -> _x `i -> 4 `i `uc ]
-[e $UE 97  ]
+[; ;i2c.c: 33: else
+[; ;i2c.c: 34: return 0;
+"34
+[e ) -> -> 0 `i `uc ]
+[e $UE 88  ]
 [e :U 99 ]
-[; ;main.c: 189: if (x < 90)
-"189
-[e $ ! < -> _x `i -> 90 `i 100  ]
-[; ;main.c: 190: return x+6;
-"190
-[e ) -> + -> _x `i -> 6 `i `uc ]
-[e $UE 97  ]
-[e :U 100 ]
-[; ;main.c: 192: return x+8;
-"192
-[e ) -> + -> _x `i -> 8 `i `uc ]
-[e $UE 97  ]
-[; ;main.c: 193: }
-"193
-[e :UE 97 ]
+[; ;i2c.c: 35: }
+"35
+[e :UE 88 ]
 }
-[; ;main.c: 196: uns8 hour_start[12];
-[; ;main.c: 197: uns8 hour_end[12];
-"200
-[v _hour_start_end_init `(v  1 ef ]
+"38
+[v _i2c_check_ack `(uc  1 ef ]
 {
-[; ;main.c: 199: void hour_start_end_init(void)
-[; ;main.c: 200: {
-[e :U _hour_start_end_init ]
+[; ;i2c.c: 37: uns8 i2c_check_ack()
+[; ;i2c.c: 38: {
+[e :U _i2c_check_ack ]
 [f ]
-"201
-[v _i `uc  1 a ]
-[; ;main.c: 201: uns8 i;
-[; ;main.c: 202: for (i=0; i<12; i++) {
-"202
-{
-[e = _i -> -> 0 `i `uc ]
-[e $ < -> _i `i -> 12 `i 102  ]
-[e $U 103  ]
-[e :U 102 ]
-{
-"203
-[v _min `uc  1 a ]
-[; ;main.c: 203: uns8 min;
-[; ;main.c: 204: min = i << 2 + i;
-"204
-[e = _min -> << -> _i `i + -> 2 `i -> _i `i `uc ]
-[; ;main.c: 205: min = i*5;
-"205
-[e = _min -> * -> _i `i -> 5 `i `uc ]
-[; ;main.c: 206: hour_start[i] = sixty_start(min);
-"206
-[e = *U + &U _hour_start * -> _i `ux -> -> # *U &U _hour_start `ui `ux ( _sixty_start (1 _min ]
-[; ;main.c: 207: hour_end[i] = sixty_stop(min);
-"207
-[e = *U + &U _hour_end * -> _i `ux -> -> # *U &U _hour_end `ui `ux ( _sixty_stop (1 _min ]
-"208
-}
-"202
-[e ++ _i -> -> 1 `i `uc ]
-[e $ < -> _i `i -> 12 `i 102  ]
+"39
+[v _tmp `uc  1 a ]
+[; ;i2c.c: 39: uns8 tmp;
+[; ;i2c.c: 40: do {asm("nop"); TRISB1 = 1; } while(0);
+"40
 [e :U 103 ]
-"208
-}
-[; ;main.c: 208: }
-[; ;main.c: 209: }
-"209
-[e :UE 101 ]
-}
-"211
-[v _show_face `(v  1 ef ]
 {
-[; ;main.c: 210: void show_face()
-[; ;main.c: 211: {
-[e :U _show_face ]
-[f ]
-[; ;main.c: 212: if (segment.hrl >= 12)
-"212
-[e $ ! >= -> . _segment 1 `i -> 12 `i 106  ]
-[; ;main.c: 213: return;
-"213
-[e $UE 105  ]
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
+}
+[e :U 102 ]
+[; ;i2c.c: 41: do {asm("nop"); TRISB4 = 1; } while(0);
+"41
 [e :U 106 ]
-[; ;main.c: 214: if (hour_start[segment.hrl] == segment.raw)
-"214
-[e $ ! == -> *U + &U _hour_start * -> . _segment 1 `ux -> -> # *U &U _hour_start `ui `ux `i -> . _segment 0 `i 107  ]
-[; ;main.c: 215: bit_on(0x02);
-"215
-[e ( _bit_on (1 -> -> 2 `i `uc ]
-[e $U 108  ]
-"216
-[e :U 107 ]
-[; ;main.c: 216: else if (hour_end[segment.hrl] == segment.raw){
-[e $ ! == -> *U + &U _hour_end * -> . _segment 1 `ux -> -> # *U &U _hour_end `ui `ux `i -> . _segment 0 `i 109  ]
 {
-[; ;main.c: 217: bit_off(0x02);
-"217
-[e ( _bit_off (1 -> -> 2 `i `uc ]
-[; ;main.c: 218: segment.hrl++;
-"218
-[e ++ . _segment 1 -> -> 1 `i `uc ]
-"219
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
 }
+[e :U 105 ]
+[; ;i2c.c: 42: tmp = (RB1);
+"42
+[e = _tmp -> -> _RB1 `i `uc ]
+[; ;i2c.c: 43: do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);
+"43
 [e :U 109 ]
-"221
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
+}
 [e :U 108 ]
-[; ;main.c: 219: }
-[; ;main.c: 221: }
-[e :UE 105 ]
-}
-"226
-[v _show_clk `(v  1 ef ]
+[; ;i2c.c: 45: if (1 && tmp != 0) {
+"45
+[e $ ! && != -> 1 `i -> 0 `i != -> _tmp `i -> 0 `i 110  ]
 {
-[; ;main.c: 225: void show_clk(void)
-[; ;main.c: 226: {
-[e :U _show_clk ]
-[f ]
-[; ;main.c: 228: if (segment.raw == 0 && segment.flags != 0) {
-"228
-[e $ ! && == -> . _segment 0 `i -> 0 `i != -> . _segment 6 `i -> 0 `i 111  ]
-{
-[; ;main.c: 229: segment.flags = 0;
-"229
-[e = . _segment 6 -> -> 0 `i `uc ]
-[; ;main.c: 230: segment.hour = segment.hour_next;
-"230
-[e = . _segment 3 . _segment 5 ]
-[; ;main.c: 231: segment.min = segment.min_next;
-"231
-[e = . _segment 2 . _segment 4 ]
-"232
-}
-[e :U 111 ]
-[; ;main.c: 232: }
-[; ;main.c: 234: if (segment.raw == segment.min.start) {
-"234
-[e $ ! == -> . _segment 0 `i -> . . _segment 2 0 `i 112  ]
-{
-[; ;main.c: 235: segment.show |= 0x02;
-"235
-[e =| . _segment 7 -> -> 2 `i `uc ]
-"236
-}
-[; ;main.c: 236: } else if (segment.raw == segment.min.stop ) {
-[e $U 113  ]
-[e :U 112 ]
-[e $ ! == -> . _segment 0 `i -> . . _segment 2 1 `i 114  ]
-{
-[; ;main.c: 237: segment.show &=~0x02;
-"237
-[e =& . _segment 7 -> ~ -> 2 `i `uc ]
-"238
-}
-[e :U 114 ]
-"241
+[; ;i2c.c: 46: do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+"46
 [e :U 113 ]
-[; ;main.c: 238: }
-[; ;main.c: 241: if (segment.raw == segment.hour.start) {
-[e $ ! == -> . _segment 0 `i -> . . _segment 3 0 `i 115  ]
 {
-[; ;main.c: 242: segment.show |= 0x01;
-"242
-[e =| . _segment 7 -> -> 1 `i `uc ]
-"243
-}
-[; ;main.c: 243: } else if (segment.raw == segment.hour.stop ) {
-[e $U 116  ]
-[e :U 115 ]
-[e $ ! == -> . _segment 0 `i -> . . _segment 3 1 `i 117  ]
-{
-[; ;main.c: 244: segment.show &=~0x01;
-"244
-[e =& . _segment 7 -> ~ -> 1 `i `uc ]
-"245
-}
-[e :U 117 ]
-"247
 [e :U 116 ]
-[; ;main.c: 245: }
-[; ;main.c: 247: switch (segment.show) {
-[e $U 119  ]
 {
-[; ;main.c: 248: case 0:
-"248
-[e :U 120 ]
-[; ;main.c: 249: shift_write(0x00);
-"249
-[e ( _shift_write (1 -> -> 0 `i `uc ]
-[; ;main.c: 250: break;
-"250
-[e $U 118  ]
-[; ;main.c: 251: case 0x02:
-"251
-[e :U 121 ]
-[; ;main.c: 252: shift_write(0x1F);
-"252
-[e ( _shift_write (1 -> -> 31 `i `uc ]
-[; ;main.c: 253: break;
-"253
-[e $U 118  ]
-[; ;main.c: 254: case 0x01:
-"254
-[e :U 122 ]
-[; ;main.c: 255: shift_write(0xF0);
-"255
-[e ( _shift_write (1 -> -> 240 `i `uc ]
-[; ;main.c: 256: break;
-"256
-[e $U 118  ]
-[; ;main.c: 257: case 0x01 | 0x02:
-"257
-[e :U 123 ]
-[; ;main.c: 258: shift_write(0xFF);
-"258
-[e ( _shift_write (1 -> -> 255 `i `uc ]
-[; ;main.c: 259: break;
-"259
-[e $U 118  ]
-"260
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
 }
-[; ;main.c: 260: }
-[e $U 118  ]
-"247
+[e :U 115 ]
 [e :U 119 ]
-[e [\ . _segment 7 , $ -> -> 0 `i `uc 120
- , $ -> -> 2 `i `uc 121
- , $ -> -> 1 `i `uc 122
- , $ -> | -> 1 `i -> 2 `i `uc 123
- 118 ]
-"260
+{
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
+}
 [e :U 118 ]
-[; ;main.c: 261: }
-"261
-[e :UE 110 ]
-}
-[; ;main.c: 263: uns8 red_start;
-[; ;main.c: 264: uns8 red_stop;
-"266
-[v _next_segment `(v  1 ef ]
+[e :U 122 ]
 {
-[; ;main.c: 265: void next_segment(void)
-[; ;main.c: 266: {
-[e :U _next_segment ]
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
+}
+[e :U 121 ]
+}
+[e :U 112 ]
+[; ;i2c.c: 47: return 0xFF;
+"47
+[e ) -> -> 255 `i `uc ]
+[e $UE 100  ]
+"48
+}
+[e :U 110 ]
+[; ;i2c.c: 48: }
+[; ;i2c.c: 49: return 0;
+"49
+[e ) -> -> 0 `i `uc ]
+[e $UE 100  ]
+[; ;i2c.c: 50: }
+"50
+[e :UE 100 ]
+}
+"60
+[v _i2c_write_byte `(uc  1 ef1`uc ]
+{
+[; ;i2c.c: 59: uns8 i2c_write_byte(uns8 byte)
+[; ;i2c.c: 60: {
+[e :U _i2c_write_byte ]
+[v _byte `uc  1 r1 ]
 [f ]
-[; ;main.c: 267: GIE = 0;
-"267
-[e = _GIE -> -> 0 `i `b ]
-[; ;main.c: 269: if (segment.raw >= 128) {
-"269
-[e $ ! >= -> . _segment 0 `i -> 128 `i 125  ]
-{
-[; ;main.c: 271: goto ns_end;
-"271
-[e $U 126  ]
-"272
-}
-[e :U 125 ]
-[; ;main.c: 272: }
-[; ;main.c: 274: if (segment.raw == red_start)
-"274
-[e $ ! == -> . _segment 0 `i -> _red_start `i 127  ]
-[; ;main.c: 275: bit_on(0x02);
-"275
-[e ( _bit_on (1 -> -> 2 `i `uc ]
-[e $U 128  ]
-"276
-[e :U 127 ]
-[; ;main.c: 276: else if (segment.raw == red_stop)
-[e $ ! == -> . _segment 0 `i -> _red_stop `i 129  ]
-[; ;main.c: 277: bit_off(0x02);
-"277
-[e ( _bit_off (1 -> -> 2 `i `uc ]
-[e :U 129 ]
-"280
-[e :U 128 ]
-[; ;main.c: 280: show_clk();
-[e ( _show_clk ..  ]
-[; ;main.c: 282: segment.raw++;
-"282
-[e ++ . _segment 0 -> -> 1 `i `uc ]
-[; ;main.c: 284: ns_end:
-"284
-[e :U 126 ]
-[; ;main.c: 285: GIE = 1;
-"285
-[e = _GIE -> -> 1 `i `b ]
-[; ;main.c: 286: return;
-"286
-[e $UE 124  ]
-[; ;main.c: 287: }
-"287
-[e :UE 124 ]
-}
-"292
-[v _time_next_minute `(v  1 ef ]
-{
-[; ;main.c: 291: void time_next_minute(void)
-[; ;main.c: 292: {
-[e :U _time_next_minute ]
-[f ]
-[; ;main.c: 294: time.min++;
-"294
-[e ++ . _time 0 -> -> 1 `i `uc ]
-[; ;main.c: 295: if (time.min < 60)
-"295
-[e $ ! < -> . _time 0 `i -> 60 `i 131  ]
-[; ;main.c: 296: return;
-"296
-[e $UE 130  ]
-[e :U 131 ]
-[; ;main.c: 298: time.min = 0;
-"298
-[e = . _time 0 -> -> 0 `i `uc ]
-[; ;main.c: 299: time.hrs++;
-"299
-[e ++ . _time 1 -> -> 1 `i `uc ]
-[; ;main.c: 300: if (time.hrs < 12)
-"300
-[e $ ! < -> . _time 1 `i -> 12 `i 132  ]
-[; ;main.c: 301: return;
-"301
-[e $UE 130  ]
-[e :U 132 ]
-[; ;main.c: 302: time.hrs = 0;
-"302
-[e = . _time 1 -> -> 0 `i `uc ]
-[; ;main.c: 303: }
-"303
-[e :UE 130 ]
-}
-"311
-[v _segment_calc `(v  1 ef ]
-{
-[; ;main.c: 310: void segment_calc(void)
-[; ;main.c: 311: {
-[e :U _segment_calc ]
-[f ]
-[; ;main.c: 312: segment.min_next.start = sixty_start(time.min);
-"312
-[e = . . _segment 4 0 ( _sixty_start (1 . _time 0 ]
-[; ;main.c: 313: segment.min_next.stop = sixty_stop(time.min);
-"313
-[e = . . _segment 4 1 ( _sixty_stop (1 . _time 0 ]
-[; ;main.c: 315: segment.hour_next.start = sixty_start(time.hrs * 12);
-"315
-[e = . . _segment 5 0 ( _sixty_start (1 -> * -> . _time 1 `i -> 12 `i `uc ]
-[; ;main.c: 316: segment.hour_next.stop = sixty_stop(time.hrs * 12);
-"316
-[e = . . _segment 5 1 ( _sixty_stop (1 -> * -> . _time 1 `i -> 12 `i `uc ]
-[; ;main.c: 318: segment.flags = 0x02 | 0x01;
-"318
-[e = . _segment 6 -> | -> 2 `i -> 1 `i `uc ]
-[; ;main.c: 320: }
-"320
-[e :UE 133 ]
-}
-"323
-[v _next_minute `(v  1 ef ]
-{
-[; ;main.c: 322: void next_minute(void)
-[; ;main.c: 323: {
-[e :U _next_minute ]
-[f ]
-[; ;main.c: 325: time_next_minute();
-"325
-[e ( _time_next_minute ..  ]
-[; ;main.c: 327: segment_calc();
-"327
-[e ( _segment_calc ..  ]
-[; ;main.c: 328: }
-"328
-[e :UE 134 ]
-}
-"331
-[v _sync `(v  1 ef ]
-{
-[; ;main.c: 330: void sync(void)
-[; ;main.c: 331: {
-[e :U _sync ]
-[f ]
-[; ;main.c: 332: TMR1ON = 0;
-"332
-[e = _TMR1ON -> -> 0 `i `b ]
-[; ;main.c: 334: switch (state) {
-"334
-[e $U 137  ]
-{
-[; ;main.c: 335: case 0:
-"335
-[e :U 138 ]
-[; ;main.c: 337: TMR1H = 0;
-"337
-[e = _TMR1H -> -> 0 `i `uc ]
-[; ;main.c: 338: TMR1L = 0;
-"338
-[e = _TMR1L -> -> 0 `i `uc ]
-[; ;main.c: 339: tmr1_counter = 0;
-"339
-[e = _tmr1_counter -> -> 0 `i `uc ]
-[; ;main.c: 340: TMR1IF = 0;
-"340
-[e = _TMR1IF -> -> 0 `i `b ]
-[; ;main.c: 341: TMR1ON = 1;
-"341
-[e = _TMR1ON -> -> 1 `i `b ]
-[; ;main.c: 342: break;
-"342
-[e $U 136  ]
-[; ;main.c: 344: case 1:
-"344
-[e :U 139 ]
-"345
-[e :U 140 ]
-[; ;main.c: 345: case 2:
-[; ;main.c: 347: if (TMR1IF == 1)
-"347
-[e $ ! == -> _TMR1IF `i -> 1 `i 141  ]
-[; ;main.c: 348: tmr1_counter++;
-"348
-[e ++ _tmr1_counter -> -> 1 `i `uc ]
-[e :U 141 ]
-[; ;main.c: 350: seg_ticks_l = (TMR1L >> 7) | ((TMR1H << 1) & 0xFF);
-"350
-[e = _seg_ticks_l -> | >> -> _TMR1L `i -> 7 `i & << -> _TMR1H `i -> 1 `i -> 255 `i `uc ]
-[; ;main.c: 351: seg_ticks_h = (TMR1H >> 7) | ((tmr1_counter << 1) & 0xFF);
-"351
-[e = _seg_ticks_h -> | >> -> _TMR1H `i -> 7 `i & << -> _tmr1_counter `i -> 1 `i -> 255 `i `uc ]
-[; ;main.c: 353: segment.raw = 0;
-"353
-[e = . _segment 0 -> -> 0 `i `uc ]
-[; ;main.c: 354: segment.hrl = 0;
-"354
-[e = . _segment 1 -> -> 0 `i `uc ]
-[; ;main.c: 358: TMR1L = 0;
-"358
-[e = _TMR1L -> -> 0 `i `uc ]
-[; ;main.c: 359: TMR1H = 0;
-"359
-[e = _TMR1H -> -> 0 `i `uc ]
-[; ;main.c: 360: tmr1_counter = 0;
-"360
-[e = _tmr1_counter -> -> 0 `i `uc ]
-[; ;main.c: 361: TMR1IF = 0;
-"361
-[e = _TMR1IF -> -> 0 `i `b ]
-[; ;main.c: 362: TMR1ON = 1;
-"362
-[e = _TMR1ON -> -> 1 `i `b ]
-[; ;main.c: 365: TMR0 = 256 - seg_ticks_l;
-"365
-[e = _TMR0 -> - -> 256 `i -> _seg_ticks_l `i `uc ]
-[; ;main.c: 366: tmr0_counter = 0;
-"366
-[e = _tmr0_counter -> -> 0 `i `uc ]
-[; ;main.c: 367: TMR0IF = 1;
-"367
-[e = _TMR0IF -> -> 1 `i `b ]
-[; ;main.c: 370: break;
-"370
-[e $U 136  ]
-[; ;main.c: 371: default:
-"371
-[e :U 142 ]
-[; ;main.c: 372: ;
-"373
-}
-[; ;main.c: 373: }
-[e $U 136  ]
-"334
-[e :U 137 ]
-[e [\ _state , $ -> -> 0 `i `uc 138
- , $ -> -> 1 `i `uc 139
- , $ -> -> 2 `i `uc 140
- 142 ]
-"373
-[e :U 136 ]
-[; ;main.c: 376: if (state != 2)
-"376
-[e $ ! != -> _state `i -> 2 `i 143  ]
-[; ;main.c: 377: state++;
-"377
-[e ++ _state -> -> 1 `i `uc ]
-[e :U 143 ]
-[; ;main.c: 378: return;
-"378
-[e $UE 135  ]
-[; ;main.c: 379: }
-"379
-[e :UE 135 ]
-}
-"383
-[v _what_time_is_now `(v  1 ef ]
-{
-[; ;main.c: 382: void what_time_is_now()
-[; ;main.c: 383: {
-[e :U _what_time_is_now ]
-[f ]
-[; ;main.c: 384: time.hrs = 3;
-"384
-[e = . _time 1 -> -> 3 `i `uc ]
-[; ;main.c: 385: time.min = 25;
-"385
-[e = . _time 0 -> -> 25 `i `uc ]
-[; ;main.c: 390: }
-"390
-[e :UE 144 ]
-}
-"402
-[v _set_it_faster `(v  1 ef1`uc ]
-{
-[; ;main.c: 401: void set_it_faster(uns8 how_much)
-[; ;main.c: 402: {
-[e :U _set_it_faster ]
-[v _how_much `uc  1 r1 ]
-[f ]
-[; ;main.c: 403: shift_write(0x05);
-"403
-[e ( _shift_write (1 -> -> 5 `i `uc ]
-[; ;main.c: 405: if (how_much == 0)
-"405
-[e $ ! == -> _how_much `i -> 0 `i 146  ]
-[; ;main.c: 406: OSCCONbits.IRCF2 = 0;
-"406
-[e = . . _OSCCONbits 1 3 -> -> 0 `i `uc ]
-[e $U 147  ]
-"407
-[e :U 146 ]
-[; ;main.c: 407: else
-[; ;main.c: 408: OSCCONbits.IRCF2 = 1;
-"408
-[e = . . _OSCCONbits 1 3 -> -> 1 `i `uc ]
-[e :U 147 ]
-[; ;main.c: 410: OSCCONbits.IRCF1 = 1;
-"410
-[e = . . _OSCCONbits 1 2 -> -> 1 `i `uc ]
-[; ;main.c: 411: OSCCONbits.IRCF0 = 1;
-"411
-[e = . . _OSCCONbits 1 1 -> -> 1 `i `uc ]
-[; ;main.c: 413: while(!IOFS) {
-"413
-[e $U 148  ]
-[e :U 149 ]
-{
-[; ;main.c: 414: ;
-"415
-}
-[e :U 148 ]
-"413
-[e $ ! _IOFS 149  ]
-[e :U 150 ]
-[; ;main.c: 415: }
-[; ;main.c: 416: shift_write(0x02);
-"416
-[e ( _shift_write (1 -> -> 2 `i `uc ]
-[; ;main.c: 417: }
-"417
-[e :UE 145 ]
-}
-"426
-[v _rtc_setup `(uc  1 ef ]
-{
-[; ;main.c: 425: uns8 rtc_setup(void)
-[; ;main.c: 426: {
-[e :U _rtc_setup ]
-[f ]
-"427
-[v F797 `uc  -> 0 `x s ]
-[i F797
-:U ..
-"429
--> -> 0 `i `uc
--> -> 0 `i `uc
-"430
--> -> 1 `i `uc
--> -> 17 `i `uc
-"431
--> -> 13 `i `uc
--> -> 131 `i `uc
-"432
--> -> 14 `i `uc
--> -> 128 `i `uc
-"433
--> -> 15 `i `uc
--> -> 1 `i `uc
-"436
--> -> 9 `i `uc
--> -> 0 `i `uc
-"437
--> -> 10 `i `uc
--> -> 0 `i `uc
-"438
--> -> 11 `i `uc
--> -> 0 `i `uc
-"439
--> -> 12 `i `uc
--> -> 0 `i `uc
-"441
--> -> 255 `i `uc
-"442
--> -> 255 `i `uc
-..
-]
-[v _table `uc  20  a ]
-[; ;main.c: 427: uns8 table[] = {
-[; ;main.c: 429: 0x00, 0x00,
-[; ;main.c: 430: 0x01, 0x11,
-[; ;main.c: 431: 0x0D, 0x83,
-[; ;main.c: 432: 0x0E, 0x80,
-[; ;main.c: 433: 0x0F, 0x01,
-[; ;main.c: 436: 0x09, 0x00,
-[; ;main.c: 437: 0x0A, 0x00,
-[; ;main.c: 438: 0x0B, 0x00,
-[; ;main.c: 439: 0x0C, 0x00,
-[; ;main.c: 441: 0xFF, 0xFF
-[; ;main.c: 442: };
-[e = _table F797 ]
-"444
+"63
 [v _i `uc  1 a ]
-[; ;main.c: 444: uns8 i=0;
+[; ;i2c.c: 63: uns8 i;
+[; ;i2c.c: 64: for (i=0; i<8; i++) {
+"64
+{
 [e = _i -> -> 0 `i `uc ]
-[; ;main.c: 445: while (table[i] != 0xFF) {
-"445
-[e $U 152  ]
+[e $ < -> _i `i -> 8 `i 124  ]
+[e $U 125  ]
+[e :U 124 ]
+{
+[; ;i2c.c: 66: i2c_write_bit((byte >> (7-i)) & 0x01);
+"66
+[e ( _i2c_write_bit (1 -> & >> -> _byte `i - -> 7 `i -> _i `i -> 1 `i `uc ]
+"67
+}
+"64
+[e ++ _i -> -> 1 `i `uc ]
+[e $ < -> _i `i -> 8 `i 124  ]
+[e :U 125 ]
+"67
+}
+[; ;i2c.c: 67: }
+[; ;i2c.c: 68: if (i2c_check_ack())
+"68
+[e $ ! != -> ( _i2c_check_ack ..  `i -> -> -> 0 `i `uc `i 127  ]
+[; ;i2c.c: 69: return 0xFF;
+"69
+[e ) -> -> 255 `i `uc ]
+[e $UE 123  ]
+[e :U 127 ]
+[; ;i2c.c: 71: return 0;
+"71
+[e ) -> -> 0 `i `uc ]
+[e $UE 123  ]
+[; ;i2c.c: 72: }
+"72
+[e :UE 123 ]
+}
+"75
+[v _i2c_read_byte `(uc  1 ef1`*uc ]
+{
+[; ;i2c.c: 74: uns8 i2c_read_byte(uns8 *byte)
+[; ;i2c.c: 75: {
+[e :U _i2c_read_byte ]
+[v _byte `*uc  1 r1 ]
+[f ]
+[; ;i2c.c: 78: }
+"78
+[e :UE 128 ]
+}
+"81
+[v _i2c_write `(uc  1 ef3`uc`uc`uc ]
+{
+[; ;i2c.c: 80: uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
+[; ;i2c.c: 81: {
+[e :U _i2c_write ]
+[v _dev `uc  1 r1 ]
+[v _addr `uc  1 r2 ]
+[v _data `uc  1 r3 ]
+[f ]
+[; ;i2c.c: 87: dev &= 0xFE;
+"87
+[e =& _dev -> -> 254 `i `uc ]
+[; ;i2c.c: 88: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"88
+[e :U 132 ]
+{
+[e :U 135 ]
+{
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
+}
+[e :U 134 ]
+[e :U 138 ]
+{
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 137 ]
+[e :U 141 ]
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
+}
+[e :U 140 ]
+}
+[e :U 131 ]
+[; ;i2c.c: 90: if (i2c_write_byte(dev))
+"90
+[e $ ! != -> ( _i2c_write_byte (1 _dev `i -> -> -> 0 `i `uc `i 142  ]
+[; ;i2c.c: 91: return 0xFF;
+"91
+[e ) -> -> 255 `i `uc ]
+[e $UE 129  ]
+[e :U 142 ]
+[; ;i2c.c: 92: if (i2c_write_byte(addr))
+"92
+[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 143  ]
+[; ;i2c.c: 93: return 0xFF;
+"93
+[e ) -> -> 255 `i `uc ]
+[e $UE 129  ]
+[e :U 143 ]
+[; ;i2c.c: 94: if (i2c_write_byte(data))
+"94
+[e $ ! != -> ( _i2c_write_byte (1 _data `i -> -> -> 0 `i `uc `i 144  ]
+[; ;i2c.c: 95: return 0xFF;
+"95
+[e ) -> -> 255 `i `uc ]
+[e $UE 129  ]
+[e :U 144 ]
+[; ;i2c.c: 96: do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+"96
+[e :U 147 ]
+{
+[e :U 150 ]
+{
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 149 ]
 [e :U 153 ]
 {
-"446
-[v _rv `uc  1 a ]
-[; ;main.c: 446: uns8 rv;
-[; ;main.c: 447: rv = i2c_write(0xA3, table[i], table[i+1]);
-"447
-[e = _rv ( _i2c_write (3 , , -> -> 163 `i `uc *U + &U _table * -> _i `ux -> -> # *U &U _table `ui `ux *U + &U _table * -> -> + -> _i `i -> 1 `i `ui `ux -> -> # *U &U _table `ui `ux ]
-[; ;main.c: 448: if (rv)
-"448
-[e $ ! != -> _rv `i -> -> -> 0 `i `uc `i 155  ]
-[; ;main.c: 449: return 0xFF;
-"449
-[e ) -> -> 255 `i `uc ]
-[e $UE 151  ]
-[e :U 155 ]
-[; ;main.c: 450: i += 2;
-"450
-[e =+ _i -> -> 2 `i `uc ]
-"451
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 152 ]
-"445
-[e $ != -> *U + &U _table * -> _i `ux -> -> # *U &U _table `ui `ux `i -> 255 `i 153  ]
-[e :U 154 ]
-[; ;main.c: 451: }
-[; ;main.c: 452: }
-"452
-[e :UE 151 ]
-}
-"458
-[v _application_reset `(v  1 ef ]
+[e :U 156 ]
 {
-[; ;main.c: 457: void application_reset(void)
-[; ;main.c: 458: {
-[e :U _application_reset ]
-[f ]
-[; ;main.c: 459: if (mode != 0)
-"459
-[e $ ! != -> _mode `i -> 0 `i 157  ]
-[; ;main.c: 460: return;
-"460
-[e $UE 156  ]
-[e :U 157 ]
-[; ;main.c: 461: state = 0;
-"461
-[e = _state -> -> 0 `i `uc ]
-[; ;main.c: 462: shift_write(0x5A);
-"462
-[e ( _shift_write (1 -> -> 90 `i `uc ]
-[; ;main.c: 464: tmr1_counter = 0;
-"464
-[e = _tmr1_counter -> -> 0 `i `uc ]
-[; ;main.c: 465: tmr0_counter = 0;
-"465
-[e = _tmr0_counter -> -> 0 `i `uc ]
-[; ;main.c: 468: segment.show = 0;
-"468
-[e = . _segment 7 -> -> 0 `i `uc ]
-[; ;main.c: 469: what_time_is_now();
-"469
-[e ( _what_time_is_now ..  ]
-[; ;main.c: 470: segment_calc();
-"470
-[e ( _segment_calc ..  ]
-[; ;main.c: 473: TMR0 = 0;
-"473
-[e = _TMR0 -> -> 0 `i `uc ]
-[; ;main.c: 474: TMR1L = 0;
-"474
-[e = _TMR1L -> -> 0 `i `uc ]
-[; ;main.c: 475: TMR1H = 0;
-"475
-[e = _TMR1H -> -> 0 `i `uc ]
-[; ;main.c: 478: TMR0IF = 0;
-"478
-[e = _TMR0IF -> -> 0 `i `b ]
-[; ;main.c: 479: TMR1IF = 0;
-"479
-[e = _TMR1IF -> -> 0 `i `b ]
-[; ;main.c: 480: }
-"480
-[e :UE 156 ]
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
 }
-"488
-[v _init_normal `(v  1 ef ]
-{
-[; ;main.c: 487: void init_normal(void)
-[; ;main.c: 488: {
-[e :U _init_normal ]
-[f ]
-[; ;main.c: 489: mode = 0;
-"489
-[e = _mode -> -> 0 `i `uc ]
-[; ;main.c: 490: what_time_is_now();
-"490
-[e ( _what_time_is_now ..  ]
-[; ;main.c: 491: set_it_faster(1);
-"491
-[e ( _set_it_faster (1 -> -> 1 `i `uc ]
-[; ;main.c: 492: hour_start_end_init();
-"492
-[e ( _hour_start_end_init ..  ]
-[; ;main.c: 494: red_start = sixty_start(45);
-"494
-[e = _red_start ( _sixty_start (1 -> -> 45 `i `uc ]
-[; ;main.c: 495: red_stop = sixty_stop(15);
-"495
-[e = _red_stop ( _sixty_stop (1 -> -> 15 `i `uc ]
-[; ;main.c: 498: TMR1IF = 0;
-"498
-[e = _TMR1IF -> -> 0 `i `b ]
-[; ;main.c: 499: TMR1IE = 0;
-"499
-[e = _TMR1IE -> -> 0 `i `b ]
-[; ;main.c: 500: T1CON = 0;
-"500
-[e = _T1CON -> -> 0 `i `uc ]
-[; ;main.c: 501: TMR1ON = 1;
-"501
-[e = _TMR1ON -> -> 1 `i `b ]
-[; ;main.c: 504: TMR0IF = 0;
-"504
-[e = _TMR0IF -> -> 0 `i `b ]
-[; ;main.c: 505: TMR0IE = 0;
-"505
-[e = _TMR0IE -> -> 0 `i `b ]
-[; ;main.c: 506: T0CS = 0;
-"506
-[e = _T0CS -> -> 0 `i `b ]
-[; ;main.c: 508: state = 0;
-"508
-[e = _state -> -> 0 `i `uc ]
-[; ;main.c: 511: RBIE = 1;
-"511
-[e = _RBIE -> -> 1 `i `b ]
-[; ;main.c: 513: INTE = 0;
-"513
-[e = _INTE -> -> 0 `i `b ]
-[; ;main.c: 515: PEIE = 1;
-"515
-[e = _PEIE -> -> 1 `i `b ]
-[; ;main.c: 516: GIE = 1;
-"516
-[e = _GIE -> -> 1 `i `b ]
-[; ;main.c: 517: }
-"517
-[e :UE 158 ]
+[e :U 155 ]
 }
-"525
-[v _init_setup `(v  1 ef ]
-{
-[; ;main.c: 524: void init_setup(void)
-[; ;main.c: 525: {
-[e :U _init_setup ]
-[f ]
-[; ;main.c: 526: mode = 1;
-"526
-[e = _mode -> -> 1 `i `uc ]
-[; ;main.c: 528: }
-"528
-[e :UE 159 ]
+[e :U 146 ]
+[; ;i2c.c: 97: return 0;
+"97
+[e ) -> -> 0 `i `uc ]
+[e $UE 129  ]
+[; ;i2c.c: 98: }
+"98
+[e :UE 129 ]
 }
-"532
-[v _init `(v  1 ef ]
+"103
+[v _i2c_read `(uc  1 ef3`uc`uc`*uc ]
 {
-[; ;main.c: 531: void init(void)
-[; ;main.c: 532: {
-[e :U _init ]
+[; ;i2c.c: 102: uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
+[; ;i2c.c: 103: {
+[e :U _i2c_read ]
+[v _dev `uc  1 r1 ]
+[v _addr `uc  1 r2 ]
+[v _data `*uc  1 r3 ]
 [f ]
-[; ;main.c: 533: set_it_faster(0);
-"533
-[e ( _set_it_faster (1 -> -> 0 `i `uc ]
-[; ;main.c: 536: TRISA = 0;
-"536
-[e = _TRISA -> -> 0 `i `uc ]
-[; ;main.c: 537: ADCON1 = 0;
-"537
-[e = _ADCON1 -> -> 0 `i `uc ]
-[; ;main.c: 539: PORTA = 0x00;
-"539
-[e = _PORTA -> -> 0 `i `uc ]
-[; ;main.c: 540: a_latch = 0x00;
-"540
-[e = _a_latch -> -> 0 `i `uc ]
-[; ;main.c: 544: TRISB = 0xFF;
-"544
-[e = _TRISB -> -> 255 `i `uc ]
-[; ;main.c: 546: rtc_setup();
-"546
-[e ( _rtc_setup ..  ]
-[; ;main.c: 547: if (RB5 == 0)
-"547
-[e $ ! == -> _RB5 `i -> 0 `i 161  ]
-[; ;main.c: 548: init_setup();
-"548
-[e ( _init_setup ..  ]
-[e $U 162  ]
-"549
-[e :U 161 ]
-[; ;main.c: 549: else
-[; ;main.c: 550: init_normal();
-"550
-[e ( _init_normal ..  ]
+[; ;i2c.c: 105: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"105
+[e :U 160 ]
+{
+[e :U 163 ]
+{
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
+}
 [e :U 162 ]
-[; ;main.c: 551: }
-"551
-[e :UE 160 ]
-}
-"559
-[v F810 `(v  1 tf ]
-[v _interrupt_handler `IF810  1 e ]
-{
-[; ;main.c: 558: void interrupt interrupt_handler(void)
-[; ;main.c: 559: {
-[e :U _interrupt_handler ]
-[f ]
-[; ;main.c: 561: if (mode == 0) {
-"561
-[e $ ! == -> _mode `i -> 0 `i 164  ]
-{
-"565
-[v F811 `uc  1 s c ]
-[i F811
--> -> 0 `i `uc
-]
-[; ;main.c: 565: static char c=0;
-[; ;main.c: 566: if (RBIF) {
-"566
-[e $ ! _RBIF 165  ]
-{
-[; ;main.c: 568: if (RB7 == 1) {
-"568
-[e $ ! == -> _RB7 `i -> 1 `i 166  ]
-{
-[; ;main.c: 570: if(c == 0){
-"570
-[e $ ! == -> F811 `i -> 0 `i 167  ]
-{
-[; ;main.c: 571: sync();
-"571
-[e ( _sync ..  ]
-[; ;main.c: 572: c = 1;
-"572
-[e = F811 -> -> 1 `i `uc ]
-"573
-}
-[; ;main.c: 573: } else {
-[e $U 168  ]
-[e :U 167 ]
-{
-[; ;main.c: 574: c = 0;
-"574
-[e = F811 -> -> 0 `i `uc ]
-"575
-}
-[e :U 168 ]
-"576
-}
 [e :U 166 ]
-[; ;main.c: 575: }
-[; ;main.c: 576: }
-[; ;main.c: 577: RBIF = 0;
-"577
-[e = _RBIF -> -> 0 `i `b ]
-"578
+{
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
 }
 [e :U 165 ]
-[; ;main.c: 578: }
-[; ;main.c: 579: if (INTF) {
-"579
-[e $ ! _INTF 169  ]
-{
-[; ;main.c: 584: INTF = 0;
-"584
-[e = _INTF -> -> 0 `i `b ]
-"585
-}
 [e :U 169 ]
-"586
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
 }
-[e :U 164 ]
-[; ;main.c: 585: }
-[; ;main.c: 586: }
-[; ;main.c: 587: }
-"587
-[e :UE 163 ]
+[e :U 168 ]
 }
-"589
-[i _last_clk
--> 0 `i
-]
-[; ;main.c: 589: bit last_clk = 0;
-"591
-[v _main `(v  1 ef ]
+[e :U 159 ]
+[; ;i2c.c: 106: if (i2c_write_byte(dev & 0xFE))
+"106
+[e $ ! != -> ( _i2c_write_byte (1 -> & -> _dev `i -> 254 `i `uc `i -> -> -> 0 `i `uc `i 170  ]
+[; ;i2c.c: 107: return 0xFF;
+"107
+[e ) -> -> 255 `i `uc ]
+[e $UE 157  ]
+[e :U 170 ]
+[; ;i2c.c: 108: if (i2c_write_byte(addr))
+"108
+[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 171  ]
+[; ;i2c.c: 109: return 0xFF;
+"109
+[e ) -> -> 255 `i `uc ]
+[e $UE 157  ]
+[e :U 171 ]
+[; ;i2c.c: 110: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"110
+[e :U 174 ]
 {
-[; ;main.c: 591: void main(void) {
-[e :U _main ]
-[f ]
-[; ;main.c: 593: init();
-"593
-[e ( _init ..  ]
-[; ;main.c: 595: application_reset();
-"595
-[e ( _application_reset ..  ]
-"597
-[v _i `uc  1 a ]
-[; ;main.c: 597: uns8 i = 0;
-[e = _i -> -> 0 `i `uc ]
-[; ;main.c: 599: if (mode == 0) {
-"599
-[e $ ! == -> _mode `i -> 0 `i 171  ]
-{
-[; ;main.c: 600: bit_on(0x02);
-"600
-[e ( _bit_on (1 -> -> 2 `i `uc ]
-[; ;main.c: 601: while(1) {
-"601
-[e :U 173 ]
-{
-[; ;main.c: 603: if (TMR0IF) {
-"603
-[e $ ! _TMR0IF 175  ]
-{
-[; ;main.c: 604: if (state == 2) {
-"604
-[e $ ! == -> _state `i -> 2 `i 176  ]
-{
-[; ;main.c: 606: if (tmr0_counter == seg_ticks_h) {
-"606
-[e $ ! == -> _tmr0_counter `i -> _seg_ticks_h `i 177  ]
-{
-[; ;main.c: 607: tmr0_counter = 0;
-"607
-[e = _tmr0_counter -> -> 0 `i `uc ]
-[; ;main.c: 608: TMR0 = 256 - seg_ticks_l;
-"608
-[e = _TMR0 -> - -> 256 `i -> _seg_ticks_l `i `uc ]
-[; ;main.c: 609: next_segment();
-"609
-[e ( _next_segment ..  ]
-"610
-}
-[; ;main.c: 610: } else {
-[e $U 178  ]
 [e :U 177 ]
 {
-[; ;main.c: 611: tmr0_counter++;
-"611
-[e ++ _tmr0_counter -> -> 1 `i `uc ]
-"612
-}
-[e :U 178 ]
-"613
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 176 ]
-[; ;main.c: 612: }
-[; ;main.c: 613: }
-[; ;main.c: 614: TMR0IF = 0;
-"614
-[e = _TMR0IF -> -> 0 `i `b ]
-"615
-}
-[e :U 175 ]
-[; ;main.c: 615: }
-[; ;main.c: 619: if (TMR1IF) {
-"619
-[e $ ! _TMR1IF 179  ]
-{
-[; ;main.c: 620: tmr1_counter++;
-"620
-[e ++ _tmr1_counter -> -> 1 `i `uc ]
-[; ;main.c: 623: if (tmr1_counter >= 40) {
-"623
-[e $ ! >= -> _tmr1_counter `i -> 40 `i 180  ]
-{
-[; ;main.c: 624: application_reset();
-"624
-[e ( _application_reset ..  ]
-"625
-}
 [e :U 180 ]
-[; ;main.c: 625: }
-[; ;main.c: 626: TMR1IF = 0;
-"626
-[e = _TMR1IF -> -> 0 `i `b ]
-"627
+{
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
 }
 [e :U 179 ]
-[; ;main.c: 627: }
-[; ;main.c: 631: if (last_clk == 1 && RB3 == 0) {
-"631
-[e $ ! && == -> _last_clk `i -> 1 `i == -> _RB3 `i -> 0 `i 181  ]
-{
-[; ;main.c: 632: next_minute();
-"632
-[e ( _next_minute ..  ]
-"633
-}
-[e :U 181 ]
-[; ;main.c: 633: }
-[; ;main.c: 635: last_clk = RB3;
-"635
-[e = _last_clk _RB3 ]
-"638
-}
-[e :U 172 ]
-"601
-[e $U 173  ]
-[e :U 174 ]
-"639
-}
-[e :U 171 ]
-[; ;main.c: 638: }
-[; ;main.c: 639: }
-[; ;main.c: 642: if (mode == 1) {
-"642
-[e $ ! == -> _mode `i -> 1 `i 182  ]
-{
-[; ;main.c: 643: while(1)
-"643
-[e :U 184 ]
-[; ;main.c: 644: ;
-"644
 [e :U 183 ]
-"643
-[e $U 184  ]
-[e :U 185 ]
-"646
+{
+[; nop ;#
+[e = _RB4 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 0 `i `b ]
 }
 [e :U 182 ]
-[; ;main.c: 646: }
-[; ;main.c: 647: }
-"647
-[e :UE 170 ]
+}
+[e :U 173 ]
+[; ;i2c.c: 111: if (i2c_write_byte(dev | 0x01))
+"111
+[e $ ! != -> ( _i2c_write_byte (1 -> | -> _dev `i -> 1 `i `uc `i -> -> -> 0 `i `uc `i 184  ]
+[; ;i2c.c: 112: return 0xFF;
+"112
+[e ) -> -> 255 `i `uc ]
+[e $UE 157  ]
+[e :U 184 ]
+[; ;i2c.c: 113: }
+"113
+[e :UE 157 ]
 }
