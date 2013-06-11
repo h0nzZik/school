@@ -66,7 +66,7 @@
         <property key="preprocess-assembler" value="false"/>
         <property key="undefine-macros" value=""/>
         <property key="verbose" value="false"/>
-        <property key="warning-level" value="-9"/>
+        <property key="warning-level" value="-1"/>
         <property key="what-to-do" value="request"/>
         <property key="what-to-do-ex" value="ignore"/>
       </HI-TECH-COMP>

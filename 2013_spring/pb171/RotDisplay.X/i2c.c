@@ -71,10 +71,18 @@ uns8 i2c_write_byte(uns8 byte)
 	return 0;
 }
 
-uns8 i2c_read_byte(uns8 *byte)
+uns8 i2c_read_byte(void)
 {
+	uns8 i;
+	uns8 data = 0;
+	for (i=0; i<8; i++) {
+		data = data<<1;
+		data |= i2c_read_bit();
+	}
 
-
+	/* ack */
+	i2c_write_bit(0);
+	return data;
 }
 
 uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
@@ -101,7 +109,8 @@ uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
  */
 uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
 {
-//	dev |= 0x01;	/* read addr */
+
+	uns8 d;
 	i2c_start();
 	if (i2c_write_byte(dev & 0xFE))	/* device in write mode*/
 		return 0xFF;
@@ -110,4 +119,8 @@ uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
 	i2c_start();
 	if (i2c_write_byte(dev | 0x01))	/* device in read mode */
 		return 0xFF;
+	d = i2c_read_byte();
+	*data = d;
+	i2c_stop();
+	return 0;
 }

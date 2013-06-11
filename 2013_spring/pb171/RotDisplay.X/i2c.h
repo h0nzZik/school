@@ -44,7 +44,7 @@ uns8 i2c_write(uns8 dev, uns8 addr, uns8 data);
 #define i2c_start()	do {i2c_scl_set(); i2c_sda_clr(); i2c_scl_clr();} while(0)
 /* assume scl is clear */
 #define i2c_stop()	do {i2c_sda_clr(); i2c_scl_set(); i2c_sda_set();} while(0)
-
+uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data);
 
 
 

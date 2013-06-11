@@ -21,6 +21,8 @@ extern "C" {
 
 /* buttons */
 #define BUTTON_LEFT	RB5
+#define BUTTON_RIGHT	RA6
+#define TRIS_BUTTON_RIGHT	TRISAbits.TRISA6
 
 #define RTC_CLOCK_SRC	RB3
 #define RTC_INT		RB0	// BTW interrupt is there

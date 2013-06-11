@@ -1144,8 +1144,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;eeprom_routines.h: 43: extern void eecpymem(volatile unsigned char *to, eeprom unsigned char *from, unsigned char size);
 [; ;eeprom_routines.h: 44: extern void memcpyee(eeprom unsigned char *to, const unsigned char *from, unsigned char size);
 [; ;pic.h: 154: extern void _delay(unsigned long);
-[; ;main.h: 28: typedef unsigned char uns8;
+[; ;main.h: 30: typedef unsigned char uns8;
 [; ;i2c.h: 30: uns8 i2c_write(uns8 dev, uns8 addr, uns8 data);
+[; ;i2c.h: 47: uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data);
 [; ;i2c.c: 8: typedef unsigned char uns8;
 "11 i2c.c
 [v _i2c_write_bit `(v  1 ef1`uc ]
@@ -1393,200 +1394,274 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e :UE 123 ]
 }
 "75
-[v _i2c_read_byte `(uc  1 ef1`*uc ]
+[v _i2c_read_byte `(uc  1 ef ]
 {
-[; ;i2c.c: 74: uns8 i2c_read_byte(uns8 *byte)
+[; ;i2c.c: 74: uns8 i2c_read_byte(void)
 [; ;i2c.c: 75: {
 [e :U _i2c_read_byte ]
-[v _byte `*uc  1 r1 ]
 [f ]
-[; ;i2c.c: 78: }
+"76
+[v _i `uc  1 a ]
+"77
+[v _data `uc  1 a ]
+[; ;i2c.c: 76: uns8 i;
+[; ;i2c.c: 77: uns8 data = 0;
+[e = _data -> -> 0 `i `uc ]
+[; ;i2c.c: 78: for (i=0; i<8; i++) {
 "78
+{
+[e = _i -> -> 0 `i `uc ]
+[e $ < -> _i `i -> 8 `i 129  ]
+[e $U 130  ]
+[e :U 129 ]
+{
+[; ;i2c.c: 79: data = data<<1;
+"79
+[e = _data -> << -> _data `i -> 1 `i `uc ]
+[; ;i2c.c: 80: data |= i2c_read_bit();
+"80
+[e =| _data ( _i2c_read_bit ..  ]
+"81
+}
+"78
+[e ++ _i -> -> 1 `i `uc ]
+[e $ < -> _i `i -> 8 `i 129  ]
+[e :U 130 ]
+"81
+}
+[; ;i2c.c: 81: }
+[; ;i2c.c: 84: i2c_write_bit(0);
+"84
+[e ( _i2c_write_bit (1 -> -> 0 `i `uc ]
+[; ;i2c.c: 85: return data;
+"85
+[e ) _data ]
+[e $UE 128  ]
+[; ;i2c.c: 86: }
+"86
 [e :UE 128 ]
 }
-"81
+"89
 [v _i2c_write `(uc  1 ef3`uc`uc`uc ]
 {
-[; ;i2c.c: 80: uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
-[; ;i2c.c: 81: {
+[; ;i2c.c: 88: uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
+[; ;i2c.c: 89: {
 [e :U _i2c_write ]
 [v _dev `uc  1 r1 ]
 [v _addr `uc  1 r2 ]
 [v _data `uc  1 r3 ]
 [f ]
-[; ;i2c.c: 87: dev &= 0xFE;
-"87
+[; ;i2c.c: 95: dev &= 0xFE;
+"95
 [e =& _dev -> -> 254 `i `uc ]
-[; ;i2c.c: 88: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
-"88
-[e :U 132 ]
-{
+[; ;i2c.c: 96: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"96
 [e :U 135 ]
 {
-[; nop ;#
-[e = _TRISB4 -> -> 1 `i `b ]
-}
-[e :U 134 ]
 [e :U 138 ]
 {
 [; nop ;#
-[e = _RB1 -> -> 0 `i `b ]
-[e = _TRISB1 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 137 ]
 [e :U 141 ]
 {
 [; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 140 ]
+[e :U 144 ]
+{
+[; nop ;#
 [e = _RB4 -> -> 0 `i `b ]
 [e = _TRISB4 -> -> 0 `i `b ]
 }
-[e :U 140 ]
-}
-[e :U 131 ]
-[; ;i2c.c: 90: if (i2c_write_byte(dev))
-"90
-[e $ ! != -> ( _i2c_write_byte (1 _dev `i -> -> -> 0 `i `uc `i 142  ]
-[; ;i2c.c: 91: return 0xFF;
-"91
-[e ) -> -> 255 `i `uc ]
-[e $UE 129  ]
-[e :U 142 ]
-[; ;i2c.c: 92: if (i2c_write_byte(addr))
-"92
-[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 143  ]
-[; ;i2c.c: 93: return 0xFF;
-"93
-[e ) -> -> 255 `i `uc ]
-[e $UE 129  ]
 [e :U 143 ]
-[; ;i2c.c: 94: if (i2c_write_byte(data))
-"94
-[e $ ! != -> ( _i2c_write_byte (1 _data `i -> -> -> 0 `i `uc `i 144  ]
-[; ;i2c.c: 95: return 0xFF;
-"95
+}
+[e :U 134 ]
+[; ;i2c.c: 98: if (i2c_write_byte(dev))
+"98
+[e $ ! != -> ( _i2c_write_byte (1 _dev `i -> -> -> 0 `i `uc `i 145  ]
+[; ;i2c.c: 99: return 0xFF;
+"99
 [e ) -> -> 255 `i `uc ]
-[e $UE 129  ]
-[e :U 144 ]
-[; ;i2c.c: 96: do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
-"96
+[e $UE 132  ]
+[e :U 145 ]
+[; ;i2c.c: 100: if (i2c_write_byte(addr))
+"100
+[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 146  ]
+[; ;i2c.c: 101: return 0xFF;
+"101
+[e ) -> -> 255 `i `uc ]
+[e $UE 132  ]
+[e :U 146 ]
+[; ;i2c.c: 102: if (i2c_write_byte(data))
+"102
+[e $ ! != -> ( _i2c_write_byte (1 _data `i -> -> -> 0 `i `uc `i 147  ]
+[; ;i2c.c: 103: return 0xFF;
+"103
+[e ) -> -> 255 `i `uc ]
+[e $UE 132  ]
 [e :U 147 ]
-{
+[; ;i2c.c: 104: do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+"104
 [e :U 150 ]
+{
+[e :U 153 ]
 {
 [; nop ;#
 [e = _RB1 -> -> 0 `i `b ]
 [e = _TRISB1 -> -> 0 `i `b ]
-}
-[e :U 149 ]
-[e :U 153 ]
-{
-[; nop ;#
-[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 152 ]
 [e :U 156 ]
 {
 [; nop ;#
-[e = _TRISB1 -> -> 1 `i `b ]
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 155 ]
+[e :U 159 ]
+{
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
 }
-[e :U 146 ]
-[; ;i2c.c: 97: return 0;
-"97
+[e :U 158 ]
+}
+[e :U 149 ]
+[; ;i2c.c: 105: return 0;
+"105
 [e ) -> -> 0 `i `uc ]
-[e $UE 129  ]
-[; ;i2c.c: 98: }
-"98
-[e :UE 129 ]
+[e $UE 132  ]
+[; ;i2c.c: 106: }
+"106
+[e :UE 132 ]
 }
-"103
+"111
 [v _i2c_read `(uc  1 ef3`uc`uc`*uc ]
 {
-[; ;i2c.c: 102: uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
-[; ;i2c.c: 103: {
+[; ;i2c.c: 110: uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
+[; ;i2c.c: 111: {
 [e :U _i2c_read ]
 [v _dev `uc  1 r1 ]
 [v _addr `uc  1 r2 ]
 [v _data `*uc  1 r3 ]
 [f ]
-[; ;i2c.c: 105: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
-"105
-[e :U 160 ]
-{
+"113
+[v _d `uc  1 a ]
+[; ;i2c.c: 113: uns8 d;
+[; ;i2c.c: 114: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"114
 [e :U 163 ]
 {
-[; nop ;#
-[e = _TRISB4 -> -> 1 `i `b ]
-}
-[e :U 162 ]
 [e :U 166 ]
 {
 [; nop ;#
-[e = _RB1 -> -> 0 `i `b ]
-[e = _TRISB1 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 165 ]
 [e :U 169 ]
 {
 [; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 168 ]
+[e :U 172 ]
+{
+[; nop ;#
 [e = _RB4 -> -> 0 `i `b ]
 [e = _TRISB4 -> -> 0 `i `b ]
 }
-[e :U 168 ]
-}
-[e :U 159 ]
-[; ;i2c.c: 106: if (i2c_write_byte(dev & 0xFE))
-"106
-[e $ ! != -> ( _i2c_write_byte (1 -> & -> _dev `i -> 254 `i `uc `i -> -> -> 0 `i `uc `i 170  ]
-[; ;i2c.c: 107: return 0xFF;
-"107
-[e ) -> -> 255 `i `uc ]
-[e $UE 157  ]
-[e :U 170 ]
-[; ;i2c.c: 108: if (i2c_write_byte(addr))
-"108
-[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 171  ]
-[; ;i2c.c: 109: return 0xFF;
-"109
-[e ) -> -> 255 `i `uc ]
-[e $UE 157  ]
 [e :U 171 ]
-[; ;i2c.c: 110: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
-"110
+}
+[e :U 162 ]
+[; ;i2c.c: 115: if (i2c_write_byte(dev & 0xFE))
+"115
+[e $ ! != -> ( _i2c_write_byte (1 -> & -> _dev `i -> 254 `i `uc `i -> -> -> 0 `i `uc `i 173  ]
+[; ;i2c.c: 116: return 0xFF;
+"116
+[e ) -> -> 255 `i `uc ]
+[e $UE 160  ]
+[e :U 173 ]
+[; ;i2c.c: 117: if (i2c_write_byte(addr))
+"117
+[e $ ! != -> ( _i2c_write_byte (1 _addr `i -> -> -> 0 `i `uc `i 174  ]
+[; ;i2c.c: 118: return 0xFF;
+"118
+[e ) -> -> 255 `i `uc ]
+[e $UE 160  ]
 [e :U 174 ]
-{
+[; ;i2c.c: 119: do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
+"119
 [e :U 177 ]
 {
-[; nop ;#
-[e = _TRISB4 -> -> 1 `i `b ]
-}
-[e :U 176 ]
 [e :U 180 ]
 {
 [; nop ;#
-[e = _RB1 -> -> 0 `i `b ]
-[e = _TRISB1 -> -> 0 `i `b ]
+[e = _TRISB4 -> -> 1 `i `b ]
 }
 [e :U 179 ]
 [e :U 183 ]
 {
 [; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 182 ]
+[e :U 186 ]
+{
+[; nop ;#
 [e = _RB4 -> -> 0 `i `b ]
 [e = _TRISB4 -> -> 0 `i `b ]
 }
-[e :U 182 ]
+[e :U 185 ]
 }
-[e :U 173 ]
-[; ;i2c.c: 111: if (i2c_write_byte(dev | 0x01))
-"111
-[e $ ! != -> ( _i2c_write_byte (1 -> | -> _dev `i -> 1 `i `uc `i -> -> -> 0 `i `uc `i 184  ]
-[; ;i2c.c: 112: return 0xFF;
-"112
+[e :U 176 ]
+[; ;i2c.c: 120: if (i2c_write_byte(dev | 0x01))
+"120
+[e $ ! != -> ( _i2c_write_byte (1 -> | -> _dev `i -> 1 `i `uc `i -> -> -> 0 `i `uc `i 187  ]
+[; ;i2c.c: 121: return 0xFF;
+"121
 [e ) -> -> 255 `i `uc ]
-[e $UE 157  ]
-[e :U 184 ]
-[; ;i2c.c: 113: }
-"113
-[e :UE 157 ]
+[e $UE 160  ]
+[e :U 187 ]
+[; ;i2c.c: 122: d = i2c_read_byte();
+"122
+[e = _d ( _i2c_read_byte ..  ]
+[; ;i2c.c: 123: *data = d;
+"123
+[e = *U _data _d ]
+[; ;i2c.c: 124: do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+"124
+[e :U 190 ]
+{
+[e :U 193 ]
+{
+[; nop ;#
+[e = _RB1 -> -> 0 `i `b ]
+[e = _TRISB1 -> -> 0 `i `b ]
+}
+[e :U 192 ]
+[e :U 196 ]
+{
+[; nop ;#
+[e = _TRISB4 -> -> 1 `i `b ]
+}
+[e :U 195 ]
+[e :U 199 ]
+{
+[; nop ;#
+[e = _TRISB1 -> -> 1 `i `b ]
+}
+[e :U 198 ]
+}
+[e :U 189 ]
+[; ;i2c.c: 125: return 0;
+"125
+[e ) -> -> 0 `i `uc ]
+[e $UE 160  ]
+[; ;i2c.c: 126: }
+"126
+[e :UE 160 ]
 }

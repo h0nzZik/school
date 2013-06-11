@@ -748,11 +748,14 @@ extern void memcpyee(eeprom unsigned char *to, const unsigned char *from, unsign
 #pragma inline(_delay)
 extern void _delay(unsigned long);
 
-# 28 "main.h"
+# 30 "main.h"
 typedef unsigned char uns8;
 
 # 30 "i2c.h"
 uns8 i2c_write(uns8 dev, uns8 addr, uns8 data);
+
+# 47
+uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data);
 
 # 8 "i2c.c"
 typedef unsigned char uns8;
@@ -815,16 +818,24 @@ return 0xFF;
 return 0;
 }
 
-uns8 i2c_read_byte(uns8 *byte)
+uns8 i2c_read_byte(void)
 {
+uns8 i;
+uns8 data = 0;
+for (i=0; i<8; i++) {
+data = data<<1;
+data |= i2c_read_bit();
+}
 
 
+i2c_write_bit(0);
+return data;
 }
 
 uns8 i2c_write(uns8 dev, uns8 addr, uns8 data)
 {
 
-# 87
+# 95
 dev &= 0xFE;
 do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
 
@@ -838,10 +849,11 @@ do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1;
 return 0;
 }
 
-# 102
+# 110
 uns8 i2c_read(uns8 dev, uns8 addr, uns8 *data)
 {
 
+uns8 d;
 do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
 if (i2c_write_byte(dev & 0xFE))
 return 0xFF;
@@ -850,4 +862,8 @@ return 0xFF;
 do {do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); RB4 = 0; TRISB4 = 0; } while(0);} while(0);
 if (i2c_write_byte(dev | 0x01))
 return 0xFF;
+d = i2c_read_byte();
+*data = d;
+do {do {asm("nop"); RB1 = 0; TRISB1 = 0; } while(0); do {asm("nop"); TRISB4 = 1; } while(0); do {asm("nop"); TRISB1 = 1; } while(0);} while(0);
+return 0;
 }
