@@ -365,7 +365,7 @@ uns8 rtc_setup(void)
 		/* basic setup */
 		0x00, 0x00,	/* Control register 1 - clear stop and test */
 		0x01, 0x11,	/* periodic, timer interrupt enable */
-		0x0D, 0x83,	/* 1024 Hz frequency out */
+		0x0D, 0x83,	/* 1 Hz frequency out */
 
 		/* seconds or minutes? */
 //		0x0E, USE_SECONDS_AS_MINUTES
@@ -527,7 +527,6 @@ void init(void)
 	/* set portB as input */
 	TRISB = 0xFF;
 
-	
 	if (BUTTON_LEFT == 0)
 		init_setup();
 	else

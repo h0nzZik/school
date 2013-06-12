@@ -12,12 +12,12 @@
 extern "C" {
 #endif
 
-#define LED_BIT		0x02
-#define DATA_BIT	0x04
+#define LED_BIT		0x02	// RA1
+#define DATA_BIT	0x04	// RA2
 
 /* FIXME: Chyba v dokumentaci */
-#define SHCLK_BIT	0x10    /* shift clock */
-#define STCLK_BIT	0x08    /* store clock */
+#define SHCLK_BIT	0x10    /* shift clock, RA4 */
+#define STCLK_BIT	0x08    /* store clock, RA3 */
 
 /* buttons */
 #define BUTTON_LEFT	RB5
