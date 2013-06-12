@@ -1,0 +1,39 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{makeidx}
+\usepackage{graphicx}
+\begin{document}
+\section*{Hodiny}
+\subsection*{Zadání}
+\subsection*{Start aplikace}
+Aplikace se spustí, pokud je čip reálného času zapnutý (přepínač RTC\_ON) a dojde k přepnutí přepínače MCU\_ON (levý z pohledu vně) do polohy ON. Pokud je v tomto okamžiku stisknuto levé tlačitko (PUSH\_LEFT), program se přepne do 'setup' modu. Tento režim slouží uživateli k nastavení času, po provedení požadovaných operací je aplikace přepnuta do režimu 'normal'. Pokud levé tlačítko během startu stisknuto není, aplikace přejde do režimu 'normal' samovolně.
+\subsection*{Režim 'setup'}
+\subsubsection*{Nastavení hodin}
+Po vstoupení do nastavovacího režimu a uvolnění levého tlačítka uživatel nastaví hodnotu hodin. Výchozí a minimální hodnotou je 0, tisk levého tlačítka má za následek její zvýšení, tisk pravého (PUSH\_RIGHT) snížení. Nejvyšší možná hodnota hodin je 11, další zvyšování vede k přetečení hodnoty na nulu. Snižování funguje obdobně.
+
+\subsubsection*{Nastavení minut}
+Současným stisknutím a následným současným uvolněním obou tlačítek dojde k zapsání hodnoty hodin do RTC čipu a uživatel může přejít k nastavení minut. To je postaveno na totožném principu, jako nastavení hodin. Po nastavení požadované hodnoty a současném stisku obou tlačítek dojde k zapsání hodnoty minut a ukončení režimu nastavení.
+\subsection*{Režim 'normal'}
+Po vstupu do tohoto režimu a inicializaci RTC čipu mikroprocesorem je zařízení schopné provozu. Připojením napájení k motoru a infračervené svítivé diodě dojde k roztočení desky a zobrazení času.
+
+\subsection*{Jak to funguje}
+Pokaždé, když fotodioda proletí nad infračervenou svítivou diodou, dojde k vynulování počítadel, je přečtena hodnota "stopek", ty jsou vynulovány a znovu spuštěny. Kotouč je rozdělen na 64 segmentů a za předpokladu, že se úhlová rychlost rotace nemění, můžeme spočítat počet taktů, které uplynou, než kotouč dorotuje k dalšímu segmentu. Poté je zvýšeno počítadlo a jsou zobrazena data pro další segment. Celý cyklus se opakuje do dosažení maximální hodnoty počítadla nebo do další synchronizace.
+\subsubsection*{Segmenty}
+Kotouč je rozdělený na 64 segmentů, ale hodina má (z neznámých důvodů) 60 minut. Surové segmenty jsou na minutové přepočítávány následujícím způsobem. Nultému minutovému segmentu přísluší surový segment 0 a 1, na i-tý minutový segment pro \(i \in {1, 2, ..., 29} \) připadá segment \( i+1\). Minuta 30 je mapovaná na surové segmenty 31 a 32, minutovým segmentům pro \(i \in {31, 32, ..., 59} \) připadá segment \( i+2\). Surové segmenty 62 a 63 slouží jako korekce chyby. Číslování je možné posunout tak, že dva surové segmenty připadnou minutám 0, 15, 30 a 45. Potom jsou surové segmenty rozděleny beze zbytku.
+\subsubsection*{Zobrazování}
+Ke změně zobrazovaných dat dochází pouze pokud je splněna jedna z následujících podmínek:
+\begin{enumerate}
+\item Právě zobrazovaný surový segment je 0
+\item Právě zobrazovaný surový segment je prvním surovým segmentem aktuální minuty
+\item Právě zobrazovaný surový segment je prvním surovým segmentem aktuální hodiny
+\item Alespoň jedna z předchozích podmínek platila během prvního surového segmentu předchozího minutového segmentu.
+\end{enumerate}
+
+
+
+\end{document}
