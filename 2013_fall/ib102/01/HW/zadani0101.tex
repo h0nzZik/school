@@ -1,0 +1,48 @@
+\documentclass[12pt]{ib102}
+\usepackage[czech]{babel}
+
+\setassignment{1}
+\setexercise{1}
+\setduedate{23}{9}{2013}
+\setpoints{2}
+
+%%% ZDE NAPISTE SVOJE UCO, JMENO A SKUPINU
+\setstudent{Jan Tušil}
+\setgroup{11}
+\setuco{410062}
+
+
+\begin{document}
+\begin{zadani}
+Mějme abecedu $\Sigma = \{a,b\}$. \\
+\\
+Pro každé z~následujících slov a jazyků: \\
+a) rozhodněte, zda se jedná o~slovo nebo jazyk\\
+b) pokud se jedná o~slovo, napište jej jako posloupnost znaků abecedy a pokud o~jazyk, napište jej jako množinu slov (tedy množinu posloupností znaků).
+\bigskip
+
+\begin{itemize}\itemsep 5ex
+    \item[] $\{ab\}.\emptyset$
+    \item[] $\emptyset^*.\{\eps\}$
+    \item[] $\{a^3,b^2\}^2$
+    \item[] $a.\eps^3.(aa)^2$
+    \item[] $\emptyset^+.(\{a\} \cup \{b\}^2)$
+    \item[] $a.(ba)^2$
+\end{itemize}
+
+\end{zadani}
+
+\begin{reseni}
+%%% SEM PISTE SVE RESENI
+\begin{tabular}{lll}
+$\{ab\}.\emptyset $ & jazyk & $ \emptyset$ \\
+$\emptyset^*.\{\eps\}$ & jazyk & $\{\eps\}.\{\eps\} = \{\eps\}$ \\
+$\{a^3,b^2\}^2$ & jazyk & $\{aaa,bb\}^2 = \{aaaaaa,aaabb,bbaaa,bbbb\}$ \\
+$a.\eps^3.(aa)^2$ & slovo & $aaaaa$ \\
+$\emptyset^+.(\{a\} \cup \{b\}^2)$ & jazyk & $\emptyset$ \\
+$a.(ba)^2$ & slovo & $ababa$ \\
+\end{tabular}
+\end{reseni}
+
+
+\end{document}
