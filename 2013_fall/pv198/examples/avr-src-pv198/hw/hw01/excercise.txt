@@ -1,0 +1,12 @@
+Use two pins (e.g DIP switch) to select between four modes
+Mode 0:
+	Walking LED loop PD0 -> PD1 -> .. PD7 -> PD0 -> ..
+Mode 1:
+	Two 4-bit walking LED loops
+Mode 2:
+	Something else
+Mode 3:
+	Something else
+	
+
+Output (PD0 - PD7) bargraph

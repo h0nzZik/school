@@ -1,0 +1,11 @@
+Submission - (english variant):
+
+Zadani - (ceska verze):
+
+Navrhnete jednoduchou aplikaci, ktera vychazi z prikladu 05.02.eeprom a
+je schopna zobrazit na serivou linku obsah interni pameti SRAM
+mikroradice ATmega128. Program doplnte o moznost prepsani opsahu pameti
+od adresy 0x600 definovanym vzorem 0x00-0xff.
+
+$Id: sram.txt,v 1.2 2006/12/04 21:58:24 qceleda Exp $
+
