@@ -1,0 +1,6 @@
+2) Generování uživatelských znakù na LCD
+----------------------------------------
+
+Navrhnìte program pro generování uživatelské znakové sady u textového
+LCD. Na LCD dynamicky zobrazujte vygenerované znaky (èeština) tak, aby
+došlo k zobrazení všech možných znakù.
