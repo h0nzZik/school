@@ -1,0 +1,50 @@
+\documentclass[12pt]{ib102}
+\usepackage[czech]{babel}
+
+\setassignment{1}
+\setexercise{2}
+\setduedate{23}{9}{2013}
+\setpoints{2}
+
+
+%%% ZDE NAPISTE SVOJE UCO, JMENO A SKUPINU
+\setstudent{Jan Tušil}
+\setgroup{11}
+\setuco{410062}
+
+
+\begin{document}
+\begin{zadani}
+Nechť $L$ je jazyk nad abecedou $\Sigma=\set{a,b}$ tvořený právě všemi slovy,
+která mají počet znaků $a$ nedělitelný $3$ a zároveň se nevyskytují 2 znaky $b$
+za sebou (tedy mezi každými dvěma výskyty znaku $b$ je alespoň jeden znak $a$).
+
+
+Zapište jazyk $L$ pomocí jednoprvkových jazyků $\set{a}$ a $\set{b}$
+s~využitím konečného počtu operací sjednocení ($\cup$), průniku ($\cap$),
+rozdílu ($\setminus$), doplňku ($\mathsf{co-}$), zřetězení ($\cdot$),
+mocniny (${}^2, {}^3, \ldots$), iterace (${}^*$) a pozitivní iterace (${}^+$).
+
+\end{zadani}
+
+\begin{reseni}
+Pro zpřehlednění zápisu si označme $A=\{a\}$, $B=\{b\}$, $U=A \cup (A.B)$.
+Největší podmnožina jazyka $L$, ve které žádné slovo nezačíná písmenem $b$, může být zapsána:
+
+
+
+\begin{math}
+M=(U \cup U^2).(U^3)^*
+\end{math}
+
+
+
+Z té pak lze snadno utvořit jazyk $L$:
+
+
+\begin{math}
+L=M \cup (B.M)
+\end{math}
+\end{reseni}
+
+\end{document}
