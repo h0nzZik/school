@@ -1,0 +1,43 @@
+\documentclass[12pt]{ib102}
+\usepackage[czech]{babel}
+
+\setassignment{2}
+\setexercise{2}
+\setduedate{30}{9}{2013}
+\setpoints{2}
+
+
+%%% ZDE NAPISTE SVOJE UCO, JMENO A SKUPINU
+\setstudent{Jan Tušil}
+\setgroup{11}
+\setuco{410062}
+
+
+\begin{document}
+\begin{zadani}
+Uvažme jazyk
+$$L = \{w \in \{a,b,c\}^*  \mid \#_a(w) + \#_b(w) = \#_c(w) \}.$$
+
+\bigskip
+
+\bigskip
+
+\noindent Rozhodněte, zda je jazyk $L$ regulární, a vaše tvrzení dokažte. Tzn.:
+\begin{itemize}
+\item Pokud $L$ je regulární, uveďte regulární gramatiku, která $L$ generuje, nebo konečný deterministický automat, který $L$ akceptuje. Gramatiku/automat zapište se všemi formálními náležitostmi.
+\item Pokud $L$ není regulární, dokažte tuto skutečnost pomocí Lemmatu o~vkládání (Pumping lemma).
+\end{itemize}
+\end{zadani}
+
+\begin{reseni}
+Slovo \( w = a^n.b^n.c^{2n} \) jistě leží v \( L \) pro každé \( n \in \mathbb{N^+} \). Rozdělení \(r.s.t=w \) taková, že \( \lvert s \rvert \geq 1 \land \lvert r.s \rvert \leq n \) lze vyjádřit výrazem
+\begin{equation}
+(a^{n-l-m}).((a^l)^i).(a^m.b^n.c^{2n})
+\end{equation}
+pro všechna celá \(l \geq 1 \land n-l-m \geq 0 \) a pevné \( i = 1 \). Slovo vzniklé dosazením \( i \geq 2 \) zjevně neleží v \( L \) (pouze se zvýší počet výskytu znaku \( a \) ), odtud z Pumping Lemma plyne, že \( L \) není regulární. 
+\end{reseni}
+
+
+
+
+\end{document}
