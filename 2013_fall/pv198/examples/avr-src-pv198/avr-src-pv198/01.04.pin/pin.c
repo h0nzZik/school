@@ -26,6 +26,10 @@
 #define SETUP_JMP_DDR	DDB7	/* SETUP jumper data direction bit */
 #define SETUP_JMP		PINB7	/* SETUP jumper pin */
 
+
+#define ALARM_LED_ON() LED_PORT &= ~(_BV(ALARM_LED))
+#define ALARM_LED_OFF() LED_PORT |= _BV(ALARM_LED)
+
 int main(void)
 {
 	LED_DDR |= _BV(ALARM_LED_DDR);		/* set ALARM led pin as output pin '1' */
@@ -37,11 +41,11 @@ int main(void)
 
 		if(bit_is_set(JMP_PIN, SETUP_JMP)) 
 		{
-			LED_PORT |= _BV(ALARM_LED);		/* turn off led */
+			ALARM_LED_OFF();		/* turn off led */
 		}
 		else 
 		{
-			LED_PORT &= ~(_BV(ALARM_LED));	/* turn on led */	
+			ALARM_LED_ON();	/* turn on led */	
 		}
 	}
 }
