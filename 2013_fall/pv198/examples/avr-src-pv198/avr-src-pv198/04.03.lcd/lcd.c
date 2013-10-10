@@ -123,24 +123,47 @@ void LCD_write_big_num(uint8_t pos, uint8_t val)
  *
  */
 
-void LCD_wr_cgram_all(uint8_t set) {
+void LCD_wr_cgram_all(uint8_t set)
+{
+	switch (set) {
+		case 0:
+			LCD_wr_cgram(0, &cgrom[0]);
+			LCD_wr_cgram(1, &cgrom[8]);
+			LCD_wr_cgram(2, &cgrom[16]);
+			LCD_wr_cgram(3, &cgrom[24]);
+			LCD_wr_cgram(4, &cgrom[32]);
+			LCD_wr_cgram(5, &cgrom[40]);
+			break;
+
+		case 1:
+			LCD_wr_cgram(0, &cgrom2[0]);
+			LCD_wr_cgram(1, &cgrom2[8]);
+			LCD_wr_cgram(2, &cgrom2[16]);
+			LCD_wr_cgram(3, &cgrom2[24]);
+			LCD_wr_cgram(4, &cgrom2[32]);
+			LCD_wr_cgram(5, &cgrom2[40]);
+			LCD_wr_cgram(6, &cgrom2[48]);
+			LCD_wr_cgram(7, &cgrom2[56]);
+			break;
+
+		case 2:
+			LCD_wr_cgram(0, &cgrom3[0]);
+			LCD_wr_cgram(1, &cgrom3[8]);
+			LCD_wr_cgram(2, &cgrom3[16]);
+			LCD_wr_cgram(3, &cgrom3[24]);
+			LCD_wr_cgram(4, &cgrom3[32]);
+			LCD_wr_cgram(5, &cgrom3[40]);
+			LCD_wr_cgram(6, &cgrom3[48]);
+			LCD_wr_cgram(7, &cgrom3[56]);
+
+			break;
+	}
+
 	if (!set) {
-		LCD_wr_cgram(0, &cgrom[0]);
-		LCD_wr_cgram(1, &cgrom[8]);
-		LCD_wr_cgram(2, &cgrom[16]);
-		LCD_wr_cgram(3, &cgrom[24]);
-		LCD_wr_cgram(4, &cgrom[32]);
-		LCD_wr_cgram(5, &cgrom[40]);
+
 	}
 	else {
-		LCD_wr_cgram(0, &cgrom2[0]);
-		LCD_wr_cgram(1, &cgrom2[8]);
-		LCD_wr_cgram(2, &cgrom2[16]);
-		LCD_wr_cgram(3, &cgrom2[24]);
-		LCD_wr_cgram(4, &cgrom2[32]);
-		LCD_wr_cgram(5, &cgrom2[40]);
-		LCD_wr_cgram(6, &cgrom2[48]);
-		LCD_wr_cgram(7, &cgrom2[56]);
+
 	}
 	
 }

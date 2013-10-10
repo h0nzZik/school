@@ -31,6 +31,20 @@ void LCD_putch( uint8_t);
 void LCD_puts( uint8_t *);
 
 
+#define LCD_shift_content_right() LCD_send_cmd(0x1C)
+#define LCD_shift_content_left() LCD_send_cmd(0x18)
+
+void delay_ms(uint8_t cnt)
+{
+	uint8_t i, j;
+
+	for (i=0; i<cnt; i++) {
+		for (j=0; j<10; j++) {
+			_delay_us(100);
+		}
+	}
+}
+
 /*!
  *      M       A       I       N
  *
@@ -38,7 +52,10 @@ void LCD_puts( uint8_t *);
 int main(void) {
         Hw_init();                              /* Initialize LCD */
         LCD_puts(&text[0]);                     /* Display string on both part of display */
-        while (1);                              /* wait forever */
+        while (1) {                              /* wait forever */
+			delay_ms(100);
+			LCD_shift_content_right();
+		}
         return(0);
 }
 
@@ -130,6 +147,7 @@ void LCD_sendval( uint8_t val, uint8_t RS )
                                                         /* has been transferred twice. */
 }
 
+
 /*!
  * \brief Initializing LCD by Instruction - 4-bit initialization
  */
@@ -159,4 +177,6 @@ void LCD_init(void)
 	LCD_send_cmd(0x01);                     /* display clear */
 	LCD_send_cmd(0x06);                     /* entry mode */
 	LCD_send_cmd(0x0C);                     /* display on, cursor off, blinking cursor off */
+
+	LCD_send_cmd(0x0E);                     /* display on, cursor off, blinking cursor off */
 }

@@ -33,7 +33,7 @@ void Hw_init(void);
 int main(void) {
 uint8_t i;
         Hw_init();                              /* Initialize LCD */
-        LCD_wr_cgram_all(1);
+        LCD_wr_cgram_all(2);
         LCD_cursor_yx(1,1);                     /* Display first line */
         LCD_puts(&text[0],1);
         LCD_cursor_yx(4,1);
