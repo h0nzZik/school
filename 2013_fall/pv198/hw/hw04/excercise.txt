@@ -1,0 +1,9 @@
+4) SRAM Memory tester
+---------------------
+Create program to test SRAM
+
+Algorithms:
+http://www.memtest86.com/technical.htm
+
+Let user choose one of them and a memory block.
++ Fault injection
