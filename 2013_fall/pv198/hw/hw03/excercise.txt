@@ -1,0 +1,16 @@
+3) Serial port HW
+
++--------------+                 +--------------+
+|      PC      |                 |    ATMega    |
+| ( Control )  +-----[ UART ]----+ ( Heating )  |
+| ( system  )  |                 | ( system  )  |
++--------------+                 +--------------+
+
+
+
+
+Commands:
+ * on/off heating
+ * set temperature
+ * read temperature
+ * status
