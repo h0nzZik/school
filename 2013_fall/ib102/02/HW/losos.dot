@@ -1,0 +1,39 @@
+digraph finite_state_machine {
+	rankdir=LR;
+	size="8,5"
+	
+	// Start node
+	node [shape = point, color=white, fontcolor=white];
+	start;
+
+	// Accepting nodes
+	node [shape = doublecircle, color=black, fontcolor=black];
+	Q_0 "L" "LO";
+	// Not accepting nodes
+	node [shape = circle, color=black, fontcolor=black];
+	"LOS" "LOSO" "P";
+	
+	Q_0 [label=<&#949;>];	// Epsylon
+	start	-> Q_0;
+	Q_0	-> "L" [label = "L"];
+	Q_0	-> Q_0 [label = "O,S"];
+
+	
+	"L"	-> "LO" [label = "O"];
+	"L"	-> "L" [label = "L"];
+	"L"	-> Q_0 [label = "S"];
+	
+	"LO"	-> "LOS" [label = "S"];
+	"LO"	-> "L" [label = "L"];
+	"LO"	-> Q_0 [label = "O"];
+	
+	"LOS"	-> "LOSO" [label = "O"];
+	"LOS"	-> "P" [label = "L,S"];
+	
+	"LOSO"	-> Q_0 [label = "S"];
+	"LOSO"	-> "P" [label = "L,O"];
+	
+	"P"	-> "P" [label = "L,O,S"];
+	
+}
+
