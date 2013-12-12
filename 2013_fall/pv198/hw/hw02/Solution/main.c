@@ -13,15 +13,20 @@
  *
  * $Id: main.c,v 1.2 2006/12/03 11:03:26 cvsd Exp $
  */
-static char text[]="0123456";
 
-
+#include <stdio.h>
 #include <avr/io.h>
 #include <util/delay.h>
 #include "lcd.h"
 #include "shift.h"
 
+/* calculate baudrate value */
+#define UART_BAUD_SELECT(baudRate,xtalCpu) ((xtalCpu)/((baudRate)*16l)-1)
 
+/* function prototypes */
+void ser_init(uint16_t baud);
+int ser_putch(char c, FILE *stream);
+int ser_getch(FILE *stream);
 /* Function prototypes */
 void Hw_init(void);
 
@@ -30,24 +35,40 @@ void Hw_init(void);
  *      M       A       I       N
  *
  */
-int main(void) {
-uint8_t i;
-        Hw_init();                              /* Initialize LCD */
-        LCD_wr_cgram_all(2);
-        LCD_cursor_yx(1,1);                     /* Display first line */
-        LCD_puts(&text[0],1);
-        LCD_cursor_yx(4,1);
-        LCD_puts(&text[0],4);                   /* Display fourth line */
-        LCD_cursor_yx(2,1);
-        LCD_puts(&text[0],2);                   /* Display second line */
-        LCD_cursor_yx(3,1);
-        LCD_puts(&text[0],3);                   /* Display third line */
-        for (i = 0; i < 100; i++)
-                _delay_ms(10);                  /* Wait 1 sec */
-        LCD_sendcmd(LCD_EN1 | LCD_EN2 | 0x1);   /* clear whole display */
-        LCD_puts_big(&text[0]);                 /* display number with big font */
+int main(void)
+{
+		uint8_t i;
 
-        while (1);                              /* wait forever */
+		static const char *s = "Zvláš zákeøný uèeò s ïolíèky bìží podél zóny úlù.";
+
+		FILE mystdout = FDEV_SETUP_STREAM(ser_putch, ser_getch, _FDEV_SETUP_RW);
+		stdout = stdin = stderr =  &mystdout;
+		ser_init( UART_BAUD_SELECT(9600, F_CPU) );
+
+
+		printf("Debug: program started\r\n");
+
+
+        Hw_init();
+		
+
+
+        LCD_cursor_yx(1,1);                     /* Display first line */
+
+
+
+		uint8_t j = 0;
+		while (j < 60 && s[j])
+		{
+			LCD_putc(s[j++]);
+		}
+
+
+		while(1)
+		{
+			LCD_putc(ser_getch(NULL));
+		}
+
         return(0);
 }
 
@@ -61,6 +82,57 @@ void Hw_init(void)
 	SHIFT_DDR |= _BV(SHIFT_OUT_DDR);	/* serial data stream -> output pin */ 
 	SHIFT_DDR |= _BV(SHIFT_LCD_SET_DDR);	/* parallel write -> output pin */
 
-        LCD_init();                             /* Init LCD display */
+    LCD_init();                             /* Init LCD display */
+	czech_init();
 }
 
+/*!
+ * \brief Inits ATmega128's serial port (UART0).
+ *
+ * \param baud  UART0 baudrate generator value.
+ */
+void ser_init(uint16_t baud)
+{
+	/* set baud rate */
+	UBRR0H = (uint8_t)(baud>>8);
+	UBRR0L = (uint8_t) baud;
+
+	/* enable receiver and transmitter */
+	UCSR0B = (1<<RXEN)|(1<<TXEN);
+
+	/* set frame format: 8 data, 2 stop bits */
+	UCSR0C = (1<<USBS)|(3<<UCSZ0);
+}
+
+/*!
+ * \brief Reads the character from serial port (UART0).
+ *
+ * \return received character.
+ */
+int ser_getch(FILE *stream)
+{
+	/* wait for data to be received */
+	while ( !(UCSR0A & (1<<RXC0)) );
+
+	/* get and return received data from buffer */
+	return UDR0;
+}
+
+
+/*!
+ * \brief Writes the character c to serial port (UART0).
+ *
+ * \param c  character to write.
+ */
+int ser_putch(char c, FILE *stream)
+{
+	if (c == '\n')
+		ser_putch('\r', stream);
+
+	/* wait for empty transmit buffer */
+	while ( !( UCSR0A & (1<<UDRE)) );
+
+	/* put data into buffer and sends the data */
+	UDR0 = c;
+	return 0;
+}

@@ -1,47 +1,45 @@
 #include <avr/io.h>
 #include <util/delay.h>
+#include <stdint.h>
+#include <stdio.h>
+
+#include "czech.h"
 #include "lcd.h"
 #include "shift.h"
 
-/* First CG-ROM */
-const uint8_t cgrom[] = {  0x0e, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x0e, 0x00, /* O full */
-                        0x00, 0x10, 0x08, 0x04, 0x02, 0x01, 0x00, 0x00, /* \ */
-                        0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, /* | */
-                        0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, /* || */
-						0x1c, 0x1c, 0x1c, 0x1c, 0x1c, 0x1c, 0x1c, 0x1c, /* ||| */
-						0x1e, 0x1e, 0x1e, 0x1e, 0x1e, 0x1e, 0x1e, 0x1e }; /* |||| */
-/* Second CG-ROM */
-const uint8_t cgrom2[] = { 0x1f, 0x1f, 0x1f, 0x1f, 0x00, 0x00, 0x00, 0x00, /* ""   0 */
-						0x00, 0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, /* ,,   1 */
-						0x01, 0x07, 0x0f, 0x0f, 0x1f, 0x1f, 0x1f, 0x1f, /* /|   2 */
-						0x10, 0x1c, 0x1e, 0x1e, 0x1f, 0x1f, 0x1f, 0x1f, /* |\   3 */
-						0x1f, 0x1f, 0x1f, 0x1f, 0x0f, 0x0f, 0x07, 0x01, /* \|   4 */
-						0x1f, 0x1f, 0x1f, 0x1f, 0x1e, 0x1e, 0x1c, 0x10, /* |/   5 */
-						0x00, 0x00, 0x00, 0x00, 0x10, 0x1c, 0x1e, 0x1e, /* |\maly 6 */
-						0x00, 0x00, 0x00, 0x0f, 0x0f, 0x0f, 0x0f, 0x00};/* . */
-/* Third CG-ROM */
-const uint8_t cgrom3[] = { 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x00, 0x00, 0x00, /* ""   0 */
-						0x00, 0x00, 0x00, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, /* ,,   1 */
-						0x00, 0x01, 0x03, 0x07, 0x0f, 0x1f, 0x1f, 0x00, /* /|   2 */
-						0x00, 0x10, 0x18, 0x1c, 0x1e, 0x1f, 0x1f, 0x00, /* |\   3 */
-						0x00, 0x1f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, /* \|   4 */
-						0x00, 0x1f, 0x1f, 0x1e, 0x1c, 0x18, 0x10, 0x00}; /* |/   5 */
+display_t coord;
 
 
-/* Table data for big number */
-const uint8_t big_number[][16] = {{ 2,0,0,3,255,32,32,255,255,32,32,255,4,1,1,5},		// Char 0
-				{32,1,255,32,32,32,255,32,32,32,255,32,32,1,255,1},             // Char 1
-				{2,0,0,3,32,32,1,5,2,0,32,32,255,1,1,1},			// Char 2
-				{2,0,0,3,32,32,1,5,32,32,32,3,4,1,1,5},				// Char 3
-				{255,32,32,32,255,32,32,32,255,1,255,1,32,32,255,32},	        // Char 4
-				{255,0,0,0,255,1,1,6,32,32,32,255,4,1,1,5},			// Char 5
-				{2,0,0,3,255,1,1,6,255,32,32,255,4,1,1,5}, 			// Char 6
-				{0,0,0,255,32,32,32,255,32,32,255,32,32,255,32,32}, 	        // Char 7
-				{2,0,0,3,4,1,1,5,2,32,32,3,4,1,1,5}, 				// Char 8
-				{2,0,0,3,4,1,1,255,32,32,32,255,4,1,1,5}};			// Char 9
-				
+inline void coord_newline(display_t *display)
+{
+	display->y++;
+	display->y %= 4;
 
-									
+	switch (display->y)
+	{
+		case 0:
+			LCD_sendcmd(LCD_EN1| 0x01); // clear display 1
+			break;
+		case 2:
+			LCD_sendcmd(LCD_EN2| 0x01); // clear display 2
+			break;
+		default:
+			break;			
+	}
+}
+
+inline void coord_next(display_t *display)
+{
+	display->x++;
+	if (display->x >= 40)
+	{
+		display->x = 0;
+		coord_newline(display);
+	}
+}
+
+
+								
 							
 /*!
  * \brief Send data to 2x16 LCD shift interface.
@@ -65,125 +63,38 @@ void DevBoardShiftLcdOut( uint8_t val )
 	SHIFT_PORT |= _BV(SHIFT_LCD_SET);       	/* 0 -> 1 data valid */
 }
 
+/**
+ * @brief Puts a character into LCD display.
+ * Character is put to current cursor and cursor is incremented.
+ * @param char character to put
+ */
+void LCD_putc(char c)
+{
+	printf("LCD_putc(0x%x): cursor value [%u, %u]\n", 0xFF & c, 0xFF & (unsigned)coord.x, 0xFF & (unsigned)coord.y);
+	switch(c)
+	{
+		case '\r':
+			// fall through
+		case '\n':
+			coord_newline(&coord);
+			return;
+	}
 
+	coord_next(&coord);
+	lcd_cz_putc(c, &coord);
+}
 
 /*!
  * \brief Function display string on LCD 
  *
  * \param *str  Pointer to string (0x00 is expected on the end of the text)
  */
-void LCD_puts( uint8_t *str, uint8_t row)
+void LCD_puts( const char *str, uint8_t row)
 {
-        while(*str) LCD_senddata( ((row < 3) ? LCD_EN1 : LCD_EN2) | *str++);                       /* Send one char to LCD */
-}
-
-/*!
- * \brief Function display string of big numbers on LCD 
- *
- * \param *str  Pointer to string (0x00 is expected on the end of the text)
- */
-void LCD_puts_big( uint8_t *str )
-{
-        uint8_t col = 0;
-        while(*str) LCD_write_big_num( (col += 5), (*str++ & 0xf));                       /* Send one char to LCD */
-}
-
-
-
-/*!
- * \brief Send one digit to LCD
- *
- * \param pos   start position
- * \param val   value (only number)
- * 
- */
-void LCD_write_big_num(uint8_t pos, uint8_t val)
-{
-	uint8_t i,j;
-	for (i = 0; i <4; i++) {
-		switch (i) {
-			case 0:	LCD_sendcmd(LCD_EN1 | (0x80 + pos)); break;
-			case 1: LCD_sendcmd(LCD_EN1 | (0xc0 + pos)); break;
-			case 2: LCD_sendcmd(LCD_EN2 | (0x80 + pos)); break;
-			case 3: LCD_sendcmd(LCD_EN2 | (0xc0 + pos)); break;
+        while(*str)
+		{
+			LCD_putc(*str++); /* Send one char to LCD */
 		}
-		for (j = 0; j < 4; j++) {
-			if (i <2)
-				LCD_senddata(LCD_EN1 | big_number[val][4*i+j]);
-			else
-				LCD_senddata(LCD_EN2 | big_number[val][4*i+j]);
-		}		
-	}
-}
-
-/*!
- * \brief Pre-set all CGRAM characters
- *
- * \param set   Type of CGRAM stored in rom
- *
- */
-
-void LCD_wr_cgram_all(uint8_t set)
-{
-	switch (set) {
-		case 0:
-			LCD_wr_cgram(0, &cgrom[0]);
-			LCD_wr_cgram(1, &cgrom[8]);
-			LCD_wr_cgram(2, &cgrom[16]);
-			LCD_wr_cgram(3, &cgrom[24]);
-			LCD_wr_cgram(4, &cgrom[32]);
-			LCD_wr_cgram(5, &cgrom[40]);
-			break;
-
-		case 1:
-			LCD_wr_cgram(0, &cgrom2[0]);
-			LCD_wr_cgram(1, &cgrom2[8]);
-			LCD_wr_cgram(2, &cgrom2[16]);
-			LCD_wr_cgram(3, &cgrom2[24]);
-			LCD_wr_cgram(4, &cgrom2[32]);
-			LCD_wr_cgram(5, &cgrom2[40]);
-			LCD_wr_cgram(6, &cgrom2[48]);
-			LCD_wr_cgram(7, &cgrom2[56]);
-			break;
-
-		case 2:
-			LCD_wr_cgram(0, &cgrom3[0]);
-			LCD_wr_cgram(1, &cgrom3[8]);
-			LCD_wr_cgram(2, &cgrom3[16]);
-			LCD_wr_cgram(3, &cgrom3[24]);
-			LCD_wr_cgram(4, &cgrom3[32]);
-			LCD_wr_cgram(5, &cgrom3[40]);
-			LCD_wr_cgram(6, &cgrom3[48]);
-			LCD_wr_cgram(7, &cgrom3[56]);
-
-			break;
-	}
-
-	if (!set) {
-
-	}
-	else {
-
-	}
-	
-}
-
-/*!
- * \brief Pre-set one CGRAM character
- *
- * \param char_val      Number of char. Only 0 - 7 are permitted.
- * \param *char_buf     Pointer to the memory on the first microline
- *
- */
-void LCD_wr_cgram(uint8_t char_val, const uint8_t *char_buf )
-{ uint8_t i = 8;
-
-  char_val <<= 3;
-  LCD_sendcmd(LCD_EN1 | LCD_EN2 | cmd_set_cgram_addr | char_val );
-
-  while(i--) LCD_senddata( LCD_EN1 | LCD_EN2 | *char_buf++ );
-
-  LCD_sendcmd(LCD_EN1 | LCD_EN2 | cmd_set_ddram_addr);
 }
 
 /*!
@@ -193,9 +104,12 @@ void LCD_wr_cgram(uint8_t char_val, const uint8_t *char_buf )
  * \param column        Column (1-40)
  *
  */
-void LCD_cursor_yx(uint8_t row, uint8_t column ) {
-uint16_t i;
-        column--;
+void LCD_cursor_yx(uint8_t row, uint8_t column )
+{
+	//printf("Setting cursor: [%u, %u]\n", 0xFF & (unsigned)row, 0xFF & (unsigned)column);
+
+	uint16_t i;
+    column--;
 	switch( row ) {
 		case 1 : i = (0x80 + column) | LCD_EN1; break;
 		case 2 : i = (0xc0 + column) | LCD_EN1; break;
@@ -307,4 +221,7 @@ void LCD_init(void)
 	LCD_sendcmd(LCD_EN1| LCD_EN2 | 0x06);                     /* entry mode */
 	LCD_sendcmd(LCD_EN1| LCD_EN2 | 0x0f);                     /* display on, cursor off, blinking cursor off */
 
+
+	coord.x = 0;
+	coord.y = 0;
 }

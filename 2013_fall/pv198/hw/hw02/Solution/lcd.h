@@ -79,13 +79,28 @@ uint8_t LCD_write_big_val(uint8_t, uint16_t );
 
 void LCD_cursor_yx(uint8_t, uint8_t);
 void LCD_sendval(uint16_t);
-void LCD_puts( uint8_t *, uint8_t);
+void LCD_putc(char c);
+void LCD_puts( const char *str, uint8_t row);
 void LCD_puts_big( uint8_t *);
 
 #define LCD_sendcmd( val )  LCD_sendval( val )       /* send command */
 #define LCD_senddata( val ) LCD_sendval( val | LCD_RS)       			/* send data */
 
 #define LCD_write(val) DevBoardShiftLcdOut(val)
+
+
+typedef struct
+{
+	uint8_t x;	//
+	uint8_t y;	//
+} display_t;
+
+
+// Display should be 'display_t'type
+
+
+extern display_t coord;
+
 
 #endif
 
