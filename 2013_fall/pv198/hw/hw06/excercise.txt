@@ -1,0 +1,5 @@
+10 fingers writing game
+------------------------
+Generate random characters,
+user must write the same characters.
+Use WDT
