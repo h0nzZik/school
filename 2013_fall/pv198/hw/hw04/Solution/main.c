@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
@@ -24,12 +25,13 @@
 /* global and extern variables */
 const char ver_str_pgm[]  PROGMEM = "\rATmega128 onchip SRAM ver. 0.1.0 - "__DATE__", "__TIME__;
 
-char main_menu[] = "\n"
+const char main_menu[] = "\n"
 	"+---=[ SRAM tester ]=------------------------------------------+\n"
 	"|                                                              |\n"
 	"|  Simple memory tester                                        |\n"
 	"|                                                              |\n"
 	"+ command -+- function ----------------------------------------+\n"
+	"|    h     | Help (this menu)                                  |\n"
 	"|    b     | Set base address of memory window                 |\n"
 	"|    n     | Set size of memory window (in bytes)              |\n"
 	"|    r     | Run memory test on selected window                |\n"
@@ -42,6 +44,13 @@ void ser_init(uint16_t baud);
 int ser_putch(char c, FILE *stream);
 int ser_getch(FILE *stream);
 
+
+struct StdioOptions
+{
+	bool echo;
+};
+
+struct StdioOptions stdopts;
 
 /*
  * Memory tester
@@ -75,15 +84,50 @@ void MemoryTester_init(struct MemoryTester *mt)
 //	mt->inouterr = FDEV_SETUP_STREAM(ser_putch, ser_getch, _FDEV_SETUP_RW);
 	FILE f = FDEV_SETUP_STREAM(ser_putch, ser_getch, _FDEV_SETUP_RW);
 	mt->inouterr = f;
+	stdin = stdout = stderr = &mt->inouterr;
 
 	mt->window_base = NULL;
 	mt->window_size = 0;
-	stdin = stdout = stderr = &mt->inouterr;
 	puts_P(ver_str_pgm);
 }
 
 // This program consists of one instance of MemoryTester
 struct MemoryTester app;
+
+int read_4hex(size_t *p)
+{
+	size_t val = 0;
+	int i;
+	int c;
+
+	for (i = 0; i < 4; i++)
+	{
+		c = getchar();
+		if (isdigit(c))
+		{
+			val = val * 16 + c - '0';
+			continue;
+		}
+
+		if (isxdigit(c))
+		{
+			val = val * 16 + tolower(c) - 'a' + 10;
+			continue;
+		}
+
+		if (c == '\r' || c == '\n')
+			break;
+
+		putchar('\n');
+		puts_P(PSTR("Bad input."));
+		return -1;
+
+	}
+	
+	*p = val;
+	putchar('\n');
+	return 0;
+}
 
 /**
  * @brief Asks user for address of memory window to test
@@ -91,12 +135,13 @@ struct MemoryTester app;
  */
 void MemoryTester_setWindowAddr(struct MemoryTester *self)
 {
-	printf("Enter window address: ");
-	while (1 != scanf("%p", &self->window_base))
-	{
-		self->window_base = NULL;
-		printf("Bad input. Try it again: ");
-	}
+	printf("Enter window address in hex format: 0x"); // Can not use puts (end of line)
+
+	self->window_base = NULL;
+	size_t tmp;
+	if (read_4hex(&tmp))
+		return;
+	self->window_base = (void *)tmp;
 }
 
 /**
@@ -105,12 +150,13 @@ void MemoryTester_setWindowAddr(struct MemoryTester *self)
  */
 void MemoryTester_setWindowSize(struct MemoryTester *self)
 {
-	printf("Enter window size: ");
-	while (1 != scanf("%zu", &self->window_size))
-	{
-		self->window_size = 0;
-		printf("Bad input. Try it again: ");
-	}
+	printf("Enter window size (in hex format): 0x"); // Can not use puts (end of line)
+	self->window_size = 0;
+	if (read_4hex(&self->window_size))
+		return;
+
+
+	printf("Window size set to %x\n", self->window_size);
 }
 
 /**
@@ -129,9 +175,17 @@ void MemoryTester_fail(struct MemoryTester *self)
  */
 void MemoryTester_run(struct MemoryTester *self)
 {
+	//printf("Running memory test: %u bytes of window %p\n", self->window_size, self->window_base);
 	if ((self->window_base == NULL) || (self->window_size == 0))
 	{
-		printf("You should set window base address and size first\n");
+		puts_P(PSTR("You should set window base address and size first"));
+		return;
+	}
+
+	size_t tmp = (size_t)self->window_base + self->window_size;
+	if (tmp < (size_t)self->window_base)
+	{
+		puts_P(PSTR("Can not start: this would cause integer overflow"));
 		return;
 	}
 
@@ -142,14 +196,18 @@ void MemoryTester_run(struct MemoryTester *self)
 	size_t i;
 
 	// Fill memory with pattern
+	printf("Setting memory range from %p to %p to pattern %x\n",
+		self->window_base, self->window_base + self->window_size, 0xFF & pattern);
 	memset((void *)self->window_base, pattern, self->window_size);
 
 	self->failed = false;
 	self->failed_frame = false;
 
-	printf("Moving inversion: first round (low to high)\n");
-	printf("Each square represents one 16B frame\n");
+	puts_P(PSTR("Moving inversion: first round (low to high)"));
+	puts_P(PSTR("Each square represents one 16B frame"));
+#if 0
 	printf("   0123456789ABCDEF"); // '\n' is printed in loop
+#endif
 
 	// Check whether it is filled. Then use inverted pattern
 	for (i = 0; i < self->window_size; i++, ptr++)
@@ -161,11 +219,16 @@ void MemoryTester_run(struct MemoryTester *self)
 
 		*ptr = ~pattern;
 
+
+		if (i % 256 == 0)
+			putchar('\n');
+#if 0
 		if (i % 256 == 0)
 		{
-				printf("\n%04zx", i / 255);
-		}
+			printf("\n%04zx", i & 0xFFF0); //For unknown reason this does not work
 
+		}
+#endif
 		// Draw a map of memory - square
 		if (i % 16 == 15)
 		{
@@ -174,16 +237,17 @@ void MemoryTester_run(struct MemoryTester *self)
 		}
 	}
 
-	printf("Moving inversion: second round (high to low)\n");
-	printf("Only buggy addresses are printed\n");
+	putchar('\n');
+	puts_P(PSTR("Moving inversion: second round (high to low)"));
+	puts_P(PSTR("Buggy addresses are printed"));
 
 	// Check whether memory is filled with inverted pattern.
 	// Start from highest address
 	while (ptr-- != self->window_base)
 	{
-			if (*ptr != ~pattern)
+			if ((*ptr & 0x00FF) != (~pattern & 0x00FF))
 			{
-					printf("Bad address: %p\n", ptr);
+					printf("Bad address: %p. %x != %x\n", ptr, *ptr, ~pattern);
 					MemoryTester_fail(self);
 			}
 
@@ -191,30 +255,53 @@ void MemoryTester_run(struct MemoryTester *self)
 			*ptr = pattern;
 	}
 
-	printf("--------------------------------------");
+	puts_P(PSTR("--------------------------------------"));
 	if (self->failed)
 	{
-		printf("Test failed\n");
+		puts_P(PSTR("Test failed"));
 	} else {
-			printf("Test passed\n");
+		puts_P(PSTR("Test passed\n"));
 	}
 
 }
 
 int main( void )
 {
+	stdopts.echo = false;
 	MemoryTester_init(&app);
 
+	// Show main menu
+	puts(main_menu);
 	while(1)
 	{
-		puts(main_menu);
+		// Let user select action
+		stdopts.echo = false;
+		//puts("Choose command");
 
-		switch( getchar() )
+		
+		int c = getchar();
+		stdopts.echo = true;
+
+		switch(c)
 		{
-			case 'b': MemoryTester_setWindowAddr(&app); break;
-			case 'n': MemoryTester_setWindowSize(&app); break;
-			case 'r': MemoryTester_run(&app); break;
-			default: break;
+			case 'b':
+				MemoryTester_setWindowAddr(&app);
+				break;
+				
+			case 'n':
+				MemoryTester_setWindowSize(&app);
+				break;
+				
+			case 'r':
+				MemoryTester_run(&app);
+				// Fall through
+
+			case 'h':
+				puts(main_menu);
+				break;
+
+			default:
+				break;
 		}
 	}
 }
@@ -255,6 +342,7 @@ int ser_putch(char c, FILE *stream)
 	return 0;
 }
 
+
 /*!
  * \brief Reads the character from serial port (UART0).
  *
@@ -266,7 +354,12 @@ int ser_getch(FILE *stream)
 	/* wait for data to be received */
 	while ( !(UCSR0A & (1<<RXC0)) );
 
+	int tmp = UDR0;
+	if (stdopts.echo)
+	{
+		ser_putch(tmp, stream);
+	}
 	/* get and return received data from buffer */
-	return UDR0;
+	return tmp;
 }
 
