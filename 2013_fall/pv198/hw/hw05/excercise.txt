@@ -1,2 +1,3 @@
 Interrupts
-Ring buffer, RS232
+Ring buffer, RS232, implement in interrupt.
+Getchar/putchar will use the buffers.
