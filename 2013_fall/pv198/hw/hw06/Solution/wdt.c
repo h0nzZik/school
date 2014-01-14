@@ -1,17 +1,8 @@
-/*
- *                ATmega128 HW/SW reset example
- *
- * Description : HW/SW reset of the ATmega128 MCU. HW reset is forced by
- *               watchdog timer. SW reset is just jump to 0x0000
- *               address, no peripheries setup is performed.
- *
- * Author: Pavel Celeda - celeda@liberouter.org
- *
- * Target system : Charon 2 Development Kit - www.hwg.cz
- *                 ATmega128 14,7456 MHz, UART: 9600,N,8,1
- *
- * Compiler : avr-gcc 4.1.0
- *
+/**
+ * @file wdt.c
+ * @brief Implementation of simple finger-training game.
+ * Use UART to play.
+ * @author Jan Tusil <410062@mail.muni.cz>
  * $Id: wdt.c,v 1.1 2006/12/10 12:20:27 qceleda Exp $
  */
 
