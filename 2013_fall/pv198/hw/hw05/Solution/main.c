@@ -1,6 +1,6 @@
 /**
  * @file main.c
- * @brief Simple memory tester
+ * @brief Ring buffer demo
  * @author Jan Tusil <410062@mail.muni.cz>
  *
  * Target system : Charon 2 Development Kit - www.hwg.cz
