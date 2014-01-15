@@ -1,10 +1,10 @@
-/*
- *                  LCD - e x a m p l e
- *
+/**
+ * @file main.c
+ * @brief Serial <--> LCD czech demo.
  * Description : Extended functions used for 4-bit communication with LCD
  *               between ATmega128 and 4 lines LCD MC4004
  *
- * Author: Zbynek Bures
+ * @author Zbynek Bures, Jan Tusil
  *
  * Target system : Charon 2 Development Kit - www.hwg.cz
  *                 ATmega128 14,7456 MHz, UART: 9600,N,8,1
